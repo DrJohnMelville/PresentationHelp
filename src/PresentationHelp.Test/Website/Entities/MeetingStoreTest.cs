@@ -72,4 +72,17 @@ public class MeetingStoreTest
         sut.TryGetMeeting("A", out var m).Should().BeTrue();
         m.Should().BeSameAs(m1);
     }
+
+    [Fact]
+    public void GetOrDefaultSucceed()
+    {
+        var m1 = sut.GetOrCreateMeeting("a");
+        sut.GetOrDefaultMeeting("a").Should().BeSameAs(m1);
+    }
+
+    [Fact]
+    public void GetOrDefaultFail()
+    {
+        sut.GetOrDefaultMeeting("a").Should().BeSameAs(DefaultMeetingContent.NotFound);
+    }
 }

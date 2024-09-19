@@ -33,4 +33,8 @@
     <ProjectReference Include="..\PresentationHelp.Website.Models\PresentationHelp.Website.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Website\Services\" />
+  </ItemGroup>
+
 </Project>

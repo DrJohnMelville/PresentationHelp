@@ -1,4 +1,7 @@
-﻿using PresentationHelp.Website.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using PresentationHelp.Website.Models.Entities;
+using PresentationHelp.Website.Models.Services;
+using PresentationHelp.Website.Services;
 
 namespace PresentationHelp.Website.CompositionRoot;
 
@@ -14,11 +17,9 @@ public readonly struct SetupWebPipeline (WebApplication app)
 
     }
 
-    private IResult MeetingConsumer(HttpContext ctx, string name)
+    private IResult MeetingConsumer(
+        HttpContext ctx, string name, [FromServices]MeetingParticipantService mps)
     {
-        return Results.Text($"""
-            <h1>Hello {ctx.Items["UserId"]}</h1>
-            <p>You are in meeting: {name}</p>
-            """, "text/html");
+        return Results.Text(mps.Html(name, ctx.Items["UserId"]!.ToString()), "text/html");
     }
 }

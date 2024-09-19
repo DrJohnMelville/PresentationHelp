@@ -66,4 +66,7 @@ public class MeetingStore(TimeProvider timeProvider)
         RetireMeetingCacheIfNeeded();
         return meetings.TryGetValue(name, out o);
     }
+
+    public Meeting GetOrDefaultMeeting (string name) => 
+        TryGetMeeting(name, out var ret) ? ret : DefaultMeetingContent.NotFound;
 }
