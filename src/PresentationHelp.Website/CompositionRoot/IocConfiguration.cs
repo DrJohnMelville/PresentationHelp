@@ -1,4 +1,8 @@
 ﻿using Melville.IOC.IocContainers;
+using Melville.IOC.IocContainers.ActivationStrategies.TypeActivation;
+using PresentationHelp.Website.Models.Entities;
+using PresentationHelp.Website.Models.Services;
+using PresentationHelp.Website.Services;
 
 namespace PresentationHelp.Website.CompositionRoot;
 
@@ -9,5 +13,15 @@ public readonly struct IocConfiguration(IBindableIocService service)
     private void Configure()
     {
         service.Bind<TimeProvider>().ToConstant(TimeProvider.System);
+        service.Bind<ILoggerFactory>().To<LoggerFactory>().AsSingleton().DoNotDispose();
+
+        SetupWebsiteServices();
+    }
+
+    private void SetupWebsiteServices()
+    {
+        service.Bind<MeetingStore>().ToSelf().AsSingleton();
+        service.Bind<MeetingParticipantService>().ToSelf().AsSingleton();
+        service.Bind<MeetingCommandService>().ToSelf().AsSingleton();
     }
 }

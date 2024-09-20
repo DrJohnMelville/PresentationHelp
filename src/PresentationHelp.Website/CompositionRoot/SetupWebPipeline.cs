@@ -14,12 +14,23 @@ public readonly struct SetupWebPipeline (WebApplication app)
 
 
         app.MapGet("/{name}", MeetingConsumer);
-
+        app.MapPost("/{meetingName}/OpenMeeting", StartMeeting);
     }
+
 
     private IResult MeetingConsumer(
-        HttpContext ctx, string name, [FromServices]MeetingParticipantService mps)
+        HttpContext ctx, string name, [FromServices]MeetingParticipantService mps) =>
+        Results.Text(mps.Html(name, ctx.GetUser()), "text/html");
+
+    private string StartMeeting(HttpContext ctx, string meetingName,
+        [FromServices] MeetingCommandService service)
     {
-        return Results.Text(mps.Html(name, ctx.Items["UserId"]!.ToString()), "text/html");
+        return service.StartMeeting(meetingName, ctx.GetUser());
     }
+}
+
+public static class UserIdExtraction
+{
+    public static string GetUser(this HttpContext ctx) =>
+        ctx.Items["UserId"]?.ToString() ?? "Anonymous";
 }
