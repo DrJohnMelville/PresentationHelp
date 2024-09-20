@@ -20,7 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationHelp.Test", "Pr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wpf", "Wpf", "{FB9F3DA3-6EB2-491B-9E1D-F362A2C51EBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationHelp.Command", "PresentationHelp.Command\PresentationHelp.Command.csproj", "{B7783DF2-30F1-442A-B1C7-E290E1B1C90C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationHelp.Command", "PresentationHelp.Command\PresentationHelp.Command.csproj", "{B7783DF2-30F1-442A-B1C7-E290E1B1C90C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationHelp.Test2", "PresentationHelp.Test2\PresentationHelp.Test2.csproj", "{33E8C08C-2C1E-4F36-B979-E6AA43B205C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{B7783DF2-30F1-442A-B1C7-E290E1B1C90C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7783DF2-30F1-442A-B1C7-E290E1B1C90C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7783DF2-30F1-442A-B1C7-E290E1B1C90C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33E8C08C-2C1E-4F36-B979-E6AA43B205C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33E8C08C-2C1E-4F36-B979-E6AA43B205C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33E8C08C-2C1E-4F36-B979-E6AA43B205C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33E8C08C-2C1E-4F36-B979-E6AA43B205C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
