@@ -1,21 +1,26 @@
 ﻿using System.Net.Http;
+using PresentationHelp.Command.QueryMeetingName;
 
 namespace PresentationHelp.Command.Connection;
 
 public interface IRegisterWebsiteConnection
 {
-    void SetClient(HttpClient client);
+    Task SetClient(string baseUrl, string MeetingName);
 } 
 
 public interface IWebsiteConnection
 {
-    Task<HttpClient> GetClientAsync();
+    MeetingModel GetClient();
 }
 
 public class WebsiteConnection: IWebsiteConnection, IRegisterWebsiteConnection
 {
-    private TaskCompletionSource<HttpClient> source = new();
-    public Task<HttpClient> GetClientAsync() => source.Task;
-
-    public void SetClient(HttpClient client) => source.SetResult(client);
+    private MeetingModel? client;
+    public MeetingModel GetClient() => 
+        client ?? throw new InvalidOperationException("Client not initalized yet");
+     
+    public async Task SetClient(string baseUrl, string MeetingName)
+    {
+        client = await MeetingModelFactory.Create(baseUrl, MeetingName);
+    }
 }

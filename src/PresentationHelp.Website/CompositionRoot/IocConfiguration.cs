@@ -22,6 +22,16 @@ public readonly struct IocConfiguration(IBindableIocService service)
     {
         service.Bind<MeetingStore>().ToSelf().AsSingleton();
         service.Bind<MeetingParticipantService>().ToSelf().AsSingleton();
+        service.Bind<IRefreshClients>().To<RefreshClientsService>().AsSingleton();
+        service.Bind<ISendCommand>().To<SendCommandService>().AsSingleton();
         service.Bind<MeetingCommandService>().ToSelf().AsSingleton();
+    }
+}
+
+public readonly struct AspNetServiceRegistration(IServiceCollection coll)
+{
+    public void Configure()
+    {
+        coll.AddSignalR();
     }
 }

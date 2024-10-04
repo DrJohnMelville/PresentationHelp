@@ -1,10 +1,11 @@
 using Melville.IOC.AspNet.RegisterFromServiceCollection;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using PresentationHelp.Website.CompositionRoot;
 using PresentationHelp.Website.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseServiceProviderFactory(new MelvilleServiceProviderFactory(true, IocConfiguration.Configure));
-// Add services to the container.
+new AspNetServiceRegistration(builder.Services).Configure();
 
 var app = builder.Build();
 

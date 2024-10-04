@@ -30,7 +30,6 @@ public class Startup:StartupBase
 
     private void ConfigureConnection(IBindableIocService service)
     {
-        service.Bind<HttpClient>().ToSelf(ConstructorSelectors.DefaultConstructor);
         service.Bind<IWebsiteConnection>().And<IRegisterWebsiteConnection>()
             .To<WebsiteConnection>().AsSingleton();
     }

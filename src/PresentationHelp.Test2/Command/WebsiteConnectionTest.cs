@@ -1,4 +1,5 @@
 ﻿using PresentationHelp.Command.Connection;
+using PresentationHelp.Shared;
 
 namespace PresentationHelp.Test2.Command;
 
@@ -7,19 +8,9 @@ public class WebsiteConnectionTest
     private readonly WebsiteConnection sut = new();
 
     [Test]
-    public async Task ReturnsRegisteredConnection()
+    public void ThrowOnPrematureGet()
     {
-        var client = new HttpClient();
-        sut.SetClient(client);
-        (await sut.GetClientAsync()).Should().BeSameAs(client);
-    }
-
-    [Test]
-    public async Task WaitForRegistration()
-    {
-        var task = sut.GetClientAsync();
-        task.IsCompleted.Should().BeFalse();
-        sut.SetClient(new HttpClient());
-        task.IsCompleted.Should().BeTrue();
+        sut.Invoking(i=>i.GetClient()).Should()
+            .Throw<InvalidOperationException>();
     }
 }
