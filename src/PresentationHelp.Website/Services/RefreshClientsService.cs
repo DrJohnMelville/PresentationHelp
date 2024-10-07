@@ -16,6 +16,6 @@ public class SendCommandService(IHubContext<DisplayHub> viewers) : ISendCommand
     public Task Send(string meeting, string command)
     {
         return viewers.Clients.Groups(meeting.ToLowerInvariant())
-            .SendCoreAsync("ReceiveCommand", [meeting, command]);
+            .SendCoreAsync("ReceiveCommand", [command]);
     }
 }

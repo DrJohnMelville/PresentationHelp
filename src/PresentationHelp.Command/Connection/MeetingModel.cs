@@ -14,13 +14,16 @@ public class MeetingModelFactory
             .WithAutomaticReconnect()
             .Build();
         await hubConnection.StartAsync();
-        var meetingModel = new MeetingModel(baseUrl, meetingName, hubConnection.ServerProxy<IDisplayHubServer>());
+        var meetingModel = 
+            new MeetingModel(baseUrl, meetingName, hubConnection.ServerProxy<IDisplayHubServer>());
+        meetingModel.SetDisposeHandels(hubConnection.ClientProxy<IDisplayHubClient>(meetingModel),
+            hubConnection);
         meetingModel.DisplayHub.CreateOrJoinMeeting(meetingName);
         return meetingModel;
     }
 }
 
-public partial class MeetingModel
+public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
 {
     [AutoNotify] private string lastCommand = "No commands received";
     public string ParticipantUrl { get; }
@@ -31,8 +34,22 @@ public partial class MeetingModel
     {
         ParticipantUrl = $"{baseUrl}{HttpUtility.UrlEncode(meetingName)}";
         MeetingName = meetingName;
-        DisplayHub = displayHub;
+        DisplayHub = displayHub; 
 
+    }
+
+
+    private IDisposable clientMethodRegistrations;
+    private IAsyncDisposable connection;
+    public ValueTask DisposeAsync()
+    {
+        clientMethodRegistrations.Dispose();
+        return connection.DisposeAsync();
+    }
+    public void SetDisposeHandels(IDisposable clientMethods, IAsyncDisposable connection)
+    {
+        clientMethodRegistrations = clientMethods;
+        this.connection = connection;
     }
 
     public async Task<int> EnrollDisplay()
@@ -45,4 +62,9 @@ public partial class MeetingModel
     public Task SendCommandToWebsiteAsync(string nextCommand) =>
         DisplayHub.PostCommand(MeetingName, nextCommand);
 
+    public Task ReceiveCommand(string command)
+    {
+        LastCommand = command;
+        return Task.CompletedTask;
+    }
 }

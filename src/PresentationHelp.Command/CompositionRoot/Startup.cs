@@ -25,6 +25,8 @@ public class Startup:StartupBase
         service.Bind<IOpenSaveFile>().To<OpenSaveFileAdapter>();
         service.Bind<Window>( ).And<IRootNavigationWindow>().To<RootNavigationWindow>().AsSingleton();
 
+        service.Bind<Application>().ToSelf().AsSingleton();
+
         ConfigureConnection(service);
     }
 
