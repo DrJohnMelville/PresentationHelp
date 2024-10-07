@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using PresentationHelp.Website.Hubs;
 using PresentationHelp.Website.Models.Entities;
 using PresentationHelp.Website.Models.Services;
@@ -15,6 +16,8 @@ public readonly struct SetupWebPipeline (WebApplication app)
 
         app.MapHub<ClientHub>("/___Hubs/Client___");
         app.MapHub<DisplayHub>("/___Hubs/Display___");
+        app.MapGet("/___lib/shared.js", 
+            () => TypedResults.Bytes(CommonClientInsert.JavaScript, "text/javascript"));
         app.MapGet("/{name}", MeetingConsumer);
     }
 
