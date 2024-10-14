@@ -12,7 +12,7 @@ public class MeetingParticipantServiceTest
 
     public MeetingParticipantServiceTest()
     {
-        store = new MeetingStore(time);
+        store = new MeetingStore(time, s => new Meeting(s, Mock.Of<ISendCommand>()));
         sut = new MeetingParticipantService(store);
     }
 
@@ -20,7 +20,7 @@ public class MeetingParticipantServiceTest
     public void AccessDefaultCreatedMeeting()
     {
         store.GetOrCreateMeeting("Name");
-        sut.Html("Name", "User").Should().Be(DefaultMeetingContent.Html);
+        sut.Html("Name", "User").Should().Be(DefaultMeetingContent.Html("Name", 1));
     }
 
     [Test]

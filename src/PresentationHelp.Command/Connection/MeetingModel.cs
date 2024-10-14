@@ -67,4 +67,10 @@ public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
         LastCommand = command;
         return Task.CompletedTask;
     }
+
+    public Task ReceiveUserDatum(int screen, string user, string datum)
+    {
+        LastCommand = $"User {user} sent {datum} to screen #{screen}";
+        return Task.CompletedTask;
+    }
 }

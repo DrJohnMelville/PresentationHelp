@@ -10,4 +10,5 @@ public interface IDisplayHubServer
 public interface IDisplayHubClient
 {
     Task ReceiveCommand(string command);
+    Task ReceiveUserDatum(int screen, string user, string datum);
 }

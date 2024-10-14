@@ -4,7 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace PresentationHelp.Website.Models.Entities;
 
-public class MeetingStore(TimeProvider timeProvider)
+public class MeetingStore(
+    TimeProvider timeProvider, Func<string, Meeting> meetingFactory)
 {
     private static readonly TimeSpan MaxMeetingPause = TimeSpan.FromHours(24);
     private readonly ConcurrentDictionary<string, Meeting> meetings = new(StringComparer.InvariantCultureIgnoreCase);
@@ -13,7 +14,7 @@ public class MeetingStore(TimeProvider timeProvider)
     public Meeting GetOrCreateMeeting(string name)
     {
         RetireMeetingCacheIfNeeded();
-        var ret = meetings.GetOrAdd(name, s => new Meeting(s));
+        var ret = meetings.GetOrAdd(name, meetingFactory);
         ret.ExpiresAt = timeProvider.GetLocalNow()+MaxMeetingPause;
         return ret;
     }

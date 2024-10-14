@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Time.Testing;
 using PresentationHelp.Website.Models.Entities;
+using PresentationHelp.Website.Models.Services;
 
 namespace PresentationHelp.Test2.Website.Entities;
 
@@ -10,7 +11,7 @@ public class MeetingStoreTest
 
     public MeetingStoreTest()
     {
-        sut = new MeetingStore(timeSource);
+        sut = new MeetingStore(timeSource, s=>new Meeting(s, Mock.Of<ISendCommand>()));
     }
 
     [Test]

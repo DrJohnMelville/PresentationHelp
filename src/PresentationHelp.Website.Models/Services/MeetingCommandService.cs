@@ -10,6 +10,7 @@ public interface IRefreshClients
 public interface ISendCommand
 {
     public Task Send(string meeting, string command);
+    public Task SendUserDatum(string meeting, int screen, string user, string datum);
 }
 
 public class MeetingCommandService(MeetingStore store, IRefreshClients refreshClients, ISendCommand sendCommand)

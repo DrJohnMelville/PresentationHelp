@@ -14,7 +14,7 @@ public class MeetingCommandServiceTest
 
     public MeetingCommandServiceTest()
     {
-        store = new MeetingStore(timeProvider);
+        store = new MeetingStore(timeProvider, s=> new Meeting(s, sendCommand.Object));
         sut = new MeetingCommandService(store, refreshClients.Object, sendCommand.Object);
     }
 
