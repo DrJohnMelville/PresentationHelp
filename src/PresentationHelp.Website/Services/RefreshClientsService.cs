@@ -13,7 +13,7 @@ public class RefreshClientsService(IHubContext<ClientHub> clients) : IRefreshCli
 public class SendCommandService(IHubContext<DisplayHub> viewers) : ISendCommand
 {
     public Task Send(string meeting, string command) => 
-        viewers.SendToMeetingParticipants("ReceiveCommand", command);
+        viewers.SendToMeetingParticipants(meeting, "ReceiveCommand", command);
 
     public Task SendUserDatum(string meeting, int screen, string user, string datum) => 
         viewers.SendToMeetingParticipants(meeting, "ReceiveUserDatum", screen, user, datum);

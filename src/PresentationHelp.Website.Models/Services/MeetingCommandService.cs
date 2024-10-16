@@ -26,7 +26,7 @@ public class MeetingCommandService(MeetingStore store, IRefreshClients refreshCl
     public async Task<string> PostCommand(string meetingName, string command, string clientHtml)
     {
         await sendCommand.Send(meetingName, command);
-        // postcommand needs to take a HTML string for the new client, or blank to keep the old client
+
         if (store.TryGetMeeting(meetingName, out var meeting) &&
             meeting.UpdateClientHtml(clientHtml))
                 await refreshClients.Refresh(meetingName);
