@@ -12,8 +12,8 @@ public class DisplayHub(MeetingCommandService service) : Hub, IDisplayHubServer
         return service.StartMeeting(meeting);
     }
 
-    public Task PostCommand(string meeting, string command) => 
-        service.PostCommand(meeting, command);
+    public Task PostCommand(string meeting, string command, string clientHtml) => 
+        service.PostCommand(meeting, command, clientHtml);
 
     public Task<int> EnrollDisplay(string meeting) => 
         Task.FromResult(service.EnrollView());

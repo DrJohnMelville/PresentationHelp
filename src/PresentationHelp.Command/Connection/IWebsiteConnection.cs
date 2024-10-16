@@ -14,7 +14,7 @@ public interface IWebsiteConnection
     MeetingModel GetClient();
 }
 
-public class WebsiteConnection(Application app) : IWebsiteConnection, IRegisterWebsiteConnection
+public class WebsiteConnection(Application app, MeetingModelFactory mmetingFactory) : IWebsiteConnection, IRegisterWebsiteConnection
 {
     private MeetingModel? client;
 
@@ -23,7 +23,7 @@ public class WebsiteConnection(Application app) : IWebsiteConnection, IRegisterW
 
     public async Task SetClient(string baseUrl, string MeetingName)
     {
-        client = await MeetingModelFactory.Create(baseUrl, MeetingName);
+        client = await mmetingFactory.Create(baseUrl, MeetingName);
         app.Exit += DisposeOfMeeting;
     }
 

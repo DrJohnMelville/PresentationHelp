@@ -24,14 +24,14 @@ public class MeetingCommandServiceTest
         store.TryGetMeeting("xxxYY", out _).Should().BeFalse();
         (await sut.StartMeeting("xxxYY")).Should().Be("Ok");
         store.TryGetMeeting("xxxYY", out _).Should().BeTrue();
-        refreshClients.Verify(i=>i.Refresh("_NotFoundMeeting"), Times.Once);
+        refreshClients.Verify(i=>i.Refresh("___NotFoundMeeting"), Times.Once);
     }
 
     [Test]
     public async Task PostCommandTest()
     {
         store.GetOrCreateMeeting("xxxYY");
-        (await sut.PostCommand("xxxYY", "user")).Should().Be("Ok");
+        (await sut.PostCommand("xxxYY", "user", "")).Should().Be("Ok");
         sendCommand.Verify(i => i.Send("xxxYY", "user"), Times.Once);
     }
 

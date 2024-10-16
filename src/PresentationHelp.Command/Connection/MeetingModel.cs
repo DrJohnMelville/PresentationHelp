@@ -3,41 +3,48 @@ using Microsoft.AspNetCore.SignalR.Client;
 using PresentationHelp.Shared;
 using System.Web;
 using PresentationHelp.Command.Presenter;
+using PresentationHelp.CommandModels.Parsers;
+using PresentationHelp.ScreenInterface;
+using PresentationHelp.Website.Models.Entities;
 
 namespace PresentationHelp.Command.Connection;
 
-public class MeetingModelFactory
+public class MeetingModelFactory(ICommandParser commandParser)
 {
-    public static async Task<MeetingModel> Create(string baseUrl, string meetingName)
+    public async Task<MeetingModel> Create(string baseUrl, string meetingName)
     {
         var hubConnection = new HubConnectionBuilder().WithUrl(new Uri(baseUrl + "___Hubs/Display___"))
             .WithAutomaticReconnect()
             .Build();
         await hubConnection.StartAsync();
         var meetingModel = 
-            new MeetingModel(baseUrl, meetingName, hubConnection.ServerProxy<IDisplayHubServer>());
-        meetingModel.SetDisposeHandels(hubConnection.ClientProxy<IDisplayHubClient>(meetingModel),
+            new MeetingModel(baseUrl, meetingName, hubConnection.ServerProxy<IDisplayHubServer>(),
+                commandParser);
+        meetingModel.SetDisposeHandles(hubConnection.ClientProxy<IDisplayHubClient>(meetingModel),
             hubConnection);
-        meetingModel.DisplayHub.CreateOrJoinMeeting(meetingName);
         return meetingModel;
     }
 }
 
 public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
 {
+    private readonly ICommandParser commandParser;
     [AutoNotify] private string lastCommand = "No commands received";
     public string ParticipantUrl { get; }
     public string MeetingName { get; }
-    public IDisplayHubServer DisplayHub { get; }
+    private IDisplayHubServer DisplayHub { get; }
+    private int screenNumber = 0;
 
-    public MeetingModel(string baseUrl, string meetingName, IDisplayHubServer displayHub)
+    public MeetingModel(
+        string baseUrl, string meetingName, IDisplayHubServer displayHub,
+        ICommandParser commandParser)
     {
         ParticipantUrl = $"{baseUrl}{HttpUtility.UrlEncode(meetingName)}";
         MeetingName = meetingName;
-        DisplayHub = displayHub; 
-
+        DisplayHub = displayHub;
+        this.commandParser = commandParser;
+        DisplayHub.CreateOrJoinMeeting(meetingName);
     }
-
 
     private IDisposable clientMethodRegistrations;
     private IAsyncDisposable connection;
@@ -46,7 +53,7 @@ public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
         clientMethodRegistrations.Dispose();
         return connection.DisposeAsync();
     }
-    public void SetDisposeHandels(IDisposable clientMethods, IAsyncDisposable connection)
+    public void SetDisposeHandles(IDisposable clientMethods, IAsyncDisposable connection)
     {
         clientMethodRegistrations = clientMethods;
         this.connection = connection;
@@ -59,8 +66,14 @@ public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
         return ret;
     }
 
-    public Task SendCommandToWebsiteAsync(string nextCommand) =>
-        DisplayHub.PostCommand(MeetingName, nextCommand);
+#warning parse command and send html update
+    private readonly IScreenDefinition sd = new MessageScreen("Internal -- should never show");
+    public Task SendCommandToWebsiteAsync(string nextCommand)
+    {
+        var screen = commandParser.GetAsScreen(nextCommand,sd );
+        return DisplayHub.PostCommand(MeetingName, nextCommand, 
+            screen?.HtmlForUser(new HtmlBuilder(MeetingName, ++screenNumber)) ?? "");
+    }
 
     public Task ReceiveCommand(string command)
     {

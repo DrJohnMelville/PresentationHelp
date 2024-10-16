@@ -7,12 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Melville.INPC" Version="0.7.2" />
-    <PackageReference Include="Melville.Generators.INPC" Version="0.7.2" />
+    <ProjectReference Include="..\PresentationHelp.ScreenInterface\PresentationHelp.ScreenInterface.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PresentationHelp.ScreenInterface\PresentationHelp.ScreenInterface.csproj" />
+    <Folder Include="ErrorScreens\" />
   </ItemGroup>
 
 </Project>

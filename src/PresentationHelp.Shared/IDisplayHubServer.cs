@@ -3,7 +3,7 @@
 public interface IDisplayHubServer
 {
     Task CreateOrJoinMeeting(string meeting);
-    Task PostCommand(string meeting, string command);
+    Task PostCommand(string meeting, string command, string clientHtml);
     Task<int> EnrollDisplay(string meeting);
 }
 

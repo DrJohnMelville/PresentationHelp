@@ -19,7 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PresentationHelp.CommandModels\PresentationHelp.CommandModels.csproj" />
     <ProjectReference Include="..\PresentationHelp.Shared\PresentationHelp.Shared.csproj" />
+    <ProjectReference Include="..\PresentationHelp.Website.Models\PresentationHelp.Website.Models.csproj" />
   </ItemGroup>
 
 </Project>

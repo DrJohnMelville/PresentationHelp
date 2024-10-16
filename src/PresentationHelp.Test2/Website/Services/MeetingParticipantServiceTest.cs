@@ -20,7 +20,7 @@ public class MeetingParticipantServiceTest
     public void AccessDefaultCreatedMeeting()
     {
         store.GetOrCreateMeeting("Name");
-        sut.Html("Name", "User").Should().Be(DefaultMeetingContent.Html("Name", 1));
+        sut.Html("Name", "User").Should().Contain("You are logged into the meeting.");
     }
 
     [Test]

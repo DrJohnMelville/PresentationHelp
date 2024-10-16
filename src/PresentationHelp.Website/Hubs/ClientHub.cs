@@ -8,7 +8,7 @@ public class ClientHub(MeetingStore store): Hub, IClientHubServer
 {
     public  Task EnrollClient(string meeting)
     {
-        return Groups.AddToGroupAsync(Context.ConnectionId, meeting.ToLowerInvariant());
+         return Groups.AddToGroupAsync(Context.ConnectionId, meeting.ToLowerInvariant());
     }
     public Task SendDatum(string meeting, int screen, string datum)
     {

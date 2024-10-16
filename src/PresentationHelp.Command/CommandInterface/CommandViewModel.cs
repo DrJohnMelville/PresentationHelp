@@ -5,6 +5,7 @@ using Melville.MVVM.Wpf.DiParameterSources;
 using PresentationHelp.Command.Connection;
 using PresentationHelp.Command.Presenter;
 using PresentationHelp.Command.QueryMeetingName;
+using PresentationHelp.CommandModels.Parsers;
 
 namespace PresentationHelp.Command.CommandInterface;
 

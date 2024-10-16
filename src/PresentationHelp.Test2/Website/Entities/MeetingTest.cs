@@ -23,8 +23,8 @@ public class MeetingTest
     [Test]
     public void HtmlContent()
     {
-        sut.Html.Should().Be(DefaultMeetingContent.Html("A", 1));
-        sut.Html = "New Content";
+        sut.Html.Should().Contain("You are logged into the meeting.");
+        sut.UpdateClientHtml("New Content");
         sut.Html.Should().Be("New Content");
     }
 
@@ -34,5 +34,14 @@ public class MeetingTest
         await sut.PostUserDatum(1, "id", "datum");
         sendCommand.Verify(i=>i.SendUserDatum("A", 1, "id", "datum"),
             Times.Once);
+    }
+
+    [Test]
+    public void UpdateClientHtml()
+    {
+        sut.UpdateClientHtml("New Content").Should().BeTrue();
+        sut.Html.Should().Be("New Content");
+        sut.UpdateClientHtml("").Should().BeFalse();
+        sut.Html.Should().Be("New Content");
     }
 }

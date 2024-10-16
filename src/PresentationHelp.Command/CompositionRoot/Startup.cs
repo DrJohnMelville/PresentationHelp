@@ -8,6 +8,8 @@ using Melville.MVVM.Wpf.RootWindows;
 using Melville.WpfAppFramework.StartupBases;
 using PresentationHelp.Command.Connection;
 using PresentationHelp.Command.QueryMeetingName;
+using PresentationHelp.CommandModels.Parsers;
+using PresentationHelp.ScreenInterface;
 
 namespace PresentationHelp.Command.CompositionRoot;
 
@@ -27,7 +29,13 @@ public class Startup:StartupBase
 
         service.Bind<Application>().ToSelf().AsSingleton();
 
+        ConfigureCommandParser(service);
         ConfigureConnection(service);
+    }
+
+    private void ConfigureCommandParser(IBindableIocService service)
+    {
+        service.Bind<ICommandParser>().To<ScreenParser>().AsSingleton();
     }
 
     private void ConfigureConnection(IBindableIocService service)
