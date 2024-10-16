@@ -12,7 +12,7 @@ public class CommandViewModelTest
     private readonly Mock<IDisplayHubServer> hubServerMock = new();
     private readonly MeetingModel meeting;
     private readonly Mock<IWebsiteConnection> websiteConnectionMock = new();
-    private readonly Mock<ICommandParser> commandParser = new();
+    private readonly Mock<IScreenParser> commandParser = new();
     private readonly CommandViewModel sut;
 
     public CommandViewModelTest()

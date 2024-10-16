@@ -11,4 +11,7 @@ public class ErrorScreen(IScreenDefinition priorScreen, string error): IScreenDe
     public Task AcceptCommand(string command) => priorScreen.AcceptCommand(command);
 
     public string HtmlForUser(IHtmlBuilder builder) => "";
+
+    public object PublicViewModel => priorScreen.PublicViewModel;
+    public object CommandViewModel => error;
 }

@@ -1,14 +1,12 @@
-﻿using System.Net.Http;
-using System.Windows;
-using Melville.INPC;
+﻿using System.Windows;
 using Melville.IOC.IocContainers;
-using Melville.IOC.IocContainers.ActivationStrategies.TypeActivation;
 using Melville.MVVM.Wpf.MvvmDialogs;
 using Melville.MVVM.Wpf.RootWindows;
 using Melville.WpfAppFramework.StartupBases;
 using PresentationHelp.Command.Connection;
 using PresentationHelp.Command.QueryMeetingName;
 using PresentationHelp.CommandModels.Parsers;
+using PresentationHelp.MessageScreens;
 using PresentationHelp.ScreenInterface;
 
 namespace PresentationHelp.Command.CompositionRoot;
@@ -35,7 +33,8 @@ public class Startup:StartupBase
 
     private void ConfigureCommandParser(IBindableIocService service)
     {
-        service.Bind<ICommandParser>().To<ScreenParser>().AsSingleton();
+        service.Bind<IScreenParser>().To<MessageScreenParser>();
+        service.Bind<IScreenParser>().To<ScreenParser>().BlockSelfInjection().AsSingleton();
     }
 
     private void ConfigureConnection(IBindableIocService service)

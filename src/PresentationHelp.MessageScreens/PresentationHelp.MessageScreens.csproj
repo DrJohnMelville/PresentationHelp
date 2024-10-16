@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UseWpf>true</UseWpf>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Melville.Generators.INPC" Version="0.7.2" />
+    <ProjectReference Include="..\PresentationHelp.ScreenInterface\PresentationHelp.ScreenInterface.csproj" />
   </ItemGroup>
 
 </Project>

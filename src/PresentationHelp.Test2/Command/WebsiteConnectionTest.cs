@@ -9,7 +9,7 @@ namespace PresentationHelp.Test2.Command;
 public class WebsiteConnectionTest
 {
     private readonly WebsiteConnection sut = new(new Application(),
-        new MeetingModelFactory(Mock.Of<ICommandParser>()));
+        new MeetingModelFactory(Mock.Of<IScreenParser>()));
 
     [Test]
     public void ThrowOnPrematureGet()

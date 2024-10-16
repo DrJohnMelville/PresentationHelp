@@ -1,10 +1,5 @@
-﻿using System.Diagnostics.Contracts;
-using System.Security.RightsManagement;
-using Melville.INPC;
-using Microsoft.AspNetCore.SignalR.Client;
+﻿using Melville.INPC;
 using PresentationHelp.Command.Connection;
-using PresentationHelp.Command.QueryMeetingName;
-using PresentationHelp.Shared;
 
 namespace PresentationHelp.Command.Presenter;
 
