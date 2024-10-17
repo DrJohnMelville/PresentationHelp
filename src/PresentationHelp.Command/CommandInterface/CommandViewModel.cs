@@ -12,7 +12,7 @@ namespace PresentationHelp.Command.CommandInterface;
 public partial class CommandViewModel(
     IWebsiteConnection connection)
 {
-    private MeetingModel meeting = connection.GetClient();
+    public MeetingModel Meeting { get; } = connection.GetClient();
     [AutoNotify] private string nextCommand = "";
 
     [AutoNotify] public bool CanExecuteCommand => !string.IsNullOrWhiteSpace(NextCommand);
@@ -20,7 +20,7 @@ public partial class CommandViewModel(
     public async Task ExecuteCommand(IWaitingService wait)
     {
         using var waiter = wait.WaitBlock("Sending Command to Server");
-        await meeting.SendCommandToWebsiteAsync(NextCommand);
+        await Meeting.SendCommandToWebsiteAsync(NextCommand);
     }
 
     public async Task ShowPresenter([FromServices] PresenterViewModel viewModel)

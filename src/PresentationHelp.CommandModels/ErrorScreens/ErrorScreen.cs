@@ -13,5 +13,5 @@ public class ErrorScreen(IScreenDefinition priorScreen, string error): IScreenDe
     public string HtmlForUser(IHtmlBuilder builder) => "";
 
     public object PublicViewModel => priorScreen.PublicViewModel;
-    public object CommandViewModel => error;
+    public object CommandViewModel => new ErrorScreenViewModel(error, priorScreen);
 }

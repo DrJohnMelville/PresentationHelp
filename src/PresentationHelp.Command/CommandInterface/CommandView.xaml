@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PresentationHelp.Command.CommandInterface"
              xmlns:eventBindings="clr-namespace:Melville.MVVM.Wpf.EventBindings;assembly=Melville.MVVM.Wpf"
+             xmlns:viewFrames="clr-namespace:Melville.MVVM.Wpf.ViewFrames;assembly=Melville.MVVM.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -12,16 +13,21 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <WrapPanel>
             <Button Content="Show Presenter View" Click="{eventBindings:EventBinding ShowPresenter}"/>
         </WrapPanel>
         <TextBlock Grid.Row="1">Enter a Command</TextBlock>
-        <TextBox Grid.Row="2" Text="{Binding NextCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 AcceptsReturn="True" AcceptsTab="True"/>
-        <Button Grid.Row="3" Content="Submit Command" 
-                Click="{eventBindings:EventBinding ExecuteCommand}"
-                IsEnabled="{Binding CanExecuteCommand}"></Button>
+        <DockPanel Grid.Row="2" Margin="0, 0, 0, 5">
+            <Button DockPanel.Dock="Bottom" Content="Submit Command" 
+                    Click="{eventBindings:EventBinding ExecuteCommand}"
+                    IsEnabled="{Binding CanExecuteCommand}"></Button>
+            <TextBox Text="{Binding NextCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     AcceptsReturn="True" AcceptsTab="False"/>
+        </DockPanel>
+        <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+                      Height="5"/>
+        <viewFrames:ViewFrame Grid.Row="4" Content="{Binding Meeting.CurrentScreen.CommandViewModel}"/>
     </Grid>
 </UserControl>

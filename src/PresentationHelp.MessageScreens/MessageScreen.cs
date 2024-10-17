@@ -1,6 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using System.Windows.Media;
-using Melville.INPC;
 using PresentationHelp.ScreenInterface;
 
 namespace PresentationHelp.MessageScreens;
@@ -26,12 +24,4 @@ public partial class MessageScreenParser : IScreenParser
 
     [GeneratedRegex(@"^\s*Message\r\n(.+)$")]
     private partial Regex Parser();
-}
-
-public partial class SolidColorViewModel
-{
-    [FromConstructor] public Color Color { get; }
-
-    public static SolidColorViewModel LightGray = new (Colors.LightGray);
-    public static SolidColorViewModel Transparent = new (Colors.Transparent);
 }
