@@ -1,5 +1,8 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using Melville.IOC.IocContainers;
+using Melville.MVVM.Wpf.EventBindings;
 using Melville.MVVM.Wpf.MvvmDialogs;
 using Melville.MVVM.Wpf.RootWindows;
 using Melville.WpfAppFramework.StartupBases;
@@ -9,6 +12,7 @@ using PresentationHelp.CommandModels.Parsers;
 using PresentationHelp.MessageScreens;
 using PresentationHelp.Poll;
 using PresentationHelp.ScreenInterface;
+using PresentationHelp.WpfViewParts;
 
 namespace PresentationHelp.Command.CompositionRoot;
 

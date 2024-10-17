@@ -45,5 +45,24 @@ public class ScreenParserTest
         scr.HtmlForUser(new HtmlBuilder("M", 1)).Should().Contain("Option A")
             .And.Contain("Option B").And
             .Contain("Option C");
+
+        var poll = (PollScreen)scr;
+        poll.Title.Should().BeEmpty();
+        poll.Items.Should().BeEquivalentTo("Option A", "Option B", "Option C");
+    }
+    [Test]
+    public void PollScreenParsingWithTitle()
+    {
+        var scr = sut.GetAsScreen("""
+        Poll
+            Option A
+            Option B
+            Option C
+        Title: My Poll
+        """, priorDefinition.Object);
+        scr.Should().BeOfType<PollScreen>();
+        var poll = (PollScreen)scr;
+        poll.Title.Should().Be("My Poll");
+        poll.Items.Should().BeEquivalentTo("Option A", "Option B", "Option C");
     }
 }

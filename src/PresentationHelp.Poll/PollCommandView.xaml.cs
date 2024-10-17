@@ -13,13 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PresentationHelp.MessageScreens;
+namespace PresentationHelp.Poll;
 /// <summary>
-/// Interaction logic for SolidColorView.xaml
+/// Interaction logic for PollCommandView.xaml
 /// </summary>
-public partial class SolidColorView : UserControl
+public partial class PollCommandView : UserControl
 {
-    public SolidColorView()
+    public PollCommandView()
     {
         InitializeComponent();
     }

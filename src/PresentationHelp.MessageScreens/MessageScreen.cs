@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using PresentationHelp.ScreenInterface;
+using PresentationHelp.WpfViewParts;
 
 namespace PresentationHelp.MessageScreens;
 
@@ -22,6 +23,6 @@ public partial class MessageScreenParser : IScreenParser
             new MessageScreen(match.Groups[1].Value): null;
     }
 
-    [GeneratedRegex(@"^\s*Message\r\n(.+)$")]
+    [GeneratedRegex(@"^\s*Message\r\n(.+)$", RegexOptions.IgnoreCase)]
     private partial Regex Parser();
 }

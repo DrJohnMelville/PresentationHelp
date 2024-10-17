@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
 using Melville.INPC;
 
-namespace PresentationHelp.MessageScreens;
+namespace PresentationHelp.WpfViewParts;
 
 public partial class SolidColorViewModel
 {

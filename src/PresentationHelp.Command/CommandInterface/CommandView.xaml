@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:PresentationHelp.Command.CommandInterface"
              xmlns:eventBindings="clr-namespace:Melville.MVVM.Wpf.EventBindings;assembly=Melville.MVVM.Wpf"
              xmlns:viewFrames="clr-namespace:Melville.MVVM.Wpf.ViewFrames;assembly=Melville.MVVM.Wpf"
+             xmlns:wpfViewParts="clr-namespace:PresentationHelp.WpfViewParts;assembly=PresentationHelp.WpfViewParts"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -28,6 +29,14 @@
         </DockPanel>
         <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
                       Height="5"/>
-        <viewFrames:ViewFrame Grid.Row="4" Content="{Binding Meeting.CurrentScreen.CommandViewModel}"/>
+        <viewFrames:ViewFrame Grid.Row="4" Content="{Binding Meeting.CurrentScreen.CommandViewModel}">
+            <viewFrames:ViewFrame.Resources>
+                <Style TargetType="{x:Type wpfViewParts:TextCommandButton}">
+                    <eventBindings:EventIocSetter Event="Click"
+                                                  MethodName="CommandButtonPressed"/>
+                </Style>
+
+            </viewFrames:ViewFrame.Resources>
+        </viewFrames:ViewFrame>
     </Grid>
 </UserControl>

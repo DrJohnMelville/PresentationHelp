@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PresentationHelp.ScreenInterface\PresentationHelp.ScreenInterface.csproj" />
+    <ProjectReference Include="..\PresentationHelp.WpfViewParts\PresentationHelp.WpfViewParts.csproj" />
   </ItemGroup>
 
 </Project>

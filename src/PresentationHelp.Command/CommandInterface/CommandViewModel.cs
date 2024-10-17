@@ -17,14 +17,16 @@ public partial class CommandViewModel(
 
     [AutoNotify] public bool CanExecuteCommand => !string.IsNullOrWhiteSpace(NextCommand);
 
-    public async Task ExecuteCommand(IWaitingService wait)
-    {
-        using var waiter = wait.WaitBlock("Sending Command to Server");
-        await Meeting.SendCommandToWebsiteAsync(NextCommand);
-    }
+    public Task ExecuteCommand(IWaitingService wait) => CommandButtonPressed(NextCommand, wait);
 
     public async Task ShowPresenter([FromServices] PresenterViewModel viewModel)
     {
         new PresenterView() { DataContext = viewModel }.Show();
+    }
+
+    public async Task CommandButtonPressed(string command, IWaitingService wait)
+    {
+        using var waiter = wait.WaitBlock("Sending Command to Server");
+        await Meeting.SendCommandToWebsiteAsync(NextCommand);
     }
 }
