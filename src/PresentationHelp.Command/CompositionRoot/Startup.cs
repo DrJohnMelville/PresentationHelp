@@ -7,6 +7,7 @@ using PresentationHelp.Command.Connection;
 using PresentationHelp.Command.QueryMeetingName;
 using PresentationHelp.CommandModels.Parsers;
 using PresentationHelp.MessageScreens;
+using PresentationHelp.Poll;
 using PresentationHelp.ScreenInterface;
 
 namespace PresentationHelp.Command.CompositionRoot;
@@ -34,6 +35,7 @@ public class Startup:StartupBase
     private void ConfigureCommandParser(IBindableIocService service)
     {
         service.Bind<IScreenParser>().To<MessageScreenParser>();
+        service.Bind<IScreenParser>().To<PollScreenParser>();
         service.Bind<IScreenParser>().To<ScreenParser>().BlockSelfInjection().AsSingleton();
     }
 

@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PresentationHelp.Command.Presenter"
+        xmlns:viewFrames="clr-namespace:Melville.MVVM.Wpf.ViewFrames;assembly=Melville.MVVM.Wpf"
         mc:Ignorable="d"
         Title="PresenterView" Height="450" Width="800">
     <Grid>
-        <TextBlock Text="{Binding Meeting.LastCommand}"></TextBlock>
+        <viewFrames:ViewFrame Content="{Binding Meeting.CurrentScreen.PublicViewModel}"></viewFrames:ViewFrame>
         <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" Text="{Binding Id}"/>
     </Grid>
 </Window>

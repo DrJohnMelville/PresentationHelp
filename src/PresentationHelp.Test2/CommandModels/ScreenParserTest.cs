@@ -2,6 +2,7 @@
 using PresentationHelp.CommandModels.ErrorScreens;
 using PresentationHelp.CommandModels.Parsers;
 using PresentationHelp.MessageScreens;
+using PresentationHelp.Poll;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.Website.Models.Entities;
 
@@ -10,7 +11,10 @@ namespace PresentationHelp.Test2.CommandModels;
 public class ScreenParserTest
 {
     private readonly Mock<IScreenDefinition> priorDefinition = new();
-    private readonly ScreenParser sut = new([new MessageScreenParser()]);
+    private readonly ScreenParser sut = new([
+        new MessageScreenParser(),
+        new PollScreenParser()
+    ]);
 
     [Test]
     public void ParseError()
@@ -26,5 +30,20 @@ public class ScreenParserTest
         var scr = sut.GetAsScreen("Message\r\nHello World", priorDefinition.Object);
         scr.Should().BeOfType<MessageScreen>();
         scr.HtmlForUser(new HtmlBuilder("meg", 12)).Should().Contain("Hello World");
+    }
+
+    [Test]
+    public void PollScreenParsing()
+    {
+        var scr = sut.GetAsScreen("""
+        Poll
+            Option A
+            Option B
+            Option C
+        """, priorDefinition.Object);
+        scr.Should().BeOfType<PollScreen>();
+        scr.HtmlForUser(new HtmlBuilder("M", 1)).Should().Contain("Option A")
+            .And.Contain("Option B").And
+            .Contain("Option C");
     }
 }

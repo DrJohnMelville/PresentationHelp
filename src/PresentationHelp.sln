@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationHelp.CommandMod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationHelp.MessageScreens", "PresentationHelp.MessageScreens\PresentationHelp.MessageScreens.csproj", "{3F5A95B3-CCF1-422C-9CA2-664B24135428}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationHelp.Poll", "PresentationHelp.Poll\PresentationHelp.Poll.csproj", "{63657401-A0D6-4337-8D74-575EE0BAE2E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,10 @@ Global
 		{3F5A95B3-CCF1-422C-9CA2-664B24135428}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F5A95B3-CCF1-422C-9CA2-664B24135428}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F5A95B3-CCF1-422C-9CA2-664B24135428}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63657401-A0D6-4337-8D74-575EE0BAE2E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63657401-A0D6-4337-8D74-575EE0BAE2E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63657401-A0D6-4337-8D74-575EE0BAE2E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63657401-A0D6-4337-8D74-575EE0BAE2E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +88,7 @@ Global
 		{094A27BA-A164-4A63-BB24-12893B94282D} = {59E2E2C7-2811-4DE4-8265-177605552BA2}
 		{9F5F2985-0008-4956-9C4A-91A298B60447} = {FB9F3DA3-6EB2-491B-9E1D-F362A2C51EBD}
 		{3F5A95B3-CCF1-422C-9CA2-664B24135428} = {59E2E2C7-2811-4DE4-8265-177605552BA2}
+		{63657401-A0D6-4337-8D74-575EE0BAE2E0} = {59E2E2C7-2811-4DE4-8265-177605552BA2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {40DF9E56-30C1-48A1-BF6C-3794B008FD7E}
