@@ -5,14 +5,17 @@ namespace PresentationHelp.CommandModels.Parsers;
 
 public class ScreenParser(IList<IScreenParser> parsers): IScreenParser
 {
-    public IScreenDefinition? GetAsScreen(string command, IScreenDefinition currentScreen)
+    public async ValueTask<IScreenDefinition?> GetAsScreen(
+        string command, IScreenDefinition currentScreen)
     {
-        return parsers.Select(i => i.GetAsScreen(command, currentScreen))
-            .Where(i => i != null)
-            .DefaultIfEmpty(new ErrorScreen(currentScreen, $"""
+        foreach (var parser in parsers)
+        {
+            if ((await parser.GetAsScreen(command, currentScreen)) is { } screen)
+                return screen;
+        }
+        return new ErrorScreen(currentScreen, $"""
                 Could not parse the command:
                 {command}
-                """))
-            .First();
+                """);
     }
 }

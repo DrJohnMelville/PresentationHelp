@@ -17,25 +17,25 @@ public class ScreenParserTest
     ]);
 
     [Test]
-    public void ParseError()
+    public async Task ParseError()
     {
-        var scr = sut.GetAsScreen("Error: Error Text", priorDefinition.Object);
+        var scr = await sut.GetAsScreen("Error: Error Text", priorDefinition.Object);
         scr.Should().BeOfType<ErrorScreen>();
         ((ErrorScreen)scr).Error.Should().Be("Could not parse the command:\r\nError: Error Text");
     }
 
     [Test]
-    public void MessageScreenTest()
+    public async Task MessageScreenTest()
     {
-        var scr = sut.GetAsScreen("Message\r\nHello World", priorDefinition.Object);
+        var scr = await sut.GetAsScreen("Message\r\nHello World", priorDefinition.Object);
         scr.Should().BeOfType<MessageScreen>();
         scr.HtmlForUser(new HtmlBuilder("meg", 12)).Should().Contain("Hello World");
     }
 
     [Test]
-    public void PollScreenParsing()
+    public async Task PollScreenParsing()
     {
-        var scr = sut.GetAsScreen("""
+        var scr = await sut.GetAsScreen("""
         Poll
             Option A
             Option B
@@ -51,9 +51,9 @@ public class ScreenParserTest
         poll.Items.Should().BeEquivalentTo("Option A", "Option B", "Option C");
     }
     [Test]
-    public void PollScreenParsingWithTitle()
+    public async Task PollScreenParsingWithTitle()
     {
-        var scr = sut.GetAsScreen("""
+        var scr = await sut.GetAsScreen("""
         Poll
             Option A
             Option B

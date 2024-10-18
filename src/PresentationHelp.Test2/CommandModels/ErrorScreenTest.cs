@@ -28,8 +28,8 @@ public class ErrorScreenTest
     [Test]
     public async Task AcceptCommand()
     {
-        await sut.AcceptCommand("Command");
-        prior.Verify(i => i.AcceptCommand("Command"), Times.Once);
+        await sut.TryParseCommandAsync("Command");
+        prior.Verify(i => i.TryParseCommandAsync("Command"), Times.Once);
         prior.VerifyNoOtherCalls();
     }
 }

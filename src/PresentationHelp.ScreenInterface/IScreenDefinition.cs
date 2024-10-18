@@ -2,18 +2,22 @@
 
 public interface IScreenParser
 {
-    IScreenDefinition? GetAsScreen(string command, IScreenDefinition currentScreen);
+    ValueTask<IScreenDefinition?> GetAsScreen(string command, IScreenDefinition currentScreen);
 }
 
-public interface IScreenDefinition
+public interface ICommandParser
+{
+    ValueTask<bool> TryParseCommandAsync(string command);
+}
+
+public interface IScreenDefinition: ICommandParser
 {
     Task AcceptDatum(string user, string datum);
-    Task AcceptCommand(string command);
-
     string HtmlForUser(IHtmlBuilder builder);
     object PublicViewModel { get; }
     object CommandViewModel { get; }
 }
+
 
 public interface IHtmlBuilder
 {

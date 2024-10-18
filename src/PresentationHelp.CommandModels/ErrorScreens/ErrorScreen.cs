@@ -8,7 +8,8 @@ public class ErrorScreen(IScreenDefinition priorScreen, string error): IScreenDe
 
     public Task AcceptDatum(string user, string datum) => priorScreen.AcceptDatum(user, datum);
 
-    public Task AcceptCommand(string command) => priorScreen.AcceptCommand(command);
+    public ValueTask<bool> TryParseCommandAsync(string command) =>
+        priorScreen.TryParseCommandAsync(command);
 
     public string HtmlForUser(IHtmlBuilder builder) => "";
 

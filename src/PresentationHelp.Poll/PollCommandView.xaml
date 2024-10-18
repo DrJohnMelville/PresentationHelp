@@ -8,6 +8,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <wpfViewParts:TextCommandButton DataContext="###S FontSzie 36">Font size to 36</wpfViewParts:TextCommandButton> 
+        <wpfViewParts:TextCommandButton DataContext="# FontSize 36">Font size to 36</wpfViewParts:TextCommandButton> 
     </Grid>
 </UserControl>

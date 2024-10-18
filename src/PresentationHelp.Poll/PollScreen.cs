@@ -31,10 +31,12 @@ public partial class PollScreen : IScreenDefinition
 
         return Task.CompletedTask;
     }
-    public Task AcceptCommand(string command)
+
+    public ValueTask<bool> TryParseCommandAsync(string command)
     {
-        return Task.CompletedTask;
+        throw new NotImplementedException();
     }
+
     public string HtmlForUser(IHtmlBuilder builder) => 
         builder.CommonClientPage("", 
             GenerateHtml());
