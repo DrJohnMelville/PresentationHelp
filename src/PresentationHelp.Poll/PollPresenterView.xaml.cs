@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 
 namespace PresentationHelp.Poll;
 /// <summary>
-/// Interaction logic for PollQueryView.xaml
+/// Interaction logic for PollPresenterView.xaml
 /// </summary>
-public partial class PollQueryView : UserControl
+public partial class PollPresenterView : UserControl
 {
-    public PollQueryView()
+    public PollPresenterView()
     {
         InitializeComponent();
     }

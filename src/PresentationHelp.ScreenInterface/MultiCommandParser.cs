@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace PresentationHelp.ScreenInterface;
 
-public partial class MultiScreenParser(ICommandParser inner) : ICommandParser
+public partial class MultiCommandParser(ICommandParser inner) : ICommandParser
 {
     public async ValueTask<bool> TryParseCommandAsync(string command)
     {

@@ -14,4 +14,6 @@ public partial class MessageScreen(string message) : IScreenDefinition
 
     public object PublicViewModel => SolidColorViewModel.LightGray;
     public object CommandViewModel => SolidColorViewModel.LightGray;
+
+    public bool UserHtmlIsDirty => false;
 }

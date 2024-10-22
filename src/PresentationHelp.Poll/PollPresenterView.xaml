@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PresentationHelp.Poll.PollQueryView"
+﻿<UserControl x:Class="PresentationHelp.Poll.PollPresenterView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -27,7 +27,7 @@
                 <DataTemplate>
                     <Border BorderThickness="1" Margin="3" BorderBrush="Black"
                             Padding="5">
-                        <TextBlock Text="{Binding}" 
+                        <TextBlock Text="{Binding Name}" 
                                    FontSize="{Binding DataContext.FontSize, ElementName=OuterGrid}"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">

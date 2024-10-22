@@ -4,7 +4,6 @@ using PresentationHelp.Shared;
 using System.Web;
 using PresentationHelp.Command.Presenter;
 using PresentationHelp.CommandModels.Parsers;
-using PresentationHelp.MessageScreens;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.Website.Models.Entities;
 
@@ -27,27 +26,10 @@ public class MeetingModelFactory(IScreenParser screenParser)
     }
 }
 
-public partial class ScreenHolder(IScreenParser innerParser): ICommandParser
-{
-    [AutoNotify] private IScreenDefinition screen =
-        new MessageScreen("Internal -- should never show");
-    public async ValueTask<bool> TryParseCommandAsync(string command)
-    {
-        if (await screen.TryParseCommandAsync(command)) return true;
-        if (await innerParser.GetAsScreen(command, Screen) is { } newScreen)
-        {
-            Screen = newScreen;
-            return true;
-        }
-
-        return false;
-    }
-}
-
 [AutoNotify]
 public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
 {
-    private readonly ICommandParser screenParser;
+    private readonly ICommandParser commandParser;
     private readonly ScreenHolder screenHolder;
     public IScreenDefinition CurrentScreen => screenHolder.Screen; 
     public string ParticipantUrl { get; }
@@ -64,7 +46,7 @@ public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
         this.DelegatePropertyChangeFrom(screenHolder, nameof(ScreenHolder.Screen), nameof(CurrentScreen));
         MeetingName = meetingName;
         DisplayHub = displayHub;
-        this.screenParser = new MultiScreenParser(screenHolder);
+        this.commandParser = new MultiCommandParser(screenHolder);
         DisplayHub.CreateOrJoinMeeting(meetingName);
     }
 
@@ -85,22 +67,26 @@ public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
 
     //Notice that SendCommand sends a command to the website that then comes back as ReceiveCommand,
     // but this also notifies any other viewers of the command
-    public async ValueTask SendCommandToWebsiteAsync(string nextCommand)
-    {
+    public async ValueTask SendCommandToWebsiteAsync(string nextCommand) =>
         await DisplayHub.PostCommand(MeetingName, nextCommand, 
             await NewHtmlForCommand(nextCommand));
-    }
 
     private async ValueTask<string> NewHtmlForCommand(string nextCommand)
     {
-        return await IsCommandNewScreen(nextCommand)? 
-            CurrentScreen.HtmlForUser(new HtmlBuilder(MeetingName, screenNumber +1)): "";
+        if (await IsCommandNewScreen(nextCommand)) return CreateClientHtml(1);
+        if (CurrentScreen.UserHtmlIsDirty) return CreateClientHtml(0);
+            return "";
+    }
+
+    private string CreateClientHtml(int delta)
+    {
+        return CurrentScreen.HtmlForUser(new HtmlBuilder(MeetingName, screenNumber + delta));
     }
 
     public async ValueTask<bool> IsCommandNewScreen(string command)
     {
         var old = CurrentScreen;
-        await screenParser.TryParseCommandAsync(command);
+        await commandParser.TryParseCommandAsync(command);
         return old != CurrentScreen;
     }
 

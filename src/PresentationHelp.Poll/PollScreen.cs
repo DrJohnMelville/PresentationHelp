@@ -2,44 +2,73 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using Melville.INPC;
+using Microsoft.VisualBasic.CompilerServices;
 using PresentationHelp.ScreenInterface;
+using PresentationHelp.WpfViewParts;
 
 namespace PresentationHelp.Poll;
 
+public partial class VoteItem
+{
+    [FromConstructor] public String Name { get; }
+    [AutoNotify] private int votes;
+}
+
 public partial class PollScreen : IScreenDefinition
 {
-    public string[] Items { get; }
-    public string Title { get; }
-    public ConcurrentDictionary<string, int> Votes { get; } = new();
+    public VoteItem[] Items { get; }
+    [AutoNotify] private string title = "";
+    private ConcurrentDictionary<string, int> Votes { get; } = new();
     private readonly CommandParser commands;
 
     [AutoNotify] private double fontSize = 24; 
     public int VotesCast => Votes.Count;
 
-    public PollScreen(string[] items, string title)
+    public PollScreen(string[] items)
     {
         commands = new CommandParser(
-            (@"~\s*FontSize\s*([\d.]+)", (double i) => FontSize = i)
+            (@"~\s*FontSize\s*([\d.]+)", (double i) => FontSize = i),
+            (@"~\s*Title\s*(.+\S)", (string i) => { Title = i;
+                                                     UserHtmlIsDirty = true;
+                                                   })
+
         );
 
-        this.Items = items;
-        this.Title = title;
-        publicViewModel = new PollQueryViewModel(this);
+        this.Items = items.Select(i=>new VoteItem(i)).ToArray();
+        publicViewModel = new PollPresenterViewModel(this);
     }
 
     public Task AcceptDatum(string user, string datum)
     {
-        if (int.TryParse(datum, out var index))
+        if (int.TryParse(datum, out var index) && (uint)index < Items.Length)
         {
             Votes.AddOrUpdate(user, index, (_, _) => index);
+            CountVotes();
             ((IExternalNotifyPropertyChanged)this).OnPropertyChanged(nameof(VotesCast));
         }
 
         return Task.CompletedTask;
     }
 
+    private void CountVotes()
+    {
+        Span<int> voteCounter = stackalloc int[Items.Length];
+        voteCounter.Clear();
+        foreach (var vote in Votes)
+        {
+            voteCounter[vote.Value]++;
+        }
+
+        for (int i = 0; i < Items.Length; i++)
+        {
+            Items[i].Votes = voteCounter[i];
+        }
+    }
+
     public ValueTask<bool> TryParseCommandAsync(string command) => 
         commands.TryExecuteCommandAsync(command);
+
+    public bool UserHtmlIsDirty { get; private set; }
 
     public string HtmlForUser(IHtmlBuilder builder) => 
         builder.CommonClientPage("", 
@@ -47,6 +76,7 @@ public partial class PollScreen : IScreenDefinition
 
     private string GenerateHtml()
     {
+        UserHtmlIsDirty = false;
         var sb = new StringBuilder();
         if (Title.Length > 0)
         {
@@ -56,7 +86,7 @@ public partial class PollScreen : IScreenDefinition
         int index = 0;
         foreach (var item in Items)
         {
-            sb.Append($"<button onclick=\"sendDatum('{index++}')\">{item}</button>");
+            sb.Append($"<button onclick=\"sendDatum('{index++}')\">{item.Name}</button>");
         }
 
         return sb.ToString();
@@ -66,7 +96,7 @@ public partial class PollScreen : IScreenDefinition
     public object CommandViewModel => new PollCommandViewModel(this);
 }
 
-public partial class PollQueryViewModel
+public partial class PollPresenterViewModel
 {
     [FromConstructor] public PollScreen Screen { get; }
 }

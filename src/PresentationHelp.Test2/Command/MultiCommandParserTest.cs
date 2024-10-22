@@ -3,14 +3,14 @@ using PresentationHelp.ScreenInterface;
 
 namespace PresentationHelp.Test2.Command;
 
-public class MultiScreenParserTest
+public class MultiCommandParserTest
 {
     private readonly Mock<ICommandParser> inner = new();
-    private readonly MultiScreenParser parser;
+    private readonly MultiCommandParser parser;
 
-    public MultiScreenParserTest()
+    public MultiCommandParserTest()
     {
-        parser = new MultiScreenParser(inner.Object);
+        parser = new MultiCommandParser(inner.Object);
     }
 
     [Test]

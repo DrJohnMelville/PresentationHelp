@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Melville.INPC;
 
-namespace PresentationHelp.WpfViewParts;
+namespace PresentationHelp.Poll;
 
 public class CommandParser
 {
@@ -46,7 +46,7 @@ internal readonly partial struct CommandDeclaration
             }
 
         }
-        catch (Exception)
+        catch (Exception e)
         {
         }
 

@@ -12,6 +12,7 @@ public class ErrorScreen(IScreenDefinition priorScreen, string error): IScreenDe
         priorScreen.TryParseCommandAsync(command);
 
     public string HtmlForUser(IHtmlBuilder builder) => "";
+    public bool UserHtmlIsDirty => false;
 
     public object PublicViewModel => priorScreen.PublicViewModel;
     public object CommandViewModel => new ErrorScreenViewModel(error, priorScreen);
