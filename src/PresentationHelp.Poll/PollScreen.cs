@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Text;
+using System.Text.RegularExpressions;
 using Melville.INPC;
 using PresentationHelp.ScreenInterface;
 
@@ -10,12 +11,17 @@ public partial class PollScreen : IScreenDefinition
     public string[] Items { get; }
     public string Title { get; }
     public ConcurrentDictionary<string, int> Votes { get; } = new();
+    private readonly CommandParser commands;
 
     [AutoNotify] private double fontSize = 24; 
     public int VotesCast => Votes.Count;
 
     public PollScreen(string[] items, string title)
     {
+        commands = new CommandParser(
+            (@"~\s*FontSize\s*([\d.]+)", (double i) => FontSize = i)
+        );
+
         this.Items = items;
         this.Title = title;
         publicViewModel = new PollQueryViewModel(this);
@@ -32,10 +38,8 @@ public partial class PollScreen : IScreenDefinition
         return Task.CompletedTask;
     }
 
-    public ValueTask<bool> TryParseCommandAsync(string command)
-    {
-        throw new NotImplementedException();
-    }
+    public ValueTask<bool> TryParseCommandAsync(string command) => 
+        commands.TryExecuteCommandAsync(command);
 
     public string HtmlForUser(IHtmlBuilder builder) => 
         builder.CommonClientPage("", 
