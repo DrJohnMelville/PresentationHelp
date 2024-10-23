@@ -24,17 +24,18 @@ public partial class PollScreen : IScreenDefinition
     [AutoNotify] private string title = "";
     [AutoNotify] private double fontSize = 24;
     [AutoNotify] private bool showResult;
+    [AutoNotify] private bool votingLocked;
 
     public PollScreen(string[] items)
     {
         commands = new CommandParser(
             (@"^~\s*FontSize\s*([\d.]+)", (double i) => FontSize = i),
-            (@"^~\s*Title\s*(.+\S)", (string i) => { Title = i;
-                                                     UserHtmlIsDirty = true;
-                                                   }),
+            (@"^~\s*Title\s*(.+\S)", (string i) => { Title = i; UserHtmlIsDirty = true; }),
             (@"^~\s*Show\s*Result", () => ShowResult = true),
-            (@"^~\s*Hide\s*Result", () => ShowResult = false)
-
+            (@"^~\s*Hide\s*Result", () => ShowResult = false),
+            (@"^~\s*Lock\s*Votes", () => SetVotingLock(true)),
+            (@"^~\s*Unlock\s*Votes", () => SetVotingLock(false)),
+            (@"^~\s*Clear\s*Votes", () => { Votes.Clear(); CountVotes(); })
         );
 
         this.Items = items.Select(i=>new VoteItem(i)).ToArray();
@@ -43,7 +44,9 @@ public partial class PollScreen : IScreenDefinition
 
     public Task AcceptDatum(string user, string datum)
     {
-        if (int.TryParse(datum, out var index) && (uint)index < Items.Length)
+        if (!votingLocked &&
+            int.TryParse(datum, out var index) && 
+            (uint)index < Items.Length)
         {
             Votes.AddOrUpdate(user, index, (_, _) => index);
             CountVotes();
@@ -93,6 +96,12 @@ public partial class PollScreen : IScreenDefinition
         }
 
         return sb.ToString();
+    }
+
+    private void SetVotingLock(bool value)
+    {
+        VotingLocked = value;
+        UserHtmlIsDirty = true;
     }
 
     [AutoNotify] private object publicViewModel;

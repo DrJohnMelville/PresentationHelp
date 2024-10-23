@@ -59,4 +59,31 @@ public class PollTest
         await sut.TryParseCommandAsync("~HideResult");
         sut.ShowResult.Should().BeFalse();
     }
+
+    [Test]
+    public async Task VoteLocking()
+    {
+        await sut.AcceptDatum("User 1", "0");
+        sut.Items[0].Votes.Should().Be(1);
+        sut.Items[1].Votes.Should().Be(0);
+
+        await sut.TryParseCommandAsync("~LockVotes");
+        await sut.AcceptDatum("User 1", "1");
+        sut.Items[0].Votes.Should().Be(1);
+        sut.Items[1].Votes.Should().Be(0);
+
+        await sut.TryParseCommandAsync("~UnlockVotes");
+        await sut.AcceptDatum("User 1", "1");
+        sut.Items[0].Votes.Should().Be(0);
+        sut.Items[1].Votes.Should().Be(1);
+    }
+
+    [Test]
+    public async Task ClearVotes()
+    {
+        await sut.AcceptDatum("User 1", "0");
+        sut.VotesCast.Should().Be(1);
+        await sut.TryParseCommandAsync("~ Clear votes");
+        sut.VotesCast.Should().Be(0);
+    }
 }
