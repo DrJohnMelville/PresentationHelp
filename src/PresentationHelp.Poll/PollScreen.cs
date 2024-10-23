@@ -18,6 +18,7 @@ public partial class PollScreen : IScreenDefinition
 {
     private ConcurrentDictionary<string, int> Votes { get; } = new();
     private readonly CommandParser commands;
+    private readonly IThrottle recountThrottle;
 
     public VoteItem[] Items { get; }
     public int VotesCast => Votes.Count;
@@ -26,7 +27,7 @@ public partial class PollScreen : IScreenDefinition
     [AutoNotify] private bool showResult;
     [AutoNotify] private bool votingLocked;
 
-    public PollScreen(string[] items)
+    public PollScreen(string[] items, Func<TimeSpan, Func<ValueTask>, IThrottle> throttleFactory)
     {
         commands = new CommandParser(
             (@"^~\s*FontSize\s*([\d.]+)", (double i) => FontSize = i),
@@ -38,9 +39,12 @@ public partial class PollScreen : IScreenDefinition
             (@"^~\s*Clear\s*Votes", () => { Votes.Clear(); CountVotes(); })
         );
 
+        recountThrottle = throttleFactory(TimeSpan.FromSeconds(0.5), InnerCountVotes);
+
         this.Items = items.Select(i=>new VoteItem(i)).ToArray();
         publicViewModel = new PollPresenterViewModel(this);
     }
+
 
     public Task AcceptDatum(string user, string datum)
     {
@@ -56,7 +60,9 @@ public partial class PollScreen : IScreenDefinition
         return Task.CompletedTask;
     }
 
-    private void CountVotes()
+    private void CountVotes() => GC.KeepAlive(recountThrottle.TryExecute());
+
+    private ValueTask InnerCountVotes()
     {
         Span<int> voteCounter = stackalloc int[Items.Length];
         voteCounter.Clear();
@@ -69,6 +75,8 @@ public partial class PollScreen : IScreenDefinition
         {
             Items[i].Votes = voteCounter[i];
         }
+
+        return ValueTask.CompletedTask;
     }
 
     public ValueTask<bool> TryParseCommandAsync(string command) => 

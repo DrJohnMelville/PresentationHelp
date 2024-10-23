@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="CommandModels\" />
+    <Folder Include="ScreenHelpers\" />
     <Folder Include="Website\Entities\" />
   </ItemGroup>
 

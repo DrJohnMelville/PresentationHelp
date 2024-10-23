@@ -6,6 +6,7 @@ using PresentationHelp.MessageScreens;
 using PresentationHelp.Poll;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.Website.Models.Entities;
+using PresentationHelp.WpfViewParts;
 
 namespace PresentationHelp.Test2.CommandModels;
 
@@ -15,7 +16,7 @@ public class ScreenParserTest
     private readonly MultiCommandParser commandParser;
     private readonly ScreenParser sut = new([
         new MessageScreenParser(),
-        new PollScreenParser()
+        new PollScreenParser((time,action)=>new TrivialThrottle(action))
     ]);
 
     public ScreenParserTest()
@@ -80,4 +81,4 @@ public class ScreenParserTest
         poll!.Title.Should().Be("My Poll");
         poll.Items.Select(i => i.Name).Should().BeEquivalentTo("Option A", "Option B", "Option C");
     }
-}
+ }

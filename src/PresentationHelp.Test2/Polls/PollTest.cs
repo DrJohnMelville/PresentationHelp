@@ -1,12 +1,14 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PresentationHelp.Poll;
+using PresentationHelp.WpfViewParts;
 
 namespace PresentationHelp.Test2.Polls;
 
 public class PollTest
 {
     private readonly PollScreen sut = new PollScreen(
-        ["Item 1", "Item 2", "Item 3"]){Title = "This is the Title"};
+        ["Item 1", "Item 2", "Item 3"], (_, act)=>new TrivialThrottle(act))
+        {Title = "This is the Title"};
     
     [Test]
     [Arguments("~   FontSize   15.2  ")]

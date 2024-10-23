@@ -29,6 +29,7 @@ public class Startup:StartupBase
         service.RegisterHomeViewModel<QueryMeetingNameViewModel>();
         service.Bind<IOpenSaveFile>().To<OpenSaveFileAdapter>();
         service.Bind<Window>( ).And<IRootNavigationWindow>().To<RootNavigationWindow>().AsSingleton();
+        service.Bind<TimeProvider>().ToConstant(TimeProvider.System);
 
         service.Bind<Application>().ToSelf().AsSingleton();
 

@@ -1,11 +1,9 @@
-﻿using System.Net.Http;
+﻿using System.Windows.Input;
 using Melville.INPC;
 using Melville.MVVM.WaitingServices;
 using Melville.MVVM.Wpf.DiParameterSources;
 using PresentationHelp.Command.Connection;
 using PresentationHelp.Command.Presenter;
-using PresentationHelp.Command.QueryMeetingName;
-using PresentationHelp.CommandModels.Parsers;
 
 namespace PresentationHelp.Command.CommandInterface;
 
@@ -29,4 +27,18 @@ public partial class CommandViewModel(
         using var waiter = wait.WaitBlock("Sending Command to Server");
         await Meeting.SendCommandToWebsiteAsync(command);
     }
+
+    public Task KeyDown(KeyEventArgs kea, IWaitingService waitingService)
+    {
+        if (IsExecuteCommandShortcut(kea) && CanExecuteCommand)
+        {
+            kea.Handled = true;
+            return ExecuteCommand(waitingService);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private static bool IsExecuteCommandShortcut(KeyEventArgs kea) => 
+        kea.Key == Key.Enter && kea.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control);
 }

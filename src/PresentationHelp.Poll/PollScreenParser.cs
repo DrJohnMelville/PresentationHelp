@@ -1,14 +1,16 @@
 ﻿using System.Text.RegularExpressions;
 using PresentationHelp.ScreenInterface;
+using PresentationHelp.WpfViewParts;
 
 namespace PresentationHelp.Poll;
 
-public partial class PollScreenParser: IScreenParser
+public partial class PollScreenParser(Func<TimeSpan, Func<ValueTask>, IThrottle> throttleFactory) : IScreenParser
 {
     public ValueTask<IScreenDefinition?> GetAsScreen(string command, IScreenDefinition currentScreen) =>
         new(command.StartsWith("Poll\r\n", StringComparison.CurrentCultureIgnoreCase)
             ? new PollScreen(ItemExtractor().Matches(command)
-                .Select(i => i.Groups[1].Value).ToArray())
+                .Select(i => i.Groups[1].Value).ToArray(), throttleFactory
+                )
             : null);
 
     [GeneratedRegex(@"^\s+(.+?)\s*$", RegexOptions.Multiline | RegexOptions.IgnoreCase)]
