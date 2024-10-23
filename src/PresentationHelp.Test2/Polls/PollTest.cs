@@ -49,4 +49,14 @@ public class PollTest
 
         sut.Items.Select(i => i.Votes).Should().BeEquivalentTo([1, 0, 1]);
     }
+
+    [Test]
+    public async Task ShowVotes()
+    {
+        sut.ShowResult.Should().BeFalse();
+        await sut.TryParseCommandAsync("~ShowResult");
+        sut.ShowResult.Should().BeTrue();
+        await sut.TryParseCommandAsync("~HideResult");
+        sut.ShowResult.Should().BeFalse();
+    }
 }

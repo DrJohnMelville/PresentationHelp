@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PresentationHelp.Poll"
+             xmlns:wpfHacks="clr-namespace:Melville.MVVM.Wpf.WpfHacks;assembly=Melville.MVVM.Wpf"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid DataContext="{Binding Screen}" x:Name="OuterGrid">
@@ -27,11 +28,14 @@
                 <DataTemplate>
                     <Border BorderThickness="1" Margin="3" BorderBrush="Black"
                             Padding="5">
-                        <TextBlock Text="{Binding Name}" 
-                                   FontSize="{Binding DataContext.FontSize, ElementName=OuterGrid}"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center">
-                        </TextBlock>
+                        <StackPanel HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Name}" 
+                                       FontSize="{Binding DataContext.FontSize, ElementName=OuterGrid}"/>
+                            <ProgressBar Minimum="0" Value="{Binding Votes}" Height ="10"
+                                         Maximum="{Binding DataContext.VotesCast, ElementName=OuterGrid}"
+                                         wpfHacks:VisibilityHack.CollapseUnless="{Binding DataContext.ShowResult, ElementName=OuterGrid}" />
+                        </StackPanel>
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

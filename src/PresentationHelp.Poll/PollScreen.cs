@@ -16,21 +16,24 @@ public partial class VoteItem
 
 public partial class PollScreen : IScreenDefinition
 {
-    public VoteItem[] Items { get; }
-    [AutoNotify] private string title = "";
     private ConcurrentDictionary<string, int> Votes { get; } = new();
     private readonly CommandParser commands;
 
-    [AutoNotify] private double fontSize = 24; 
+    public VoteItem[] Items { get; }
     public int VotesCast => Votes.Count;
+    [AutoNotify] private string title = "";
+    [AutoNotify] private double fontSize = 24;
+    [AutoNotify] private bool showResult;
 
     public PollScreen(string[] items)
     {
         commands = new CommandParser(
-            (@"~\s*FontSize\s*([\d.]+)", (double i) => FontSize = i),
-            (@"~\s*Title\s*(.+\S)", (string i) => { Title = i;
+            (@"^~\s*FontSize\s*([\d.]+)", (double i) => FontSize = i),
+            (@"^~\s*Title\s*(.+\S)", (string i) => { Title = i;
                                                      UserHtmlIsDirty = true;
-                                                   })
+                                                   }),
+            (@"^~\s*Show\s*Result", () => ShowResult = true),
+            (@"^~\s*Hide\s*Result", () => ShowResult = false)
 
         );
 
