@@ -9,23 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UniformGrid Columns="4">
-        <ComboBox SelectedItem="{Binding SelectedFontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                  eventBindings:EventBinding.Parameter="{Binding FontSizeCommand}"
-                  SelectionChanged="{eventBindings:EventBinding CommandButtonPressed}">
-            <ComboBox.Items>
-                <system:String>8</system:String>
-                <system:String>12</system:String>
-                <system:String>18</system:String>
-                <system:String>24</system:String>
-                <system:String>36</system:String>
-                <system:String>40</system:String>
-                <system:String>52</system:String>
-                <system:String>70</system:String>
-                <system:String>90</system:String>
-                <system:String>100</system:String>
-                <system:String>120</system:String>
-            </ComboBox.Items>
-        </ComboBox>
         <wpfViewParts:TextCommandButton 
             eventBindings:EventBinding.Parameter ="{Binding Screen.ShowResult,
             ConverterParameter=~HideResult|~ShowResult,

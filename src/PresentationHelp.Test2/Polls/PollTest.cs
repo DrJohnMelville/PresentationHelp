@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PresentationHelp.Poll;
+using PresentationHelp.ScreenInterface;
 using PresentationHelp.WpfViewParts;
 
 namespace PresentationHelp.Test2.Polls;
@@ -7,19 +8,10 @@ namespace PresentationHelp.Test2.Polls;
 public class PollTest
 {
     private readonly PollScreen sut = new PollScreen(
-        ["Item 1", "Item 2", "Item 3"], (_, act)=>new TrivialThrottle(act))
+        ["Item 1", "Item 2", "Item 3"], (_, act)=>new TrivialThrottle(act),
+            Mock.Of<IScreenHolder>())
         {Title = "This is the Title"};
     
-    [Test]
-    [Arguments("~   FontSize   15.2  ")]
-    [Arguments("~fontsize15.2")]
-    public async Task SetFontSizeTest(string command)
-    {
-        sut.FontSize.Should().Be(24);
-        (await sut.TryParseCommandAsync(command)).Should().BeTrue();
-        sut.FontSize.Should().Be(15.2);
-    }
-
     [Test]
     public async Task UnknownCommand()
     {

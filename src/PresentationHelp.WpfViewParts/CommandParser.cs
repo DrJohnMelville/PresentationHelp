@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Melville.INPC;
 
-namespace PresentationHelp.Poll;
+namespace PresentationHelp.WpfViewParts;
 
 public class CommandParser
 {

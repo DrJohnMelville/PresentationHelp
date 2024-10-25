@@ -30,8 +30,8 @@ public class MeetingModelFactory(IScreenParser screenParser)
 public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
 {
     private readonly ICommandParser commandParser;
-    private readonly ScreenHolder screenHolder;
-    public IScreenDefinition CurrentScreen => screenHolder.Screen; 
+    public ScreenHolder Holder { get; }
+    public IScreenDefinition CurrentScreen => Holder.Screen; 
     public string ParticipantUrl { get; }
     public string MeetingName { get; }
     private IDisplayHubServer DisplayHub { get; }
@@ -42,11 +42,11 @@ public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
         IScreenParser screenParser)
     {
         ParticipantUrl = $"{baseUrl}{HttpUtility.UrlEncode(meetingName)}";
-        screenHolder = new(screenParser);
-        this.DelegatePropertyChangeFrom(screenHolder, nameof(ScreenHolder.Screen), nameof(CurrentScreen));
+        Holder = new(screenParser);
+        this.DelegatePropertyChangeFrom(Holder, nameof(ScreenHolder.Screen), nameof(CurrentScreen));
         MeetingName = meetingName;
         DisplayHub = displayHub;
-        this.commandParser = new MultiCommandParser(screenHolder);
+        this.commandParser = new MultiCommandParser(Holder);
         DisplayHub.CreateOrJoinMeeting(meetingName);
     }
 

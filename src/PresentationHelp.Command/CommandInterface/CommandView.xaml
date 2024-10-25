@@ -7,6 +7,7 @@
              xmlns:eventBindings="clr-namespace:Melville.MVVM.Wpf.EventBindings;assembly=Melville.MVVM.Wpf"
              xmlns:viewFrames="clr-namespace:Melville.MVVM.Wpf.ViewFrames;assembly=Melville.MVVM.Wpf"
              xmlns:wpfViewParts="clr-namespace:PresentationHelp.WpfViewParts;assembly=PresentationHelp.WpfViewParts"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid PreviewKeyDown="{eventBindings:EventBinding KeyDown}">
@@ -14,6 +15,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <WrapPanel>
@@ -29,6 +31,26 @@
         </DockPanel>
         <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
                       Height="5"/>
+        <WrapPanel Grid.Row="3">
+            <TextBlock>Font Size</TextBlock>
+            <ComboBox SelectedItem="{Binding Meeting.Holder.SelectedFontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      eventBindings:EventBinding.Parameter="{Binding Meeting.Holder.FontSizeCommand}"
+                      SelectionChanged="{eventBindings:EventBinding CommandButtonPressed}">
+                <ComboBox.Items>
+                    <system:String>8</system:String>
+                    <system:String>12</system:String>
+                    <system:String>18</system:String>
+                    <system:String>24</system:String>
+                    <system:String>36</system:String>
+                    <system:String>40</system:String>
+                    <system:String>52</system:String>
+                    <system:String>70</system:String>
+                    <system:String>90</system:String>
+                    <system:String>100</system:String>
+                    <system:String>120</system:String>
+                </ComboBox.Items>
+            </ComboBox>
+        </WrapPanel>
         <viewFrames:ViewFrame Grid.Row="4" Content="{Binding Meeting.CurrentScreen.CommandViewModel}">
             <viewFrames:ViewFrame.Resources>
                 <Style TargetType="{x:Type wpfViewParts:TextCommandButton}">

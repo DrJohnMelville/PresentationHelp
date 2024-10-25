@@ -16,8 +16,8 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TextBlock FontSize="{Binding FontSize}" Text="{Binding Title}" />
-        <TextBlock FontSize="{Binding FontSize}" Text="{Binding VotesCast}" Grid.Column="1" />
+        <TextBlock FontSize="{Binding Holder.FontSize}" Text="{Binding Title}" />
+        <TextBlock FontSize="{Binding Holder.FontSize}" Text="{Binding VotesCast}" Grid.Column="1" />
         <ItemsControl Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Items}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -31,7 +31,7 @@
                         <StackPanel HorizontalAlignment="Stretch"
                                     VerticalAlignment="Center">
                             <TextBlock Text="{Binding Name}" 
-                                       FontSize="{Binding DataContext.FontSize, ElementName=OuterGrid}"/>
+                                       FontSize="{Binding DataContext.Holder.FontSize, ElementName=OuterGrid}"/>
                             <ProgressBar Minimum="0" Value="{Binding Votes}" Height ="10"
                                          Maximum="{Binding DataContext.VotesCast, ElementName=OuterGrid}"
                                          wpfHacks:VisibilityHack.CollapseUnless="{Binding DataContext.ShowResult, ElementName=OuterGrid}" />

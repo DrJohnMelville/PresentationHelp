@@ -17,6 +17,7 @@ public partial class VoteItem
 
 public partial class PollScreen : IScreenDefinition
 {
+    public IScreenHolder Holder { get;  }
     private ConcurrentDictionary<string, int> Votes { get; } = new();
     private readonly CommandParser commands;
     private readonly IThrottle recountThrottle;
@@ -24,14 +25,14 @@ public partial class PollScreen : IScreenDefinition
     public VoteItem[] Items { get; }
     public int VotesCast => Votes.Count;
     [AutoNotify] private string title = "";
-    [AutoNotify] private double fontSize = 24;
     [AutoNotify] private bool showResult;
     [AutoNotify] private bool votingLocked;
 
-    public PollScreen(string[] items, Func<TimeSpan, Func<ValueTask>, IThrottle> throttleFactory)
+    public PollScreen(string[] items, Func<TimeSpan, Func<ValueTask>, IThrottle> throttleFactory,
+        IScreenHolder holder)
     {
+        this.Holder = holder;
         commands = new CommandParser(
-            (@"^~\s*FontSize\s*([\d.]+)", (double i) => FontSize = i),
             (@"^~\s*Title\s*(.+\S)", (string i) => { Title = i; UserHtmlIsDirty = true; }),
             (@"^~\s*Show\s*Result", () => ShowResult = true),
             (@"^~\s*Hide\s*Result", () => ShowResult = false),
@@ -125,14 +126,4 @@ public partial class PollPresenterViewModel
 public partial class PollCommandViewModel
 {
     [FromConstructor] public PollScreen Screen { get; }
-    partial void OnConstructed()
-    {
-        this.DelegatePropertyChangeFrom(Screen, "FontSize", nameof(FontSizeCommand));
-    }
-
-    [AutoNotify] private string selectedFontSize = "24";
-    [AutoNotify] public string FontSizeCommand => 
-        Screen.FontSize.ToString(CultureInfo.InvariantCulture).Equals(SelectedFontSize)?
-            "":
-        $"~FontSize {SelectedFontSize}";
 }

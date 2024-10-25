@@ -1,8 +1,14 @@
 ﻿namespace PresentationHelp.ScreenInterface;
 
+public interface IScreenHolder
+{
+    IScreenDefinition Screen { get; }
+}
+
 public interface IScreenParser
 {
-    ValueTask<IScreenDefinition?> GetAsScreen(string command, IScreenDefinition currentScreen);
+    ValueTask<IScreenDefinition?> GetAsScreen(
+        string command, IScreenHolder holder);
 }
 
 public interface ICommandParser
