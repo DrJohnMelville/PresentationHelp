@@ -17,9 +17,10 @@ public partial class CommandViewModel(
 
     public Task ExecuteCommand(IWaitingService wait) => CommandButtonPressed(NextCommand, wait);
 
-    public async Task ShowPresenter([FromServices] PresenterViewModel viewModel)
+    public Task ShowPresenter([FromServices] PresenterViewModel viewModel)
     {
         new PresenterView() { DataContext = viewModel }.Show();
+        return Task.CompletedTask;
     }
 
     public async Task CommandButtonPressed(string command, IWaitingService wait)

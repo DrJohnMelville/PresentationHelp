@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using Melville.INPC;
@@ -124,4 +125,14 @@ public partial class PollPresenterViewModel
 public partial class PollCommandViewModel
 {
     [FromConstructor] public PollScreen Screen { get; }
+    partial void OnConstructed()
+    {
+        this.DelegatePropertyChangeFrom(Screen, "FontSize", nameof(FontSizeCommand));
+    }
+
+    [AutoNotify] private string selectedFontSize = "24";
+    [AutoNotify] public string FontSizeCommand => 
+        Screen.FontSize.ToString(CultureInfo.InvariantCulture).Equals(SelectedFontSize)?
+            "":
+        $"~FontSize {SelectedFontSize}";
 }

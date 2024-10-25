@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Melville.IOC.IocContainers;
 using Melville.MVVM.Wpf.EventBindings;
+using Melville.MVVM.Wpf.EventBindings.SearchTree;
 using Melville.MVVM.Wpf.MvvmDialogs;
 using Melville.MVVM.Wpf.RootWindows;
 using Melville.WpfAppFramework.StartupBases;
@@ -26,6 +27,7 @@ public class Startup:StartupBase
 
     protected override void RegisterWithIocContainer(IBindableIocService service)
     {
+        SetupSearchTreeDebug();
         service.RegisterHomeViewModel<QueryMeetingNameViewModel>();
         service.Bind<IOpenSaveFile>().To<OpenSaveFileAdapter>();
         service.Bind<Window>( ).And<IRootNavigationWindow>().To<RootNavigationWindow>().AsSingleton();
@@ -35,6 +37,20 @@ public class Startup:StartupBase
 
         ConfigureCommandParser(service);
         ConfigureConnection(service);
+    }
+
+    private void SetupSearchTreeDebug()
+    {
+#if DEBUG
+        VisualTreeRunner.RunStarted += (s, e) =>
+        {
+            ;
+        };
+        VisualTreeRunner.RunFailed += (s, e) =>
+        {
+            ;
+        };
+#endif
     }
 
     private void ConfigureCommandParser(IBindableIocService service)

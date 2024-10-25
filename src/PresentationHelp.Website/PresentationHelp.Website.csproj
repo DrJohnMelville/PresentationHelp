@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Melville.IOC.AspNet" Version="0.7.2" />
+    <PackageReference Include="Melville.IOC.AspNet" Version="0.7.3-preview" />
   </ItemGroup>
 
   <ItemGroup>

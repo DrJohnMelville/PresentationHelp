@@ -3,6 +3,7 @@ using System.Web;
 using System.Windows;
 using Melville.INPC;
 using Melville.MVVM.Wpf.DiParameterSources;
+using Melville.MVVM.Wpf.EventBindings.SearchTree;
 using Melville.MVVM.Wpf.RootWindows;
 using Microsoft.AspNetCore.SignalR.Client;
 using PresentationHelp.Command.CommandInterface;
@@ -22,7 +23,8 @@ public partial class QueryMeetingNameViewModel
     public async Task Login(
         [FromServices]IRegisterWebsiteConnection target,
         INavigationWindow window,
-        [FromServices] Func<CommandViewModel> nextViewFactory)
+        [FromServices] Func<CommandViewModel> nextViewFactory
+        )
     {
         await target.SetClient(Server, MeetingName); // creates the singleton meeting model
         window.NavigateTo(nextViewFactory());        // that this line references
