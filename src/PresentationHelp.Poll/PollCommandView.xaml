@@ -16,6 +16,6 @@
             Content ="{Binding Screen.ShowResult,
             ConverterParameter=Hide Results|Show Results,
             Converter={x:Static wpfViewParts:BoolStringConverter.Instance}}"
-                                        /> 
+        />
     </UniformGrid>
 </UserControl>

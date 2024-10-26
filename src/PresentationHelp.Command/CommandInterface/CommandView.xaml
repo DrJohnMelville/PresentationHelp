@@ -11,6 +11,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid PreviewKeyDown="{eventBindings:EventBinding KeyDown}">
+        <Grid.Resources>
+            <Style TargetType="{x:Type wpfViewParts:TextCommandButton}">
+                <eventBindings:EventIocSetter Event="Click"
+                                              MethodName="CommandButtonPressed"/>
+            </Style>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -32,7 +38,16 @@
         <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
                       Height="5"/>
         <WrapPanel Grid.Row="3">
-            <TextBlock>Font Size</TextBlock>
+            <wpfViewParts:TextCommandButton 
+                eventBindings:EventBinding.Parameter ="{Binding Meeting.Holder.ResponsesLocked,
+            ConverterParameter=~AllowResponses|~LockResponses,
+            Converter={x:Static wpfViewParts:BoolStringConverter.Instance}}"
+                Content ="{Binding Meeting.Holder.ResponsesLocked,
+            ConverterParameter=Allow Responses|Lock Responses,
+            Converter={x:Static wpfViewParts:BoolStringConverter.Instance}}"
+            />
+
+            <TextBlock Margin="7 0">Font Size</TextBlock>
             <ComboBox SelectedItem="{Binding Meeting.Holder.SelectedFontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       eventBindings:EventBinding.Parameter="{Binding Meeting.Holder.FontSizeCommand}"
                       SelectionChanged="{eventBindings:EventBinding CommandButtonPressed}">
@@ -52,13 +67,6 @@
             </ComboBox>
         </WrapPanel>
         <viewFrames:ViewFrame Grid.Row="4" Content="{Binding Meeting.CurrentScreen.CommandViewModel}">
-            <viewFrames:ViewFrame.Resources>
-                <Style TargetType="{x:Type wpfViewParts:TextCommandButton}">
-                    <eventBindings:EventIocSetter Event="Click"
-                                                  MethodName="CommandButtonPressed"/>
-                </Style>
-
-            </viewFrames:ViewFrame.Resources>
         </viewFrames:ViewFrame>
     </Grid>
 </UserControl>

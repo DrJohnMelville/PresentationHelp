@@ -18,7 +18,9 @@ public partial class ScreenHolder : ICommandParser, IScreenHolder
     {
         this.innerParser = innerParser;
         commands = new CommandParser(
-            (@"^~\s*FontSize\s*([\d.]+)", (double i) => FontSize = i)
+            (@"^~\s*FontSize\s*([\d.]+)", (double i) => FontSize = i),
+            (@"^~\s*Lock\s*Responses", () => ResponsesLocked = true),
+            (@"^~\s*Allow\s*Responses", () => ResponsesLocked = false)
         );
     }
 
@@ -37,11 +39,12 @@ public partial class ScreenHolder : ICommandParser, IScreenHolder
 
     [AutoNotify] private double fontSize = 24;
     [AutoNotify] private string selectedFontSize = "24";
-
-    [AutoNotify]
-    public string FontSizeCommand =>
+    [AutoNotify] public string FontSizeCommand =>
         FontSize.ToString(CultureInfo.InvariantCulture).Equals(SelectedFontSize) ?
             "" :
             $"~FontSize {SelectedFontSize}";
 
+    [AutoNotify] private bool responsesLocked;
+    public Task AcceptDatum(string user, string datum) => 
+        ResponsesLocked ? Task.CompletedTask : Screen.AcceptDatum(user, datum);
 }

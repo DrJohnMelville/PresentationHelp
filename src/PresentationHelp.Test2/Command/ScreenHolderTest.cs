@@ -18,5 +18,15 @@ public class ScreenHolderTest
         sut.FontSize.Should().Be(15.2);
     }
 
+    [Test]
+    public async Task LockResponses()
+    {
+        sut.ResponsesLocked.Should().BeFalse();
+        (await sut.TryParseCommandAsync("~LockResponses")).Should().BeTrue();
+        sut.ResponsesLocked.Should().BeTrue();
+        (await sut.TryParseCommandAsync("~AllowResponses")).Should().BeTrue();
+        sut.ResponsesLocked.Should().BeFalse();
+    }
+
 
 }

@@ -3,6 +3,8 @@
 public interface IScreenHolder
 {
     IScreenDefinition Screen { get; }
+    double FontSize { get; }
+    bool ResponsesLocked { get; }
 }
 
 public interface IScreenParser
@@ -15,6 +17,14 @@ public interface ICommandParser
 {
     ValueTask<bool> TryParseCommandAsync(string command);
 }
+
+public enum CommandResultKind
+{
+    NotRecognized = 0,
+    KeepHtml = 1,
+    NewHtml = 2
+};
+public record struct CommandResult(IScreenDefinition? NewScreen, CommandResultKind Result);
 
 public interface IScreenDefinition: ICommandParser
 {

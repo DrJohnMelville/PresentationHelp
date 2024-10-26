@@ -26,7 +26,6 @@ public partial class PollScreen : IScreenDefinition
     public int VotesCast => Votes.Count;
     [AutoNotify] private string title = "";
     [AutoNotify] private bool showResult;
-    [AutoNotify] private bool votingLocked;
 
     public PollScreen(string[] items, Func<TimeSpan, Func<ValueTask>, IThrottle> throttleFactory,
         IScreenHolder holder)
@@ -36,8 +35,6 @@ public partial class PollScreen : IScreenDefinition
             (@"^~\s*Title\s*(.+\S)", (string i) => { Title = i; UserHtmlIsDirty = true; }),
             (@"^~\s*Show\s*Result", () => ShowResult = true),
             (@"^~\s*Hide\s*Result", () => ShowResult = false),
-            (@"^~\s*Lock\s*Votes", () => SetVotingLock(true)),
-            (@"^~\s*Unlock\s*Votes", () => SetVotingLock(false)),
             (@"^~\s*Clear\s*Votes", () => { Votes.Clear(); CountVotes(); })
         );
 
@@ -50,8 +47,7 @@ public partial class PollScreen : IScreenDefinition
 
     public Task AcceptDatum(string user, string datum)
     {
-        if (!votingLocked &&
-            int.TryParse(datum, out var index) && 
+        if (int.TryParse(datum, out var index) && 
             (uint)index < Items.Length)
         {
             Votes.AddOrUpdate(user, index, (_, _) => index);
@@ -99,19 +95,20 @@ public partial class PollScreen : IScreenDefinition
             sb.Append($"<h2>{Title}</h2>");
         }
 
-        int index = 0;
-        foreach (var item in Items)
+        if (Holder.ResponsesLocked)
         {
-            sb.Append($"<button onclick=\"sendDatum('{index++}')\">{item.Name}</button>");
+            sb.Append("<h2>Responses are currently locked.</h2>");
         }
+        else
+        {
+            int index = 0;
+            foreach (var item in Items)
+            {
+                sb.Append($"<button onclick=\"sendDatum('{index++}')\">{item.Name}</button>");
+            }
 
+        }
         return sb.ToString();
-    }
-
-    private void SetVotingLock(bool value)
-    {
-        VotingLocked = value;
-        UserHtmlIsDirty = true;
     }
 
     [AutoNotify] private object publicViewModel;

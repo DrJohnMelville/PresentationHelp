@@ -78,10 +78,7 @@ public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
             return "";
     }
 
-    private string CreateClientHtml(int delta)
-    {
-        return CurrentScreen.HtmlForUser(new HtmlBuilder(MeetingName, screenNumber + delta));
-    }
+    private string CreateClientHtml(int delta) => CurrentScreen.HtmlForUser(new HtmlBuilder(MeetingName, screenNumber + delta));
 
     public async ValueTask<bool> IsCommandNewScreen(string command)
     {
@@ -96,5 +93,5 @@ public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
     }
 
     public Task ReceiveUserDatum(int screen, string user, string datum) => 
-        CurrentScreen?.AcceptDatum(user, datum) ?? Task.CompletedTask;
+        Holder.AcceptDatum(user, datum);
 }
