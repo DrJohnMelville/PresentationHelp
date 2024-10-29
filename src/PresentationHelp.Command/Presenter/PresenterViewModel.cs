@@ -1,4 +1,6 @@
-﻿using Melville.INPC;
+﻿using System.Windows;
+using System.Windows.Controls;
+using Melville.INPC;
 using PresentationHelp.Command.Connection;
 
 namespace PresentationHelp.Command.Presenter;
@@ -15,8 +17,7 @@ public partial class PresenterViewModel
         Meeting = connection.GetClient();
         EnrollWithServer();
     }
-
-
+    
     public async void EnrollWithServer()
     {
         Id = await Meeting.EnrollDisplay();

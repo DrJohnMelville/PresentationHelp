@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Melville.INPC;
 using PresentationHelp.ScreenInterface;
@@ -13,7 +14,8 @@ public class CommandParser:ICommandParser
     public CommandParser WithCommand(string regex, Delegate method, CommandResultKind kind = CommandResultKind.KeepHtml)
     {
         commandDeclarations.Add(
-            new CommandDeclaration(new Regex(regex, RegexOptions.IgnoreCase), method, kind));
+            new CommandDeclaration(new Regex(regex, RegexOptions.IgnoreCase|RegexOptions.IgnorePatternWhitespace), 
+                method, kind));
         return this;
     }
 
@@ -34,12 +36,6 @@ internal readonly partial struct CommandDeclaration
     [FromConstructor] private readonly Regex selector;
     [FromConstructor] private readonly Delegate action;
     [FromConstructor] private readonly CommandResultKind kind;
-
-    partial void OnConstructed()
-    {
-        if (selector.GetGroupNumbers().Length-1 != action.Method.GetParameters().Length)
-            throw new InvalidOperationException("Selector has wrong number of captures for method");
-    }
 
     public Match Parse(string text) => selector.Match(text);
 
@@ -66,11 +62,16 @@ internal readonly partial struct CommandDeclaration
     private object? CallFromMatch(Match match)
     {
         var parameters = action.Method.GetParameters();
-        var arguments = new object[parameters.Length];
-        for (int i = 0; i < parameters.Length; i++)
-        {
-            arguments[i] = Convert.ChangeType(match.Groups[i + 1].Value, parameters[i].ParameterType);
-        }
+        var arguments = match.Groups.OfType<Group>()
+            .Skip(1)
+            .SelectMany(i => i.Captures)
+            .Select(i => i.Value)
+            .Zip(parameters, ConvertArgumentToParameterType).ToArray();
         return action.Method.Invoke(action.Target, arguments);
+    }
+
+    private object ConvertArgumentToParameterType(string a, ParameterInfo p)
+    {
+        return Convert.ChangeType(a, p.ParameterType);
     }
 }
