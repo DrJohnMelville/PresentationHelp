@@ -2,6 +2,7 @@
 using Melville.INPC;
 using PresentationHelp.MessageScreens;
 using PresentationHelp.ScreenInterface;
+using PresentationHelp.Website.Models.Entities;
 using PresentationHelp.WpfViewParts;
 
 namespace PresentationHelp.Command.Connection;
@@ -11,31 +12,39 @@ public partial class ScreenHolder : ICommandParser, IScreenHolder
     [AutoNotify] private IScreenDefinition screen =
         new MessageScreen("Internal -- should never show");
 
-    private readonly CommandParser commands;
-    private readonly IScreenParser innerParser;
+    private readonly ICommandParser localProcessor;
+    private readonly ICommandParser globalProcessor;
+    private  ICommandParser[] targets => [screen, localProcessor, globalProcessor];
 
-    public ScreenHolder(IScreenParser innerParser)
+    public ScreenHolder(ICommandParser innerParser)
     {
-        this.innerParser = innerParser;
-        commands = new CommandParser(
-            (@"^~\s*FontSize\s*([\d.]+)", (double i) => FontSize = i),
-            (@"^~\s*Lock\s*Responses", () => ResponsesLocked = true),
-            (@"^~\s*Allow\s*Responses", () => ResponsesLocked = false)
-        );
+        globalProcessor = innerParser;
+        localProcessor = PresenterCommands();
     }
 
-    public async ValueTask<bool> TryParseCommandAsync(string command)
+    private ICommandParser PresenterCommands() =>
+        new CommandParser()
+            .WithCommand(@"^~\s*FontSize\s*([\d.]+)", (double i) => FontSize = i)
+            .WithCommand(@"^~\s*Lock\s*Responses", () => ResponsesLocked = true, CommandResultKind.NewHtml).
+            WithCommand(@"^~\s*Allow\s*Responses", () => ResponsesLocked = false, CommandResultKind.NewHtml);
+
+    public async ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder)
     {
-        if (await screen.TryParseCommandAsync(command)) return true;
-        if (await commands.TryExecuteCommandAsync(command)) return true;
-        if (await innerParser.GetAsScreen(command, this) is { } newScreen)
+        foreach (var target in targets)
         {
-            Screen = newScreen;
-            return true;
+            if (await target.TryParseCommandAsync(command, holder) is
+                { Result: not CommandResultKind.NotRecognized } result)
+            {
+                Screen = result.NewScreen;
+                return result;
+            }
         }
-
-        return false;
+        return new(screen, CommandResultKind.NotRecognized);
     }
+
+    public string HtmlForUser(HtmlBuilder htmlBuilder) => ResponsesLocked ? 
+        htmlBuilder.CommonClientPage("", "<h2>Responses are currently locked.</h2>") : 
+        screen.HtmlForUser(htmlBuilder);
 
     [AutoNotify] private double fontSize = 24;
     [AutoNotify] private string selectedFontSize = "24";
@@ -47,4 +56,5 @@ public partial class ScreenHolder : ICommandParser, IScreenHolder
     [AutoNotify] private bool responsesLocked;
     public Task AcceptDatum(string user, string datum) => 
         ResponsesLocked ? Task.CompletedTask : Screen.AcceptDatum(user, datum);
+
 }

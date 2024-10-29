@@ -7,25 +7,6 @@ public interface IScreenHolder
     bool ResponsesLocked { get; }
 }
 
-public interface IScreenParser
-{
-    ValueTask<IScreenDefinition?> GetAsScreen(
-        string command, IScreenHolder holder);
-}
-
-public interface ICommandParser
-{
-    ValueTask<bool> TryParseCommandAsync(string command);
-}
-
-public enum CommandResultKind
-{
-    NotRecognized = 0,
-    KeepHtml = 1,
-    NewHtml = 2
-};
-public record struct CommandResult(IScreenDefinition? NewScreen, CommandResultKind Result);
-
 public interface IScreenDefinition: ICommandParser
 {
     Task AcceptDatum(string user, string datum);

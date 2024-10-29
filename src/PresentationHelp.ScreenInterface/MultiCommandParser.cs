@@ -5,17 +5,15 @@ namespace PresentationHelp.ScreenInterface;
 
 public partial class MultiCommandParser(ICommandParser inner) : ICommandParser
 {
-    public async ValueTask<bool> TryParseCommandAsync(string command)
+    public async ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder)
     {
-        var ret = true;
-        foreach (Match split in Separator().Matches(command))
-        {
-            ret &= await inner.TryParseCommandAsync(split.Groups["cmd"].Value);
-        }
+        var ret = new CommandResult(holder.Screen, CommandResultKind.NotRecognized);
+        foreach (Match split in Separator().Matches(command)) 
+            ret = ret.CombineWithPrior(await inner.TryParseCommandAsync(split.Groups["cmd"].Value, holder));
 
-        return true;
+        return ret;
     }
 
-        [GeneratedRegex(@"(?:^\s*(?'cmd'~.+\S))|(?:^\s*(?'cmd'[^~]+[^~\s]))", RegexOptions.Multiline)]
+    [GeneratedRegex(@"(?:^\s*(?'cmd'~.+\S))|(?:^\s*(?'cmd'[^~]+[^~\s]))", RegexOptions.Multiline)]
     private static partial Regex Separator();
 }

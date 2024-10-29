@@ -3,19 +3,20 @@ using PresentationHelp.ScreenInterface;
 
 namespace PresentationHelp.CommandModels.Parsers;
 
-public class ScreenParser(IList<IScreenParser> parsers): IScreenParser
+public class ScreenParser(IList<ICommandParser> parsers): ICommandParser
 {
-    public async ValueTask<IScreenDefinition?> GetAsScreen(
-        string command, IScreenHolder holder)
+    public async ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder)
     {
         foreach (var parser in parsers)
         {
-            if ((await parser.GetAsScreen(command, holder)) is { } screen)
+
+            if ((await parser.TryParseCommandAsync(command, holder)) is 
+                {Result: not CommandResultKind.NotRecognized} screen)
                 return screen;
         }
-        return new ErrorScreen(holder.Screen, $"""
-                Could not parse the command:
-                {command}
-                """);
+        return new CommandResult(new ErrorScreen(holder.Screen, $"""
+            Could not parse the command:
+            {command}
+            """), CommandResultKind.KeepHtml);
     }
 }

@@ -7,6 +7,7 @@ namespace PresentationHelp.Test2.Polls;
 
 public class PollTest
 {
+    private readonly Mock<IScreenHolder> holder = new();
     private readonly PollScreen sut = new PollScreen(
         ["Item 1", "Item 2", "Item 3"], (_, act)=>new TrivialThrottle(act),
             Mock.Of<IScreenHolder>())
@@ -15,7 +16,8 @@ public class PollTest
     [Test]
     public async Task UnknownCommand()
     {
-        (await sut.TryParseCommandAsync("~ Not A Command 123")).Should().BeFalse();
+        (await sut.TryParseCommandAsync("~ Not A WithCommand 123", holder.Object)).Result
+            .Should().Be(CommandResultKind.NotRecognized);
     }
 
     [Test]
@@ -48,28 +50,12 @@ public class PollTest
     public async Task ShowVotes()
     {
         sut.ShowResult.Should().BeFalse();
-        await sut.TryParseCommandAsync("~ShowResult");
+        (await sut.TryParseCommandAsync("~ShowResult", holder.Object)).Result
+                        .Should().Be(CommandResultKind.KeepHtml);
         sut.ShowResult.Should().BeTrue();
-        await sut.TryParseCommandAsync("~HideResult");
+        (await sut.TryParseCommandAsync("~HideResult", holder.Object)).Result
+            .Should().Be(CommandResultKind.KeepHtml);
         sut.ShowResult.Should().BeFalse();
-    }
-
-    [Test]
-    public async Task VoteLocking()
-    {
-        await sut.AcceptDatum("User 1", "0");
-        sut.Items[0].Votes.Should().Be(1);
-        sut.Items[1].Votes.Should().Be(0);
-
-        await sut.TryParseCommandAsync("~LockVotes");
-        await sut.AcceptDatum("User 1", "1");
-        sut.Items[0].Votes.Should().Be(1);
-        sut.Items[1].Votes.Should().Be(0);
-
-        await sut.TryParseCommandAsync("~UnlockVotes");
-        await sut.AcceptDatum("User 1", "1");
-        sut.Items[0].Votes.Should().Be(0);
-        sut.Items[1].Votes.Should().Be(1);
     }
 
     [Test]
@@ -77,7 +63,8 @@ public class PollTest
     {
         await sut.AcceptDatum("User 1", "0");
         sut.VotesCast.Should().Be(1);
-        await sut.TryParseCommandAsync("~ Clear votes");
+        (await sut.TryParseCommandAsync("~ Clear votes", holder.Object)).Result
+            .Should().Be(CommandResultKind.KeepHtml);
         sut.VotesCast.Should().Be(0);
     }
 }

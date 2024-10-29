@@ -25,7 +25,7 @@ public partial class CommandViewModel(
 
     public async Task CommandButtonPressed(string command, IWaitingService wait)
     {
-        using var waiter = wait.WaitBlock("Sending Command to Server");
+        using var waiter = wait.WaitBlock("Sending WithCommand to Server");
         await Meeting.SendCommandToWebsiteAsync(command);
     }
 

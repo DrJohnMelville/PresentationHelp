@@ -5,6 +5,7 @@ namespace PresentationHelp.Test2.CommandModels;
 
 public class ErrorScreenTest
 {
+    private readonly Mock<IScreenHolder> holder = new();
     private readonly Mock<IScreenDefinition> prior = new();
     private readonly ErrorScreen sut;
 
@@ -28,8 +29,8 @@ public class ErrorScreenTest
     [Test]
     public async Task AcceptCommand()
     {
-        await sut.TryParseCommandAsync("Command");
-        prior.Verify(i => i.TryParseCommandAsync("Command"), Times.Once);
+        await sut.TryParseCommandAsync("WithCommand", holder.Object);
+        prior.Verify(i => i.TryParseCommandAsync("WithCommand", holder.Object), Times.Once);
         prior.VerifyNoOtherCalls();
     }
 }

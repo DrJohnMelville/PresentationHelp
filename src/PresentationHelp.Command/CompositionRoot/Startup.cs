@@ -55,9 +55,9 @@ public class Startup:StartupBase
 
     private void ConfigureCommandParser(IBindableIocService service)
     {
-        service.Bind<IScreenParser>().To<MessageScreenParser>();
-        service.Bind<IScreenParser>().To<PollScreenParser>();
-        service.Bind<IScreenParser>().To<ScreenParser>().BlockSelfInjection().AsSingleton();
+        service.Bind<ICommandParser>().To<MessageScreenParser>();
+        service.Bind<ICommandParser>().To<PollScreenParser>();
+        service.Bind<ICommandParser>().To<ScreenParser>().BlockSelfInjection().AsSingleton();
     }
 
     private void ConfigureConnection(IBindableIocService service)

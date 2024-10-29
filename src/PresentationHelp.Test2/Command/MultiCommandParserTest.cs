@@ -5,6 +5,7 @@ namespace PresentationHelp.Test2.Command;
 
 public class MultiCommandParserTest
 {
+    private readonly Mock<IScreenHolder> holder = new();
     private readonly Mock<ICommandParser> inner = new();
     private readonly MultiCommandParser parser;
 
@@ -16,42 +17,42 @@ public class MultiCommandParserTest
     [Test]
     public async Task ParseSingleCommand()
     {
-        await parser.TryParseCommandAsync("Command");
-        inner.Verify(i => i.TryParseCommandAsync("Command"), Times.Once);
+        await parser.TryParseCommandAsync("WithCommand", holder.Object);
+        inner.Verify(i => i.TryParseCommandAsync("WithCommand", holder.Object), Times.Once);
         inner.VerifyNoOtherCalls();
     }
     [Test]
     public async Task ParseMultiCommand()
     {
         await parser.TryParseCommandAsync("""
-            Command
-            ~~~Command 2
-            """);
+            WithCommand
+            ~~~WithCommand 2
+            """, holder.Object);
             
-        inner.Verify(i => i.TryParseCommandAsync("Command"), Times.Once);
-        inner.Verify(i => i.TryParseCommandAsync("~~~Command 2"), Times.Once);
+        inner.Verify(i => i.TryParseCommandAsync("WithCommand", holder.Object), Times.Once);
+        inner.Verify(i => i.TryParseCommandAsync("~~~WithCommand 2", holder.Object), Times.Once);
         inner.VerifyNoOtherCalls();
     }
     [Test]
     public async Task MultipleCommandsWithLineBreaks()
     {
         await parser.TryParseCommandAsync("""
-            ~Command  prefix
+            ~WithCommand  prefix
             Poll
                 A
                 B
-            ~~~Command 2
+            ~~~WithCommand 2
             ~  Command1
-            """);
+            """, holder.Object);
             
-        inner.Verify(i => i.TryParseCommandAsync("~Command  prefix"), Times.Once);
+        inner.Verify(i => i.TryParseCommandAsync("~WithCommand  prefix", holder.Object), Times.Once);
         inner.Verify(i => i.TryParseCommandAsync("""
         Poll
             A
             B
-        """), Times.Once);
-        inner.Verify(i => i.TryParseCommandAsync("~~~Command 2"), Times.Once);
-        inner.Verify(i => i.TryParseCommandAsync("~  Command1"), Times.Once);
+        """, holder.Object), Times.Once);
+        inner.Verify(i => i.TryParseCommandAsync("~~~WithCommand 2", holder.Object), Times.Once);
+        inner.Verify(i => i.TryParseCommandAsync("~  Command1", holder.Object), Times.Once);
         inner.VerifyNoOtherCalls();
     }
 }

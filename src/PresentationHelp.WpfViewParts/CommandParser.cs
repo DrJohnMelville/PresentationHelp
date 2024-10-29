@@ -1,25 +1,31 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 using Melville.INPC;
+using PresentationHelp.ScreenInterface;
 
 namespace PresentationHelp.WpfViewParts;
 
-public class CommandParser
+public class CommandParser:ICommandParser
 {
 
-    private readonly CommandDeclaration[] commandDeclarations;
-    public CommandParser(params (string, Delegate)[] commands) => this.commandDeclarations = 
-        commands.Select(i=>new CommandDeclaration(CreateSelectorFor(i), i.Item2)).ToArray();
+    private List<CommandDeclaration> commandDeclarations = new();
 
-    private static Regex CreateSelectorFor((string, Delegate) i) => 
-        new(i.Item1,RegexOptions.IgnoreCase);
+    public CommandParser WithCommand(string regex, Delegate method, CommandResultKind kind = CommandResultKind.KeepHtml)
+    {
+        commandDeclarations.Add(
+            new CommandDeclaration(new Regex(regex, RegexOptions.IgnoreCase), method, kind));
+        return this;
+    }
 
-    public ValueTask<bool> TryExecuteCommandAsync(string command)
+    public ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder)
     {
         foreach (var decl in commandDeclarations)
         {
-            if (decl.TryExecute(command)) return new(true);
+            if (decl.Parse(command) is { Success: true } match)
+                return decl.Execute(match, holder);
         }
-        return new(false);
+
+        return new ValueTask<CommandResult>(new CommandResult(holder.Screen, CommandResultKind.NotRecognized));
     }
 }
 
@@ -27,6 +33,7 @@ internal readonly partial struct CommandDeclaration
 {
     [FromConstructor] private readonly Regex selector;
     [FromConstructor] private readonly Delegate action;
+    [FromConstructor] private readonly CommandResultKind kind;
 
     partial void OnConstructed()
     {
@@ -34,26 +41,29 @@ internal readonly partial struct CommandDeclaration
             throw new InvalidOperationException("Selector has wrong number of captures for method");
     }
 
-    public bool TryExecute(string text)
+    public Match Parse(string text) => selector.Match(text);
+
+    public async ValueTask<CommandResult> Execute(Match match, IScreenHolder holder)
     {
         try
         {
-            var match = selector.Match(text);
-            if (match.Success)
-            {
-                CallFromMatch(match);
-                return true;
-            }
+            var ret = await UnwrapAsync(CallFromMatch(match));
+            return new CommandResult((ret as IScreenDefinition) ?? holder.Screen, kind);
 
         }
-        catch (Exception e)
+        catch (Exception)
         {
         }
 
-        return false;
+        return new CommandResult(holder.Screen, CommandResultKind.NotRecognized);
     }
 
-    private void CallFromMatch(Match match)
+    private async ValueTask<object?> UnwrapAsync(object? callFromMatch) =>
+        callFromMatch?.GetType().GetMethod("GetAwaiter") is not null
+            ? await (dynamic)callFromMatch
+            : callFromMatch;
+
+    private object? CallFromMatch(Match match)
     {
         var parameters = action.Method.GetParameters();
         var arguments = new object[parameters.Length];
@@ -61,6 +71,6 @@ internal readonly partial struct CommandDeclaration
         {
             arguments[i] = Convert.ChangeType(match.Groups[i + 1].Value, parameters[i].ParameterType);
         }
-        action.Method.Invoke(action.Target, arguments);
+        return action.Method.Invoke(action.Target, arguments);
     }
 }

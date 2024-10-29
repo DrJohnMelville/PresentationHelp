@@ -17,7 +17,7 @@ public partial class VoteItem
 
 public partial class PollScreen : IScreenDefinition
 {
-    public IScreenHolder Holder { get;  }
+    public IScreenHolder Holder { get; }
     private ConcurrentDictionary<string, int> Votes { get; } = new();
     private readonly CommandParser commands;
     private readonly IThrottle recountThrottle;
@@ -31,23 +31,26 @@ public partial class PollScreen : IScreenDefinition
         IScreenHolder holder)
     {
         this.Holder = holder;
-        commands = new CommandParser(
-            (@"^~\s*Title\s*(.+\S)", (string i) => { Title = i; UserHtmlIsDirty = true; }),
-            (@"^~\s*Show\s*Result", () => ShowResult = true),
-            (@"^~\s*Hide\s*Result", () => ShowResult = false),
-            (@"^~\s*Clear\s*Votes", () => { Votes.Clear(); CountVotes(); })
-        );
+        commands = new CommandParser()
+            .WithCommand(@"^~\s*Title\s*(.+\S)", (string i) => Title = i, CommandResultKind.NewHtml)
+            .WithCommand(@"^~\s*Show\s*Result", () => ShowResult = true)
+            .WithCommand(@"^~\s*Hide\s*Result", () => ShowResult = false)
+            .WithCommand(@"^~\s*Clear\s*Votes", () =>
+            {
+                Votes.Clear();
+                CountVotes();
+            });
 
         recountThrottle = throttleFactory(TimeSpan.FromSeconds(0.5), InnerCountVotes);
 
-        this.Items = items.Select(i=>new VoteItem(i)).ToArray();
+        this.Items = items.Select(i => new VoteItem(i)).ToArray();
         publicViewModel = new PollPresenterViewModel(this);
     }
 
 
     public Task AcceptDatum(string user, string datum)
     {
-        if (int.TryParse(datum, out var index) && 
+        if (int.TryParse(datum, out var index) &&
             (uint)index < Items.Length)
         {
             Votes.AddOrUpdate(user, index, (_, _) => index);
@@ -77,13 +80,13 @@ public partial class PollScreen : IScreenDefinition
         return ValueTask.CompletedTask;
     }
 
-    public ValueTask<bool> TryParseCommandAsync(string command) => 
-        commands.TryExecuteCommandAsync(command);
+    public ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder) => 
+        commands.TryParseCommandAsync(command, holder);
 
     public bool UserHtmlIsDirty { get; private set; }
 
-    public string HtmlForUser(IHtmlBuilder builder) => 
-        builder.CommonClientPage("", 
+    public string HtmlForUser(IHtmlBuilder builder) =>
+        builder.CommonClientPage("",
             GenerateHtml());
 
     private string GenerateHtml()
@@ -95,19 +98,12 @@ public partial class PollScreen : IScreenDefinition
             sb.Append($"<h2>{Title}</h2>");
         }
 
-        if (Holder.ResponsesLocked)
+        int index = 0;
+        foreach (var item in Items)
         {
-            sb.Append("<h2>Responses are currently locked.</h2>");
+            sb.Append($"<button onclick=\"sendDatum('{index++}')\">{item.Name}</button>");
         }
-        else
-        {
-            int index = 0;
-            foreach (var item in Items)
-            {
-                sb.Append($"<button onclick=\"sendDatum('{index++}')\">{item.Name}</button>");
-            }
 
-        }
         return sb.ToString();
     }
 

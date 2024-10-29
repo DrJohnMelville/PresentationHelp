@@ -27,9 +27,9 @@
         <WrapPanel>
             <Button Content="Show Presenter View" Click="{eventBindings:EventBinding ShowPresenter}"/>
         </WrapPanel>
-        <TextBlock Grid.Row="1">Enter a Command</TextBlock>
+        <TextBlock Grid.Row="1">Enter a WithCommand</TextBlock>
         <DockPanel Grid.Row="2" Margin="0, 0, 0, 5">
-            <Button DockPanel.Dock="Bottom" Content="Submit Command" 
+            <Button DockPanel.Dock="Bottom" Content="Submit WithCommand" 
                     Click="{eventBindings:EventBinding ExecuteCommand}"
                     IsEnabled="{Binding CanExecuteCommand}"></Button>
             <TextBox Text="{Binding NextCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

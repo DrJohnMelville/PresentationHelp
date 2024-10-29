@@ -12,7 +12,7 @@ public class CommandViewModelTest
     private readonly Mock<IDisplayHubServer> hubServerMock = new();
     private readonly MeetingModel meeting;
     private readonly Mock<IWebsiteConnection> websiteConnectionMock = new();
-    private readonly Mock<IScreenParser> commandParser = new();
+    private readonly Mock<ICommandParser> commandParser = new();
     private readonly CommandViewModel sut;
 
     public CommandViewModelTest()
@@ -35,7 +35,20 @@ public class CommandViewModelTest
     public async Task ExecuteCommand()
     {
         sut.NextCommand = "Test";
+        commandParser.Setup(i => i.TryParseCommandAsync("Test", It.IsAny<IScreenHolder>()))
+            .Returns(new ValueTask<CommandResult>(new CommandResult(
+                Mock.Of<IScreenDefinition>(), CommandResultKind.KeepHtml)));
         await sut.ExecuteCommand(Mock.Of<IWaitingService>());
         hubServerMock.Verify(i=>i.PostCommand("MeetingName","Test", ""), Times.Once);
+    }
+    [Test]
+    public async Task DoNotExecuteUnrecognizedCommand()
+    {
+        sut.NextCommand = "Test";
+        commandParser.Setup(i => i.TryParseCommandAsync("Test", It.IsAny<IScreenHolder>()))
+            .Returns(new ValueTask<CommandResult>(new CommandResult(
+                Mock.Of<IScreenDefinition>(), CommandResultKind.NotRecognized)));
+        await sut.ExecuteCommand(Mock.Of<IWaitingService>());
+        hubServerMock.Verify(i=>i.PostCommand("MeetingName","Test", ""), Times.Never);
     }
 }

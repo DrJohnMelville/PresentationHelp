@@ -27,7 +27,7 @@ public class ScreenParserTest
 
     private async ValueTask<IScreenDefinition?> ParseScreenAsync(string command)
     {
-        await commandParser.TryParseCommandAsync(command);
+        await commandParser.TryParseCommandAsync(command, holder);
         return holder.Screen;
     }
 
