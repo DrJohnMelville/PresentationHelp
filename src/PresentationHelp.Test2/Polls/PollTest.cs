@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System.Windows.Media;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PresentationHelp.Poll;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.WpfViewParts;
@@ -66,5 +67,29 @@ public class PollTest
         (await sut.TryParseCommandAsync("~ Clear votes", holder.Object)).Result
             .Should().Be(CommandResultKind.KeepHtml);
         sut.VotesCast.Should().Be(0);
+    }
+
+    [Test]
+    public async Task LineBrush()
+    {
+        sut.LineBrush.Should().Be(Brushes.Black);
+        (await sut.TryParseCommandAsync("~ Line Color Red", holder.Object)).Result
+            .Should().Be(CommandResultKind.KeepHtml);
+        ((SolidColorBrush)sut.LineBrush).Color.Should().BeEquivalentTo(Colors.Red);
+
+    }
+
+    [Test]
+    public async Task ForegroundAndBackground()
+    {
+        sut.BarColor.Should().Be(Brushes.LawnGreen);
+        sut.BarBackground.Should().Be(Brushes.LightGray);
+        (await sut.TryParseCommandAsync("~ Bar Color Red", holder.Object)).Result
+            .Should().Be(CommandResultKind.KeepHtml);
+        (await sut.TryParseCommandAsync("~ Bar Background Blue", holder.Object)).Result
+            .Should().Be(CommandResultKind.KeepHtml);
+        ((SolidColorBrush)sut.BarColor).Color.Should().BeEquivalentTo(Colors.Red);
+        ((SolidColorBrush)sut.BarBackground).Color.Should().BeEquivalentTo(Colors.Blue);
+
     }
 }

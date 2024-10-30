@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
+using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Media;
 using Melville.INPC;
-using Microsoft.CodeAnalysis;
 using PresentationHelp.MessageScreens;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.Website.Models.Entities;
@@ -36,7 +36,10 @@ public partial class ScreenHolder : ICommandParser, IScreenHolder
                 (double h, double v) => RelativeThickness = new Thickness(h,v,h,v))
             .WithCommand($"""^~\s*Display\s*Margin{ParserParts.RealNumber}""", (double w) =>
                 RelativeThickness = new Thickness(w))
+            .WithCommand(@"^~\s*Font\s*Color\s+(.+)$", (Brush brush) => FontBrush = brush)
+            .WithCommand(@"^~\s*Background\s*Color\s+(.+)$", (Brush brush) => BackgroundBrush = brush)
         ;
+
     #region Command Parsing
     public async ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder)
     {
@@ -90,6 +93,22 @@ public partial class ScreenHolder : ICommandParser, IScreenHolder
         RelativeThickness.Top*ActualHeight / 100,
         RelativeThickness.Right*ActualWidth / 100,
         RelativeThickness.Bottom*ActualHeight / 100);
+
+    #endregion
+
+    #region FontColor
+
+    [AutoNotify] private Brush fontBrush = Brushes.Black;
+    [AutoNotify] private Brush backgroundBrush = Brushes.Transparent;
+
+    private Brush ParseTextBrush(string colorName, double percent)
+    {
+        var solidColorBrush = new SolidColorBrush(BrushFromName(colorName) ?? Colors.Black){Opacity = percent/100};
+        solidColorBrush.Freeze();
+        return solidColorBrush;
+    }
+
+    private static Color? BrushFromName(string colorName) => ColorConverter.ConvertFromString(colorName) as Color?;
 
     #endregion
 }

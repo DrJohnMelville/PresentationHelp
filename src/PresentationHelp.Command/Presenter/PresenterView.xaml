@@ -9,8 +9,12 @@
         mc:Ignorable="d"
         Title="PresenterView" Height="450" Width="800">
     <Grid SizeChanged="{eventBindings:EventBinding Meeting.Holder.SizeChanged1}">
-        <viewFrames:ViewFrame Margin="{Binding Meeting.Holder.Location}"
-                              Content="{Binding Meeting.CurrentScreen.PublicViewModel}"></viewFrames:ViewFrame>
-        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" Text="{Binding Id}"/>
+        <Grid Margin="{Binding Meeting.Holder.Location}"
+              TextBlock.Foreground="{Binding Meeting.Holder.FontBrush}"
+              TextBlock.FontSize="{Binding Meeting.Holder.FontSize}"
+              Background="{Binding Meeting.Holder.BackgroundBrush}">
+            <viewFrames:ViewFrame Margin="7" Content="{Binding Meeting.CurrentScreen.PublicViewModel}" />
+
+        </Grid>
     </Grid>
 </Window>

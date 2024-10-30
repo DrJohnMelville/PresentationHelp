@@ -36,7 +36,7 @@ public class MeetingCommandServiceTest
     }
 
     [Test]
-    public async Task EnrollViewTest()
+    public void EnrollViewTest()
     {
         sut.EnrollView().Should().Be(1);
         sut.EnrollView().Should().Be(2);

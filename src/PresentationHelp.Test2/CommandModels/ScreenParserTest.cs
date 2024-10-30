@@ -77,7 +77,7 @@ public class ScreenParserTest
         ~Title My Poll
         """);
         scr.Should().BeOfType<PollScreen>();
-        var poll = (PollScreen)scr;
+        var poll = (PollScreen)scr!;
         poll!.Title.Should().Be("My Poll");
         poll.Items.Select(i => i.Name).Should().BeEquivalentTo("Option A", "Option B", "Option C");
     }

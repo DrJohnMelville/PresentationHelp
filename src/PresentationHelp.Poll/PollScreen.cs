@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Media;
 using Melville.INPC;
 using Microsoft.VisualBasic.CompilerServices;
 using PresentationHelp.ScreenInterface;
@@ -24,8 +25,12 @@ public partial class PollScreen : IScreenDefinition
 
     public VoteItem[] Items { get; }
     public int VotesCast => Votes.Count;
+
     [AutoNotify] private string title = "";
     [AutoNotify] private bool showResult;
+    [AutoNotify] private Brush lineBrush = Brushes.Black;
+    [AutoNotify] private Brush barColor= Brushes.LawnGreen;
+    [AutoNotify] private Brush barBackground = Brushes.LightGray;
 
     public PollScreen(string[] items, Func<TimeSpan, Func<ValueTask>, IThrottle> throttleFactory,
         IScreenHolder holder)
@@ -35,6 +40,9 @@ public partial class PollScreen : IScreenDefinition
             .WithCommand(@"^~\s*Title\s*(.+\S)", (string i) => Title = i, CommandResultKind.NewHtml)
             .WithCommand(@"^~\s*Show\s*Result", () => ShowResult = true)
             .WithCommand(@"^~\s*Hide\s*Result", () => ShowResult = false)
+            .WithCommand(@"^~\s*Line\s*Color(.+)", (Brush b) => LineBrush = b)
+            .WithCommand(@"^~\s*Bar\s*Color(.+)", (Brush b) => BarColor = b)
+            .WithCommand(@"^~\s*Bar\s*Background(.+)", (Brush b) => BarBackground = b)
             .WithCommand(@"^~\s*Clear\s*Votes", () =>
             {
                 Votes.Clear();

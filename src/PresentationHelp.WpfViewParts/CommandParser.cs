@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Windows.Media;
 using Melville.INPC;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PresentationHelp.ScreenInterface;
 
 namespace PresentationHelp.WpfViewParts;
@@ -72,6 +74,24 @@ internal readonly partial struct CommandDeclaration
 
     private object ConvertArgumentToParameterType(string a, ParameterInfo p)
     {
+        if (ReferenceEquals(p.ParameterType, typeof(Color)))
+            return ParseColor(a);
+        if (ReferenceEquals(p.ParameterType, typeof(Brush)))
+            return ParseBrush(a);
         return Convert.ChangeType(a, p.ParameterType);
     }
+
+    private Color ParseColor(string s) => 
+        ColorConverter.ConvertFromString(s) as Color? ?? Colors.Black;
+
+    private object ParseBrush(string s) =>
+        (RemovePercentFromColor().Match(s) is not { Success: true } match
+            ? Brushes.Black
+            : new SolidColorBrush(ParseColor(match.Groups[1].Value))
+                { Opacity = ParsePercent(match.Groups[2].Value) }).AsFrozen();
+
+    private static double ParsePercent(string value) => String.IsNullOrWhiteSpace(value)?1.0: (double.Parse(value)/100.0);
+
+    [GeneratedRegex("([#a-zA-z]\\w+)[,\\s]* (?:(\\d+)\\s*%)?", RegexOptions.IgnoreCase|RegexOptions.IgnorePatternWhitespace)]
+    private static partial Regex RemovePercentFromColor();
 }

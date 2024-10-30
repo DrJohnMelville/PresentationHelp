@@ -6,7 +6,7 @@ public class ThrottleTest
 {
     private readonly Mock<ITimer> timerMock = new();
     private readonly Mock<TimeProvider> timeProviderMock = new ();
-    private TimerCallback callOnTimeExpired;
+    private TimerCallback? callOnTimeExpired;
     private int timerCalls;
     private readonly Throttle sut;
 
@@ -54,7 +54,7 @@ public class ThrottleTest
     public async Task IsolatedCallBeforeTimeoutFiresOnlyOnce()
     {
         await sut.TryExecute();
-        callOnTimeExpired(null);
+        callOnTimeExpired?.Invoke(null);
 
         VerifyCounts(1,1);
     }
@@ -63,9 +63,9 @@ public class ThrottleTest
     public async Task TwoIsolatedCalls()
     {
         await sut.TryExecute();
-        callOnTimeExpired(null);
+        callOnTimeExpired?.Invoke(null);
         await sut.TryExecute();
-        callOnTimeExpired(null);
+        callOnTimeExpired?.Invoke(null);
         VerifyCounts(2,2);
     }
 
@@ -77,7 +77,7 @@ public class ThrottleTest
     {
         for (int i = 0; i < count; i++)
             await sut.TryExecute();
-        callOnTimeExpired(null);
+        callOnTimeExpired?.Invoke(null);
         VerifyCounts(2,1);
     }
 }

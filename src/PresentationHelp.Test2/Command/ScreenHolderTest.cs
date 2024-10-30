@@ -1,5 +1,8 @@
 ﻿using System.Printing;
 using System.Windows;
+using System.Windows.Media;
+using FluentAssertions.Execution;
+using FluentAssertions.Primitives;
 using PresentationHelp.Command.Connection;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.Website.Models.Entities;
@@ -53,4 +56,30 @@ public class ScreenHolderTest
         sut.Location.Should().BeEquivalentTo(new Thickness(left, top, right, bottom));
     }
 
+    [Test]
+    [Arguments("~FontColor Red", 0xFF, 0x00, 0x00, 0xFF, 1)]
+    [Arguments("~FontColor #FFFF0000", 0xFF, 0x00, 0x00, 0xFF, 1)]
+    [Arguments("~FontColor cadetBlue", 0x5F, 0x9E, 0xA0, 0xFF, 1)]
+    [Arguments("~FontColor cadetBlue 50%", 0x5F, 0x9E, 0xA0, 0xFF, 0.5)]
+    public async Task SetFontColor(string command, int r, int g, int b, int a, double opacity)
+    {
+        sut.FontBrush.Should().Be(Brushes.Black);
+        (await sut.TryParseCommandAsync(command, sut)).Result.Should().Be(CommandResultKind.KeepHtml);
+        var scb = (SolidColorBrush)sut.FontBrush;
+        scb.Color.Should().Be(Color.FromArgb((byte)a, (byte)r, (byte)g, (byte)b));
+        scb.Opacity.Should().Be(opacity);
+    }
+    [Test]
+    [Arguments("~Background Color Red", 0xFF, 0x00, 0x00, 0xFF, 1)]
+    [Arguments("~Background Color #FFFF0000", 0xFF, 0x00, 0x00, 0xFF, 1)]
+    [Arguments("~Background Color cadetBlue", 0x5F, 0x9E, 0xA0, 0xFF, 1)]
+    [Arguments("~Background Color cadetBlue 50%", 0x5F, 0x9E, 0xA0, 0xFF, 0.5)]
+    public async Task SetBackgroundColor(string command, int r, int g, int b, int a, double opacity)
+    {
+        sut.BackgroundBrush.Should().Be(Brushes.Transparent);
+        (await sut.TryParseCommandAsync(command, sut)).Result.Should().Be(CommandResultKind.KeepHtml);
+        var scb = (SolidColorBrush)sut.BackgroundBrush;
+        scb.Color.Should().Be(Color.FromArgb((byte)a, (byte)r, (byte)g, (byte)b));
+        scb.Opacity.Should().Be(opacity);
+    }
 }
