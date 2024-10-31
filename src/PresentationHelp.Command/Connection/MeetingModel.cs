@@ -42,7 +42,7 @@ public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
         ICommandParser screenParser)
     {
         ParticipantUrl = $"{baseUrl}{HttpUtility.UrlEncode(meetingName)}";
-        Holder = new(screenParser);
+        Holder = new(screenParser, ParticipantUrl);
         this.DelegatePropertyChangeFrom(Holder, nameof(ScreenHolder.Screen), nameof(CurrentScreen));
         MeetingName = meetingName;
         DisplayHub = displayHub;

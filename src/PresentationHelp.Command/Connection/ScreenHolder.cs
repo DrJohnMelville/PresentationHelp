@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using Melville.INPC;
+using PresentationHelp.Command.Presenter.ConnectionInformation;
 using PresentationHelp.MessageScreens;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.Website.Models.Entities;
@@ -10,19 +11,60 @@ using PresentationHelp.WpfViewParts;
 
 namespace PresentationHelp.Command.Connection;
 
-public partial class ScreenHolder : ICommandParser, IScreenHolder
+public abstract partial class DisplayHolder
+{
+    public void SizeChanged(double acutalWidth, double actualHeight)
+    {
+        ActualWidth = acutalWidth;
+        ActualHeight = actualHeight;
+    }
+
+    [AutoNotify] private double actualWidth = 1;
+    [AutoNotify] private double actualHeight = 1;
+    [AutoNotify] private Thickness relativeThickness = new Thickness(5);
+    [AutoNotify]
+    public Thickness Location => new Thickness(
+        RelativeThickness.Left * ActualWidth / 100,
+        RelativeThickness.Top * ActualHeight / 100,
+        RelativeThickness.Right * ActualWidth / 100,
+        RelativeThickness.Bottom * ActualHeight / 100);
+
+    #region Font Size
+
+    [AutoNotify] private double fontSize = 24;
+    [AutoNotify] private string selectedFontSize = "24";
+    [AutoNotify]
+    public string FontSizeCommand =>
+        FontSize.ToString(CultureInfo.InvariantCulture).Equals(SelectedFontSize) ?
+            "" :
+            $"~FontSize {SelectedFontSize}";
+
+    #endregion
+
+    #region FontColor
+
+    [AutoNotify] private Brush fontBrush = Brushes.Black;
+    [AutoNotify] private Brush backgroundBrush = Brushes.Transparent;
+
+    #endregion
+
+}
+
+public partial class ScreenHolder : DisplayHolder, ICommandParser, IScreenHolder
 {
     [AutoNotify] private IScreenDefinition screen =
         new MessageScreen("Internal -- should never show");
 
     private readonly ICommandParser localProcessor;
     private readonly ICommandParser globalProcessor;
-    [AutoNotify]public ICommandParser[] Targets => [Screen, localProcessor, globalProcessor];
+    [AutoNotify]public ICommandParser[] Targets => [Screen, ConnectionInfo, localProcessor, globalProcessor];
+    public ConnectionViewModel ConnectionInfo { get; }
 
-    public ScreenHolder(ICommandParser innerParser)
+    public ScreenHolder(ICommandParser innerParser, string participantUrl)
     {
         globalProcessor = innerParser;
         localProcessor = PresenterCommands();
+        ConnectionInfo = new ConnectionViewModel(participantUrl);
     }
 
     private ICommandParser PresenterCommands() =>
@@ -70,50 +112,13 @@ public partial class ScreenHolder : ICommandParser, IScreenHolder
 
     #endregion
 
-    #region Font Size
-
-    [AutoNotify] private double fontSize = 24;
-    [AutoNotify] private string selectedFontSize = "24";
-    [AutoNotify] public string FontSizeCommand =>
-        FontSize.ToString(CultureInfo.InvariantCulture).Equals(SelectedFontSize) ?
-            "" :
-            $"~FontSize {SelectedFontSize}";
-
-    #endregion
-
     #region Display Location
 
-    public void SizeChanged1(FrameworkElement element)
+    public void SizeChanged(FrameworkElement element)
     {
-        ActualWidth = element.ActualWidth;
-        ActualHeight = element.ActualHeight;
+        SizeChanged(element.ActualWidth, element.ActualHeight);
+        ConnectionInfo.SizeChanged(element.ActualWidth, element.ActualHeight);
     }
-
-    [AutoNotify] private double actualWidth = 1;
-    [AutoNotify] private double actualHeight = 1;
-    [AutoNotify] private Thickness relativeThickness = new Thickness(5);
-    [AutoNotify] public Thickness Location => new Thickness(
-        RelativeThickness.Left*ActualWidth / 100,
-        RelativeThickness.Top*ActualHeight / 100,
-        RelativeThickness.Right*ActualWidth / 100,
-        RelativeThickness.Bottom*ActualHeight / 100);
-
-    #endregion
-
-    #region FontColor
-
-    [AutoNotify] private Brush fontBrush = Brushes.Black;
-    [AutoNotify] private Brush backgroundBrush = Brushes.Transparent;
-
-    private Brush ParseTextBrush(string colorName, double percent)
-    {
-        var solidColorBrush = new SolidColorBrush(BrushFromName(colorName) ?? Colors.Black){Opacity = percent/100};
-        solidColorBrush.Freeze();
-        return solidColorBrush;
-    }
-
-    private static Color? BrushFromName(string colorName) => ColorConverter.ConvertFromString(colorName) as Color?;
-
     #endregion
 
     public string Title => "Error -- should not show";

@@ -11,7 +11,7 @@ namespace PresentationHelp.Test2.Command;
 
 public class ScreenHolderTest
 {
-    private readonly ScreenHolder sut = new(Mock.Of<ICommandParser>());
+    private readonly ScreenHolder sut = new(Mock.Of<ICommandParser>(), "url");
 
     [Test]
     [Arguments("~   FontSize   15.2  ")]

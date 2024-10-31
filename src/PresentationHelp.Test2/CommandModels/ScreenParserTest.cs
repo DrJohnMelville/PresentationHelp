@@ -21,7 +21,7 @@ public class ScreenParserTest
 
     public ScreenParserTest()
     {
-        holder = new ScreenHolder(sut);
+        holder = new ScreenHolder(sut, "Url");
         commandParser = new MultiCommandParser(holder);
     }
 

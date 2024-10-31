@@ -8,13 +8,13 @@
         xmlns:eventBindings="clr-namespace:Melville.MVVM.Wpf.EventBindings;assembly=Melville.MVVM.Wpf"
         mc:Ignorable="d"
         Title="PresenterView" Height="450" Width="800">
-    <Grid SizeChanged="{eventBindings:EventBinding Meeting.Holder.SizeChanged1}">
+    <Grid SizeChanged="{eventBindings:EventBinding Meeting.Holder.SizeChanged}">
         <Grid Margin="{Binding Meeting.Holder.Location}"
               TextBlock.Foreground="{Binding Meeting.Holder.FontBrush}"
               TextBlock.FontSize="{Binding Meeting.Holder.FontSize}"
               Background="{Binding Meeting.Holder.BackgroundBrush}">
             <viewFrames:ViewFrame Margin="7" Content="{Binding Meeting.CurrentScreen.PublicViewModel}" />
-
         </Grid>
+        <viewFrames:ViewFrame Content="{Binding Meeting.Holder.ConnectionInfo}"></viewFrames:ViewFrame>
     </Grid>
 </Window>
