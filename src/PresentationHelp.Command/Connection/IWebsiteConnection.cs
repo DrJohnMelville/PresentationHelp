@@ -30,6 +30,6 @@ public class WebsiteConnection(Application app, MeetingModelFactory mmetingFacto
     private void DisposeOfMeeting(object sender, ExitEventArgs e)
     {
         if (client is not null)
-            Task.Run(async () => client.DisposeAsync()).GetAwaiter().GetResult();
+            Task.Run(() => client.DisposeAsync()).GetAwaiter().GetResult();
     }
 }

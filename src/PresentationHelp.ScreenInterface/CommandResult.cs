@@ -2,6 +2,8 @@
 
 public interface ICommandParser
 {
+    public string Title { get; }
+    public IEnumerable<string> Commands { get; }
     ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder);
 }
 

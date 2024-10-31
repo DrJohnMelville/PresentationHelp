@@ -31,4 +31,8 @@ public partial class PollScreenParser(Func<TimeSpan, Func<ValueTask>, IThrottle>
         new(ItemExtractor().Matches(command)
                 .Select(i => i.Groups[1].Value).ToArray(), throttleFactory,
             holder);
+
+    public string Title => "Poll \r\n   [Poll Options]";
+
+    public IEnumerable<string> Commands => [];
 }

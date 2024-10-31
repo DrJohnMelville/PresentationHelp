@@ -17,7 +17,7 @@ public partial class ScreenHolder : ICommandParser, IScreenHolder
 
     private readonly ICommandParser localProcessor;
     private readonly ICommandParser globalProcessor;
-    private  ICommandParser[] targets => [screen, localProcessor, globalProcessor];
+    [AutoNotify]public ICommandParser[] Targets => [Screen, localProcessor, globalProcessor];
 
     public ScreenHolder(ICommandParser innerParser)
     {
@@ -26,24 +26,28 @@ public partial class ScreenHolder : ICommandParser, IScreenHolder
     }
 
     private ICommandParser PresenterCommands() =>
-        new CommandParser()
-            .WithCommand($"""~\s*Font\s*Size{ParserParts.RealNumber}""", (double i) => FontSize = i)
-            .WithCommand(@"^~\s*Lock\s*Responses", () => ResponsesLocked = true, CommandResultKind.NewHtml)
-            .WithCommand(@"^~\s*Allow\s*Responses", () => ResponsesLocked = false, CommandResultKind.NewHtml)
-            .WithCommand($$"""^~\s*Display\s*Margin{{ParserParts.RealNumber}}{4}""", 
+        new CommandParser("Common Presenter Commands")
+            .WithCommand("~Font Size [Pixels]",
+                $"""~\s*Font\s*Size{ParserParts.RealNumber}""", (double i) => FontSize = i)
+            .WithCommand("~Lock Responses", @"^~\s*Lock\s*Responses", () => ResponsesLocked = true, CommandResultKind.NewHtml)
+            .WithCommand("~Allow Responses", @"^~\s*Allow\s*Responses", () => ResponsesLocked = false, CommandResultKind.NewHtml)
+            .WithCommand("~Display Margin [left] [top] [right] [bottom]",
+                $$"""^~\s*Display\s*Margin{{ParserParts.RealNumber}}{4}""", 
                 (double l, double t, double r, double b) => RelativeThickness = new Thickness(l, t, r, b))
-            .WithCommand($$"""^~\s*Display\s*Margin{{ParserParts.RealNumber}}{2}""", 
+            .WithCommand("~Display Margin [left/right] [top/bottom]", $$"""^~\s*Display\s*Margin{{ParserParts.RealNumber}}{2}""", 
                 (double h, double v) => RelativeThickness = new Thickness(h,v,h,v))
-            .WithCommand($"""^~\s*Display\s*Margin{ParserParts.RealNumber}""", (double w) =>
+            .WithCommand("~Display Margin [all sides]",
+                $"""^~\s*Display\s*Margin{ParserParts.RealNumber}""", (double w) =>
                 RelativeThickness = new Thickness(w))
-            .WithCommand(@"^~\s*Font\s*Color\s+(.+)$", (Brush brush) => FontBrush = brush)
-            .WithCommand(@"^~\s*Background\s*Color\s+(.+)$", (Brush brush) => BackgroundBrush = brush)
+            .WithCommand("~Font Color [Brush]", @"^~\s*Font\s*Color\s+(.+)$", (Brush brush) => FontBrush = brush)
+            .WithCommand("~Background Color [Brush]", 
+                @"^~\s*Background\s*Color\s+(.+)$", (Brush brush) => BackgroundBrush = brush)
         ;
 
     #region Command Parsing
     public async ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder)
     {
-        foreach (var target in targets)
+        foreach (var target in Targets)
         {
             if (await target.TryParseCommandAsync(command, holder) is
                 { Result: not CommandResultKind.NotRecognized } result)
@@ -111,4 +115,8 @@ public partial class ScreenHolder : ICommandParser, IScreenHolder
     private static Color? BrushFromName(string colorName) => ColorConverter.ConvertFromString(colorName) as Color?;
 
     #endregion
+
+    public string Title => "Error -- should not show";
+
+    public IEnumerable<string> Commands => [];
 }

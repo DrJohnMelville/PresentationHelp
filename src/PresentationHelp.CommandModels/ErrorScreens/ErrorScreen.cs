@@ -15,5 +15,9 @@ public class ErrorScreen(IScreenDefinition priorScreen, string error): IScreenDe
     public bool UserHtmlIsDirty => false;
 
     public object PublicViewModel => priorScreen.PublicViewModel;
-    public object CommandViewModel => new ErrorScreenViewModel(error, priorScreen);
+    public object CommandViewModel => new ErrorScreenViewModel(Error, priorScreen);
+
+    public string Title => priorScreen.Title;
+
+    public IEnumerable<string> Commands => priorScreen.Commands;
 }

@@ -14,6 +14,6 @@ public class ClientHub(MeetingStore store): Hub, IClientHubServer
     {
         var c = Context;
         return store.GetOrCreateMeeting(meeting)
-            .PostUserDatum(screen, c.User.Identity.Name, datum);
+            .PostUserDatum(screen, c.User?.Identity?.Name??"", datum);
     }
 }

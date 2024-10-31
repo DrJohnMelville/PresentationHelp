@@ -16,7 +16,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TextBlock Text="{Binding Title}" />
+        <TextBlock Text="{Binding PollTitle}" />
         <TextBlock Text="{Binding VotesCast}" Grid.Column="1" />
         <ItemsControl Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Items}">
             <ItemsControl.ItemsPanel>

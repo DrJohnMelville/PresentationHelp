@@ -63,7 +63,7 @@ public class ScreenParserTest
             .Contain("Option C");
 
         var poll = (PollScreen)scr;
-        poll.Title.Should().BeEmpty();
+        poll.PollTitle.Should().BeEmpty();
         poll.Items.Select(i=>i.Name).Should().BeEquivalentTo("Option A", "Option B", "Option C");
     }
     [Test]
@@ -78,7 +78,7 @@ public class ScreenParserTest
         """);
         scr.Should().BeOfType<PollScreen>();
         var poll = (PollScreen)scr!;
-        poll!.Title.Should().Be("My Poll");
+        poll.PollTitle.Should().Be("My Poll");
         poll.Items.Select(i => i.Name).Should().BeEquivalentTo("Option A", "Option B", "Option C");
     }
  }

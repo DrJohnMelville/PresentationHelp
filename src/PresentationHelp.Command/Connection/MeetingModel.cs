@@ -50,12 +50,12 @@ public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
         DisplayHub.CreateOrJoinMeeting(meetingName);
     }
 
-    private IDisposable clientMethodRegistrations;
-    private IAsyncDisposable connection;
+    private IDisposable? clientMethodRegistrations;
+    private IAsyncDisposable? connection;
     public ValueTask DisposeAsync()
     {
-        clientMethodRegistrations.Dispose();
-        return connection.DisposeAsync();
+        clientMethodRegistrations?.Dispose();
+        return connection?.DisposeAsync() ?? ValueTask.CompletedTask;
     }
     public void SetDisposeHandles(IDisposable clientMethods, IAsyncDisposable connection)
     {

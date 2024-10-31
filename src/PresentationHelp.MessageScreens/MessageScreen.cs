@@ -19,4 +19,8 @@ public partial class MessageScreen(string message) : IScreenDefinition
     public object CommandViewModel => SolidColorViewModel.LightGray;
 
     public bool UserHtmlIsDirty => false;
+
+    public string Title => "Message Screen";
+
+    public IEnumerable<string> Commands => ["Message screen has no commands"];
 }

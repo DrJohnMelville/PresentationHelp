@@ -20,13 +20,13 @@ public partial class PollScreen : IScreenDefinition
 {
     public IScreenHolder Holder { get; }
     private ConcurrentDictionary<string, int> Votes { get; } = new();
-    private readonly CommandParser commands;
+    [DelegateTo]private readonly ICommandParser commands;
     private readonly IThrottle recountThrottle;
 
     public VoteItem[] Items { get; }
     public int VotesCast => Votes.Count;
 
-    [AutoNotify] private string title = "";
+    [AutoNotify] private string pollTitle = "";
     [AutoNotify] private bool showResult;
     [AutoNotify] private Brush lineBrush = Brushes.Black;
     [AutoNotify] private Brush barColor= Brushes.LawnGreen;
@@ -36,14 +36,14 @@ public partial class PollScreen : IScreenDefinition
         IScreenHolder holder)
     {
         this.Holder = holder;
-        commands = new CommandParser()
-            .WithCommand(@"^~\s*Title\s*(.+\S)", (string i) => Title = i, CommandResultKind.NewHtml)
-            .WithCommand(@"^~\s*Show\s*Result", () => ShowResult = true)
-            .WithCommand(@"^~\s*Hide\s*Result", () => ShowResult = false)
-            .WithCommand(@"^~\s*Line\s*Color(.+)", (Brush b) => LineBrush = b)
-            .WithCommand(@"^~\s*Bar\s*Color(.+)", (Brush b) => BarColor = b)
-            .WithCommand(@"^~\s*Bar\s*Background(.+)", (Brush b) => BarBackground = b)
-            .WithCommand(@"^~\s*Clear\s*Votes", () =>
+        commands = new CommandParser("Poll Commands")
+            .WithCommand("~Title [Poll Title]",@"^~\s*Title\s*(.+\S)", (string i) => PollTitle = i, CommandResultKind.NewHtml)
+            .WithCommand("~Show Result", @"^~\s*Show\s*Result", () => ShowResult = true)
+            .WithCommand("~Hide Result", @"^~\s*Hide\s*Result", () => ShowResult = false)
+            .WithCommand("~Line Color [Color]", @"^~\s*Line\s*Color(.+)", (Brush b) => LineBrush = b)
+            .WithCommand("~Bar Color [Color]", @"^~\s*Bar\s*Color(.+)", (Brush b) => BarColor = b)
+            .WithCommand("~Line Background [Color]", @"^~\s*Bar\s*Background(.+)", (Brush b) => BarBackground = b)
+            .WithCommand("~Clear Votes", @"^~\s*Clear\s*Votes", () =>
             {
                 Votes.Clear();
                 CountVotes();
@@ -88,8 +88,8 @@ public partial class PollScreen : IScreenDefinition
         return ValueTask.CompletedTask;
     }
 
-    public ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder) => 
-        commands.TryParseCommandAsync(command, holder);
+    // public ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder) => 
+    //     commands.TryParseCommandAsync(command, holder);
 
     public bool UserHtmlIsDirty { get; private set; }
 
@@ -101,9 +101,9 @@ public partial class PollScreen : IScreenDefinition
     {
         UserHtmlIsDirty = false;
         var sb = new StringBuilder();
-        if (Title.Length > 0)
+        if (PollTitle.Length > 0)
         {
-            sb.Append($"<h2>{Title}</h2>");
+            sb.Append($"<h2>{PollTitle}</h2>");
         }
 
         int index = 0;

@@ -8,15 +8,19 @@ using PresentationHelp.ScreenInterface;
 
 namespace PresentationHelp.WpfViewParts;
 
-public class CommandParser:ICommandParser
+public partial class CommandParser:ICommandParser
 {
+    [FromConstructor] public string Title { get; }
+
+    public IEnumerable<string> Commands => commandDeclarations.Select(i=>i.Documentation);
 
     private List<CommandDeclaration> commandDeclarations = new();
 
-    public CommandParser WithCommand(string regex, Delegate method, CommandResultKind kind = CommandResultKind.KeepHtml)
+    public CommandParser WithCommand(string documentation, string regex, Delegate method, CommandResultKind kind = CommandResultKind.KeepHtml)
     {
         commandDeclarations.Add(
-            new CommandDeclaration(new Regex(regex, RegexOptions.IgnoreCase|RegexOptions.IgnorePatternWhitespace), 
+            new CommandDeclaration(documentation, 
+                new Regex(regex, RegexOptions.IgnoreCase|RegexOptions.IgnorePatternWhitespace), 
                 method, kind));
         return this;
     }
@@ -35,6 +39,7 @@ public class CommandParser:ICommandParser
 
 internal readonly partial struct CommandDeclaration
 {
+    [FromConstructor] public string Documentation { get; }
     [FromConstructor] private readonly Regex selector;
     [FromConstructor] private readonly Delegate action;
     [FromConstructor] private readonly CommandResultKind kind;

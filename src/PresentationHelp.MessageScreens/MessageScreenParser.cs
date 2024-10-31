@@ -5,6 +5,10 @@ namespace PresentationHelp.MessageScreens;
 
 public partial class MessageScreenParser : ICommandParser
 {
+    public string Title => "Message\r\n    [Message Content]";
+
+    public IEnumerable<string> Commands => [];
+
     public ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder) =>
         new(Parser().Match(command) is { Success: true } match ?
             new CommandResult(new MessageScreen(match.Groups[1].Value), CommandResultKind.NewHtml) :

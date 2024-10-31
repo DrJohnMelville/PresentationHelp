@@ -12,7 +12,7 @@ public class PollTest
     private readonly PollScreen sut = new PollScreen(
         ["Item 1", "Item 2", "Item 3"], (_, act)=>new TrivialThrottle(act),
             Mock.Of<IScreenHolder>())
-        {Title = "This is the Title"};
+        {PollTitle = "This is the Title"};
     
     [Test]
     public async Task UnknownCommand()

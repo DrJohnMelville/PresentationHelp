@@ -9,7 +9,6 @@ public class ScreenParser(IList<ICommandParser> parsers): ICommandParser
     {
         foreach (var parser in parsers)
         {
-
             if ((await parser.TryParseCommandAsync(command, holder)) is 
                 {Result: not CommandResultKind.NotRecognized} screen)
                 return screen;
@@ -19,4 +18,8 @@ public class ScreenParser(IList<ICommandParser> parsers): ICommandParser
             {command}
             """), CommandResultKind.KeepHtml);
     }
+
+    public string Title => "Create Screens";
+
+    public IEnumerable<string> Commands => parsers.Select(i=>i.Title);
 }
