@@ -1,2 +1,0 @@
-﻿namespace PresentationHelp.Website.CompositionRoot;
-

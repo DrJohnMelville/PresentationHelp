@@ -88,9 +88,6 @@ public partial class PollScreen : IScreenDefinition
         return ValueTask.CompletedTask;
     }
 
-    // public ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder) => 
-    //     commands.TryParseCommandAsync(command, holder);
-
     public bool UserHtmlIsDirty { get; private set; }
 
     public string HtmlForUser(IHtmlBuilder builder) =>
@@ -101,9 +98,10 @@ public partial class PollScreen : IScreenDefinition
     {
         UserHtmlIsDirty = false;
         var sb = new StringBuilder();
+        sb.Append("""<div class="verticalList smallMargin">""");
         if (PollTitle.Length > 0)
         {
-            sb.Append($"<h2>{PollTitle}</h2>");
+            sb.Append($"""<h2 class="noGrow">{PollTitle}</h2>""");
         }
 
         int index = 0;
@@ -112,6 +110,7 @@ public partial class PollScreen : IScreenDefinition
             sb.Append($"<button onclick=\"sendDatum('{index++}')\">{item.Name}</button>");
         }
 
+        sb.Append("</div>");
         return sb.ToString();
     }
 

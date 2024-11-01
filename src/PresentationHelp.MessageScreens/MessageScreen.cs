@@ -13,7 +13,9 @@ public partial class MessageScreen(string message) : IScreenDefinition
         new ValueTask<CommandResult>(new CommandResult(this, CommandResultKind.NotRecognized));
 
     public string HtmlForUser(IHtmlBuilder builder) =>
-        builder.CommonClientPage("", $"<h2>{message}</h2>");
+        builder.CommonClientPage("", $"""
+        <h1 class="smallMargin">{message}</h1>
+        """);
 
     public object PublicViewModel => SolidColorViewModel.LightGray;
     public object CommandViewModel => SolidColorViewModel.LightGray;

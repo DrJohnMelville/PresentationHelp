@@ -17,7 +17,9 @@ public readonly struct SetupWebPipeline (WebApplication app)
         app.MapHub<ClientHub>("/___Hubs/Client___");
         app.MapHub<DisplayHub>("/___Hubs/Display___");
         app.MapGet("/___lib/shared.js", 
-            () => TypedResults.Bytes(CommonJavascriptDefinition.JavaScript, "text/javascript"));
+            () => TypedResults.Bytes(CommonJavascriptDefinition.JavaScript, "application/javascript"));
+        app.MapGet("/___lib/shared.css", 
+            () => TypedResults.Bytes(CommonCssDefinition.Css, "text/css"));
         app.MapGet("/{name}", MeetingConsumer);
     }
 

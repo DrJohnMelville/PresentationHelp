@@ -7,6 +7,7 @@ public class HtmlBuilder(string meetingName, int screenNumber): IHtmlBuilder
     public string CommonClientPage(string headPart, string bodyPart) => $$"""
         <html>
         <head>
+        <link rel="stylesheet" href="___lib/shared.css">
         {{headPart}}
         </head>
         <body>

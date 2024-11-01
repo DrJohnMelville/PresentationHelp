@@ -13,7 +13,9 @@ public partial class Meeting
     partial void OnConstructed()
     {
         Html = new HtmlBuilder(Name, 1).CommonClientPage("",
-                "<h2>You are logged into the meeting.  There is currently no question active.</h2>");
+                """
+                 <h2 class = "smallMargin">You are logged into the meeting.  There is currently no question active.</h2>
+                 """);
     }
 
     public Task PostUserDatum(int screen, string identityName, string datum) => 
@@ -35,7 +37,9 @@ public static class DefaultMeetingContent
     {
         var ret = new Meeting("___NotFoundMeeting", NullSendCommand.Instance);
         ret.UpdateClientHtml(new HtmlBuilder("___NotFoundMeeting", 0).CommonClientPage("",
-            "<h2>You requested a meeting that does not yet exist.  Please wait for the organizer to open the meeting.</h2>"));
+            """
+            <h2 class="smallMargin">You requested a meeting that does not yet exist.  Please wait for the organizer to open the meeting.</h2>"
+            """));
         return ret;
     }
 
