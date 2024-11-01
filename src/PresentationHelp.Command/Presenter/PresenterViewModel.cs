@@ -11,7 +11,7 @@ public partial class PresenterViewModel
 {
     [AutoNotify] private int id;
     public MeetingModel Meeting { get; }
- 
+
     public PresenterViewModel(IWebsiteConnection connection)
     {
         Meeting = connection.GetClient();

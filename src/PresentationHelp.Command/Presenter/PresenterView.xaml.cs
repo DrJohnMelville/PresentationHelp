@@ -22,4 +22,24 @@ public partial class PresenterView : Window
     {
         InitializeComponent();
     }
+
+    private void TileBarMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton != MouseButton.Left) return;
+        if (e.ClickCount == 2)
+            ToggleMaximized();
+        else
+            DragMove();
+    }
+
+    private void ToggleMaximized() => 
+        WindowState = WindowState is WindowState.Maximized ? 
+            WindowState.Normal : 
+            WindowState.Maximized;
+
+    private void CloseButtonClick(object sender, RoutedEventArgs e) => Close();
+
+    private void MinimizeClick(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+
+    private void MaximizeClick(object sender, RoutedEventArgs e) => ToggleMaximized();
 }
