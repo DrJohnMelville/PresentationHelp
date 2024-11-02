@@ -19,5 +19,5 @@ public class ErrorScreen(IScreenDefinition priorScreen, string error): IScreenDe
 
     public string Title => priorScreen.Title;
 
-    public IEnumerable<string> Commands => priorScreen.Commands;
+    public IEnumerable<ICommandInfo> Commands => priorScreen.Commands;
 }

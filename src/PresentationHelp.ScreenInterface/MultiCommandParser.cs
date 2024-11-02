@@ -17,7 +17,7 @@ public partial class MultiCommandParser(ICommandParser inner) : ICommandParser
     [GeneratedRegex(@"(?:^\s*(?'cmd'~.+\S))|(?:^\s*(?'cmd'[^~]+[^~\s]))", RegexOptions.Multiline)]
     private static partial Regex Separator();
 
-    public string Title => "Error -- should never show in UI";
+    public string Title => inner.Title;
 
-    public IEnumerable<string> Commands => [Title];
+    public IEnumerable<ICommandInfo> Commands => inner.Commands;
 }

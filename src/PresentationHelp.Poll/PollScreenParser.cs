@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System.Windows.Input;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.WpfViewParts;
 
@@ -34,5 +35,5 @@ public partial class PollScreenParser(Func<TimeSpan, Func<ValueTask>, IThrottle>
 
     public string Title => "Poll \r\n   [Poll Options]";
 
-    public IEnumerable<string> Commands => [];
+    public IEnumerable<ICommandInfo> Commands => [];
 }

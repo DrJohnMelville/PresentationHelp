@@ -12,7 +12,7 @@ public partial class CommandParser:ICommandParser
 {
     [FromConstructor] public string Title { get; }
 
-    public IEnumerable<string> Commands => commandDeclarations.Select(i=>i.Documentation);
+    public IEnumerable<ICommandInfo> Commands => commandDeclarations.OfType<ICommandInfo>();
 
     private List<CommandDeclaration> commandDeclarations = new();
 
@@ -37,7 +37,7 @@ public partial class CommandParser:ICommandParser
     }
 }
 
-internal readonly partial struct CommandDeclaration
+internal readonly partial struct CommandDeclaration: ICommandInfo
 {
     [FromConstructor] public string Documentation { get; }
     [FromConstructor] private readonly Regex selector;
@@ -99,4 +99,8 @@ internal readonly partial struct CommandDeclaration
 
     [GeneratedRegex("([#a-zA-z]\\w+)[,\\s]* (?:(\\d+)\\s*%)?", RegexOptions.IgnoreCase|RegexOptions.IgnorePatternWhitespace)]
     private static partial Regex RemovePercentFromColor();
+
+    public string Title => Documentation;
+
+    public IEnumerable<ICommandInfo> Commands => [];
 }

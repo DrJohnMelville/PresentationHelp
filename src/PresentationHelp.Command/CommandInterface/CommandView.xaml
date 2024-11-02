@@ -9,6 +9,7 @@
              xmlns:wpfViewParts="clr-namespace:PresentationHelp.WpfViewParts;assembly=PresentationHelp.WpfViewParts"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:screenInterface="clr-namespace:PresentationHelp.ScreenInterface;assembly=PresentationHelp.ScreenInterface"
+             xmlns:wpfHacks="clr-namespace:Melville.MVVM.Wpf.WpfHacks;assembly=Melville.MVVM.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid PreviewKeyDown="{eventBindings:EventBinding KeyDown}">
@@ -16,6 +17,7 @@
             <Style TargetType="{x:Type wpfViewParts:TextCommandButton}">
                 <eventBindings:EventIocSetter Event="Click"
                                               MethodName="CommandButtonPressed"/>
+                <Setter Property="Margin" Value="2 0"></Setter>
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
@@ -27,20 +29,25 @@
         </Grid.RowDefinitions>
         <WrapPanel>
             <Button Content="Show Presenter View" Click="{eventBindings:EventBinding ShowPresenter}"/>
+            <wpfViewParts:TextCommandButton eventBindings:EventBinding.Parameter="~QR Margin 0 85 85 0&#13;&#10;~QR Font Size 12">QR Bottom Left</wpfViewParts:TextCommandButton>
+            <wpfViewParts:TextCommandButton eventBindings:EventBinding.Parameter="~QR Margin 85 85 0 0&#13;&#10;~QR Font Size 12">QR Bottom Right</wpfViewParts:TextCommandButton>
+            <wpfViewParts:TextCommandButton eventBindings:EventBinding.Parameter="~QR Margin 10&#13;&#10;~QR Font Size 24">QR Big</wpfViewParts:TextCommandButton>
+            <wpfViewParts:TextCommandButton eventBindings:EventBinding.Parameter="~Hide Both"
+                   wpfHacks:VisibilityHack.CollapseUnless="{Binding Meeting.Holder.ConnectionInfo.ShowQR}">Hide QR</wpfViewParts:TextCommandButton>
+            <wpfViewParts:TextCommandButton eventBindings:EventBinding.Parameter="~Show Both"
+                   wpfHacks:VisibilityHack.CollapseIf="{Binding Meeting.Holder.ConnectionInfo.ShowQR}">Show QR</wpfViewParts:TextCommandButton>
         </WrapPanel>
         <TextBlock Grid.Row="1">Enter a Command</TextBlock>
         <DockPanel Grid.Row="2" Margin="0, 0, 0, 5">
             <ScrollViewer DockPanel.Dock="Right" MaxWidth="250" HorizontalScrollBarVisibility="Auto">
-                <ItemsControl DockPanel.Dock="Right" ItemsSource="{Binding Meeting.Holder.Targets}">
+                <TreeView DockPanel.Dock="Right" ItemsSource="{Binding Meeting.Holder.Targets}">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type screenInterface:ICommandParser}">
-                            <StackPanel>
-                                <TextBlock FontWeight="Bold" Text="{Binding Title}"/>
-                                <ItemsControl Margin="10 0 0 0" ItemsSource="{Binding Commands}"/>
-                            </StackPanel>
-                        </DataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type screenInterface:ICommandParser}"
+                                                  ItemsSource="{Binding Commands}">
+                            <TextBlock Text="{Binding Title}"/>
+                        </HierarchicalDataTemplate>
                     </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                </TreeView>
             </ScrollViewer>
             <Button DockPanel.Dock="Bottom" Content="Submit Command" 
                     Click="{eventBindings:EventBinding ExecuteCommand}"
