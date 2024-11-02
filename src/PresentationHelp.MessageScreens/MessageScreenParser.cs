@@ -7,7 +7,7 @@ public partial class MessageScreenParser : ICommandParser
 {
     public string Title => "Message\r\n    [Message Content]";
 
-    public IEnumerable<string> Commands => [];
+    public IEnumerable<ICommandInfo> Commands => [];
 
     public ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder) =>
         new(Parser().Match(command) is { Success: true } match ?

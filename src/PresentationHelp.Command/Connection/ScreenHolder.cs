@@ -123,5 +123,5 @@ public partial class ScreenHolder : DisplayHolder, ICommandParser, IScreenHolder
 
     public string Title => "Error -- should not show";
 
-    public IEnumerable<string> Commands => [];
+    public IEnumerable<ICommandInfo> Commands => [];
 }

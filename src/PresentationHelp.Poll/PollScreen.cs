@@ -1,10 +1,7 @@
 ﻿using System.Collections.Concurrent;
-using System.Globalization;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Media;
 using Melville.INPC;
-using Microsoft.VisualBasic.CompilerServices;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.WpfViewParts;
 
@@ -20,7 +17,7 @@ public partial class PollScreen : IScreenDefinition
 {
     public IScreenHolder Holder { get; }
     private ConcurrentDictionary<string, int> Votes { get; } = new();
-    [DelegateTo]private readonly ICommandParser commands;
+    [DelegateTo] private readonly ICommandParser commands;
     private readonly IThrottle recountThrottle;
 
     public VoteItem[] Items { get; }
@@ -29,7 +26,7 @@ public partial class PollScreen : IScreenDefinition
     [AutoNotify] private string pollTitle = "";
     [AutoNotify] private bool showResult;
     [AutoNotify] private Brush lineBrush = Brushes.Black;
-    [AutoNotify] private Brush barColor= Brushes.LawnGreen;
+    [AutoNotify] private Brush barColor = Brushes.LawnGreen;
     [AutoNotify] private Brush barBackground = Brushes.LightGray;
 
     public PollScreen(string[] items, Func<TimeSpan, Func<ValueTask>, IThrottle> throttleFactory,
@@ -37,7 +34,8 @@ public partial class PollScreen : IScreenDefinition
     {
         this.Holder = holder;
         commands = new CommandParser("Poll Commands")
-            .WithCommand("~Title [Poll Title]",@"^~\s*Title\s*(.+\S)", (string i) => PollTitle = i, CommandResultKind.NewHtml)
+            .WithCommand("~Title [Poll Title]", @"^~\s*Title\s*(.+\S)", (string i) => PollTitle = i,
+                CommandResultKind.NewHtml)
             .WithCommand("~Show Result", @"^~\s*Show\s*Result", () => ShowResult = true)
             .WithCommand("~Hide Result", @"^~\s*Hide\s*Result", () => ShowResult = false)
             .WithCommand("~Line Color [Color]", @"^~\s*Line\s*Color(.+)", (Brush b) => LineBrush = b)
@@ -91,8 +89,39 @@ public partial class PollScreen : IScreenDefinition
     public bool UserHtmlIsDirty { get; private set; }
 
     public string HtmlForUser(IHtmlBuilder builder) =>
-        builder.CommonClientPage("",
+        builder.CommonClientPage(GenerateCSS,
             GenerateHtml());
+
+    private const string GenerateCSS = """
+    <style>
+    .verticalList {
+        display:flex;
+        flex-flow: column wrap;
+        justify-content: center;
+        align-items:stretch;
+        row-gap: 5px;
+        height:100%;
+    }
+
+    .verticalList > * {
+         flex: 1;
+         align-content: center;
+    }
+    
+    label>div {
+        margin:auto;
+        text-align:center;
+    }
+
+    .noGrow {
+        flex-grow: 0
+    }
+    
+    .ButtonState{display:none}
+    .Button{padding:3px; margin:4px; background:#CCC; border:1px solid #333; cursor:pointer;}
+    .ButtonState:checked + .Button{background:#fff;}
+    </style>
+    """;
 
     private string GenerateHtml()
     {
@@ -107,7 +136,11 @@ public partial class PollScreen : IScreenDefinition
         int index = 0;
         foreach (var item in Items)
         {
-            sb.Append($"<button onclick=\"sendDatum('{index++}')\">{item.Name}</button>");
+            sb.Append($"""
+            <input type ="radio" name="Button" class="ButtonState" onclick="sendDatum('{index}')" id="Button{index}" value="{index}"/>
+            <label class="Button" for="Button{index}"><div>{item.Name}</div></label>
+            """);
+            index++;
         }
 
         sb.Append("</div>");

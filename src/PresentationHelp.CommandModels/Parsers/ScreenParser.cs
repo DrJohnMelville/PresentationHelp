@@ -21,5 +21,5 @@ public class ScreenParser(IList<ICommandParser> parsers): ICommandParser
 
     public string Title => "Create Screens";
 
-    public IEnumerable<string> Commands => parsers.Select(i=>i.Title);
+    public IEnumerable<ICommandInfo> Commands => parsers;
 }

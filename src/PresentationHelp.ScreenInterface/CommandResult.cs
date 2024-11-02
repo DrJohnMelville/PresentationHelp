@@ -1,9 +1,13 @@
 ﻿namespace PresentationHelp.ScreenInterface;
 
-public interface ICommandParser
+public interface ICommandInfo
 {
     public string Title { get; }
-    public IEnumerable<string> Commands { get; }
+    public IEnumerable<ICommandInfo> Commands { get; }
+}
+
+public interface ICommandParser: ICommandInfo
+{
     ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder);
 }
 
