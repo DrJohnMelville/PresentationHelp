@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="CommandModels\" />
+    <Folder Include="Sentiments\" />
     <Folder Include="ScreenHelpers\" />
     <Folder Include="Website\Entities\" />
   </ItemGroup>
@@ -25,6 +26,7 @@
     <ProjectReference Include="..\PresentationHelp.CommandModels\PresentationHelp.CommandModels.csproj" />
     <ProjectReference Include="..\PresentationHelp.Command\PresentationHelp.Command.csproj" />
     <ProjectReference Include="..\PresentationHelp.Poll\PresentationHelp.Poll.csproj" />
+    <ProjectReference Include="..\PresentationHelp.Sentiment\PresentationHelp.Sentiment.csproj" />
     <ProjectReference Include="..\PresentationHelp.Website.Models\PresentationHelp.Website.Models.csproj" />
   </ItemGroup>
 

@@ -10,7 +10,6 @@ public interface IScreenHolder
 public interface IScreenDefinition: ICommandParser
 {
     Task AcceptDatum(string user, string datum);
-    bool UserHtmlIsDirty { get; }
     string HtmlForUser(IHtmlBuilder builder);
     object PublicViewModel { get; }
     object CommandViewModel { get; }

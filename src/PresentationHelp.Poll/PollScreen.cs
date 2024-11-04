@@ -15,7 +15,7 @@ public partial class VoteItem
 
 public partial class PollScreen : IScreenDefinition
 {
-    public IScreenHolder Holder { get; }
+//    public IScreenHolder Holder { get; }
     private ConcurrentDictionary<string, int> Votes { get; } = new();
     [DelegateTo] private readonly ICommandParser commands;
     private readonly IThrottle recountThrottle;
@@ -29,10 +29,8 @@ public partial class PollScreen : IScreenDefinition
     [AutoNotify] private Brush barColor = Brushes.LawnGreen;
     [AutoNotify] private Brush barBackground = Brushes.LightGray;
 
-    public PollScreen(string[] items, Func<TimeSpan, Func<ValueTask>, IThrottle> throttleFactory,
-        IScreenHolder holder)
+    public PollScreen(string[] items, Func<TimeSpan, Func<ValueTask>, IThrottle> throttleFactory)
     {
-        this.Holder = holder;
         commands = new CommandParser("Poll Commands")
             .WithCommand("~Title [Poll Title]", @"^~\s*Title\s*(.+\S)", (string i) => PollTitle = i,
                 CommandResultKind.NewHtml)
@@ -85,9 +83,7 @@ public partial class PollScreen : IScreenDefinition
 
         return ValueTask.CompletedTask;
     }
-
-    public bool UserHtmlIsDirty { get; private set; }
-
+    
     public string HtmlForUser(IHtmlBuilder builder) =>
         builder.CommonClientPage(GenerateCSS,
             GenerateHtml());
@@ -125,7 +121,6 @@ public partial class PollScreen : IScreenDefinition
 
     private string GenerateHtml()
     {
-        UserHtmlIsDirty = false;
         var sb = new StringBuilder();
         sb.Append("""<div class="verticalList smallMargin">""");
         if (PollTitle.Length > 0)

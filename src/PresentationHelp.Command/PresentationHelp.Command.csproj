@@ -23,6 +23,7 @@
     <ProjectReference Include="..\PresentationHelp.CommandModels\PresentationHelp.CommandModels.csproj" />
     <ProjectReference Include="..\PresentationHelp.MessageScreens\PresentationHelp.MessageScreens.csproj" />
     <ProjectReference Include="..\PresentationHelp.Poll\PresentationHelp.Poll.csproj" />
+    <ProjectReference Include="..\PresentationHelp.Sentiment\PresentationHelp.Sentiment.csproj" />
     <ProjectReference Include="..\PresentationHelp.Shared\PresentationHelp.Shared.csproj" />
     <ProjectReference Include="..\PresentationHelp.Website.Models\PresentationHelp.Website.Models.csproj" />
   </ItemGroup>

@@ -10,8 +10,7 @@ public class PollTest
 {
     private readonly Mock<IScreenHolder> holder = new();
     private readonly PollScreen sut = new PollScreen(
-        ["Item 1", "Item 2", "Item 3"], (_, act)=>new TrivialThrottle(act),
-            Mock.Of<IScreenHolder>())
+        ["Item 1", "Item 2", "Item 3"], (_, act)=>new TrivialThrottle(act))
         {PollTitle = "This is the Title"};
     
     [Test]
