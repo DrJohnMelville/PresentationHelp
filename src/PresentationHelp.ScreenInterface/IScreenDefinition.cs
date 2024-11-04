@@ -9,7 +9,7 @@ public interface IScreenHolder
 
 public interface IScreenDefinition: ICommandParser
 {
-    Task AcceptDatum(string user, string datum);
+    ValueTask AcceptDatum(string user, string datum);
     string HtmlForUser(IHtmlBuilder builder);
     object PublicViewModel { get; }
     object CommandViewModel { get; }

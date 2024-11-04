@@ -7,7 +7,7 @@ namespace PresentationHelp.MessageScreens;
 
 public partial class MessageScreen(string message) : IScreenDefinition
 {
-    public Task AcceptDatum(string user, string datum) => Task.CompletedTask;
+    public ValueTask AcceptDatum(string user, string datum) => ValueTask.CompletedTask;
 
     public ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder) =>
         new ValueTask<CommandResult>(new CommandResult(this, CommandResultKind.NotRecognized));

@@ -103,7 +103,7 @@ public partial class ScreenHolder : DisplayHolder, ICommandParser, IScreenHolder
 
     [AutoNotify] private bool responsesLocked;
     public Task AcceptDatum(string user, string datum) =>
-        ResponsesLocked ? Task.CompletedTask : Screen.AcceptDatum(user, datum);
+        ResponsesLocked ? Task.CompletedTask : Screen.AcceptDatum(user, datum).AsTask();
 
 
     public string HtmlForUser(HtmlBuilder htmlBuilder) => ResponsesLocked ? 

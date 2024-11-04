@@ -52,20 +52,19 @@ public partial class PollScreen : IScreenDefinition
     }
 
 
-    public Task AcceptDatum(string user, string datum)
+    public ValueTask AcceptDatum(string user, string datum)
     {
         if (int.TryParse(datum, out var index) &&
             (uint)index < Items.Length)
         {
             Votes.AddOrUpdate(user, index, (_, _) => index);
-            CountVotes();
-            ((IExternalNotifyPropertyChanged)this).OnPropertyChanged(nameof(VotesCast));
+            return CountVotes();
         }
 
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
-    private void CountVotes() => GC.KeepAlive(recountThrottle.TryExecute());
+    private ValueTask CountVotes() => recountThrottle.TryExecute();
 
     private ValueTask InnerCountVotes()
     {
@@ -80,6 +79,7 @@ public partial class PollScreen : IScreenDefinition
         {
             Items[i].Votes = voteCounter[i];
         }
+        ((IExternalNotifyPropertyChanged)this).OnPropertyChanged(nameof(VotesCast));
 
         return ValueTask.CompletedTask;
     }

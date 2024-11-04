@@ -6,7 +6,7 @@ public class ErrorScreen(IScreenDefinition priorScreen, string error): IScreenDe
 {
     public string Error { get; } = error;
 
-    public Task AcceptDatum(string user, string datum) => priorScreen.AcceptDatum(user, datum);
+    public ValueTask AcceptDatum(string user, string datum) => priorScreen.AcceptDatum(user, datum);
 
     public ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder) => 
         priorScreen.TryParseCommandAsync(command, holder);
