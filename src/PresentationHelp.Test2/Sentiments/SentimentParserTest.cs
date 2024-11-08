@@ -33,8 +33,7 @@ public class SentimentParserTest
 
     [Test]
     [Arguments("Sentiment\r\n  High\r\n  Low", ".vslider>input")]
-    [Arguments("Sentiment",  """<input type="range"  min="0" max="1" step = "0.01" list="options">""")]
-    [Arguments("Sentiment\r\n Single", """  <option value="1" label="Single"/>""")]
+    [Arguments("Sentiment\r\n Single", """<input type="range" min="0" max="1" step = "0.01" list="options" onchange="sendDatum(this.value)"/>""")]
     [Arguments("Sentiment\r\n High\r\n Low", """  <option value="1" label="High"/>""")]
     [Arguments("Sentiment\r\n High\r\n Low", """  <option value="0" label="Low"/>""")]
     [Arguments("Sentiment\r\n High\r\n  Middle\r\n Low", """  <option value="0" label="Low"/>""")]

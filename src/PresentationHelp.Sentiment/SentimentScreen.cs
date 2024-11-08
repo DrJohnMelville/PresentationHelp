@@ -82,8 +82,7 @@ public partial class SentimentScreen : IScreenDefinition
         return $"""
             <div class ="vslider">
             {RenderTitle()}
-            <input type="range"  min="0" max="1" step = "0.01" list="options"
-                onchange="sendDatum(this.value)"/>
+            <input type="range" min="0" max="1" step = "0.01" list="options" onchange="sendDatum(this.value)"/>
             <datalist id="options">
             {LabelsAsHtml()}
             </datalist>
