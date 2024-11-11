@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationHelp.WpfViewPar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationHelp.Sentiment", "PresentationHelp.Sentiment\PresentationHelp.Sentiment.csproj", "{B59BD21F-DFE7-4B51-8808-A9DFB6ED95BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationHelp.WordCloud", "PresentationHelp.WordCloud\PresentationHelp.WordCloud.csproj", "{7B1CE745-A74B-4368-BA6F-A258147B5416}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,10 @@ Global
 		{B59BD21F-DFE7-4B51-8808-A9DFB6ED95BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B59BD21F-DFE7-4B51-8808-A9DFB6ED95BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B59BD21F-DFE7-4B51-8808-A9DFB6ED95BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B1CE745-A74B-4368-BA6F-A258147B5416}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B1CE745-A74B-4368-BA6F-A258147B5416}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B1CE745-A74B-4368-BA6F-A258147B5416}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B1CE745-A74B-4368-BA6F-A258147B5416}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +109,7 @@ Global
 		{63657401-A0D6-4337-8D74-575EE0BAE2E0} = {59E2E2C7-2811-4DE4-8265-177605552BA2}
 		{1B427D1F-14B7-430E-BF54-D64A33223E19} = {59E2E2C7-2811-4DE4-8265-177605552BA2}
 		{B59BD21F-DFE7-4B51-8808-A9DFB6ED95BC} = {59E2E2C7-2811-4DE4-8265-177605552BA2}
+		{7B1CE745-A74B-4368-BA6F-A258147B5416} = {59E2E2C7-2811-4DE4-8265-177605552BA2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {40DF9E56-30C1-48A1-BF6C-3794B008FD7E}

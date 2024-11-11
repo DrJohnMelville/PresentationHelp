@@ -14,6 +14,7 @@ using PresentationHelp.MessageScreens;
 using PresentationHelp.Poll;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.Sentiment;
+using PresentationHelp.WordCloud;
 using PresentationHelp.WpfViewParts;
 
 namespace PresentationHelp.Command.CompositionRoot;
@@ -59,6 +60,7 @@ public class Startup:StartupBase
         service.Bind<ICommandParser>().To<MessageScreenParser>();
         service.Bind<ICommandParser>().To<PollScreenParser>();
         service.Bind<ICommandParser>().To<SentimentScreenParser>();
+        service.Bind<ICommandParser>().To<WordCloudScreenParser>();
         service.Bind<ICommandParser>().To<ScreenParser>().BlockSelfInjection().AsSingleton();
     }
 

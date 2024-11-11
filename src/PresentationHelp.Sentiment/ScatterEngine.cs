@@ -36,7 +36,6 @@ public readonly struct ScatterEngine
         double maxOffset = 0;
         for (int i = 0; i < ys.Length; i++)
         {
-            double offset = 0;
             minimum = FindFirstCandidateCollider(minimum, i);
             for (int j = minimum; j < i; j++)
             {

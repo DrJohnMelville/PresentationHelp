@@ -27,6 +27,7 @@
     <ProjectReference Include="..\PresentationHelp.Poll\PresentationHelp.Poll.csproj" />
     <ProjectReference Include="..\PresentationHelp.Sentiment\PresentationHelp.Sentiment.csproj" />
     <ProjectReference Include="..\PresentationHelp.Website.Models\PresentationHelp.Website.Models.csproj" />
+    <ProjectReference Include="..\PresentationHelp.WordCloud\PresentationHelp.WordCloud.csproj" />
   </ItemGroup>
 
 </Project>

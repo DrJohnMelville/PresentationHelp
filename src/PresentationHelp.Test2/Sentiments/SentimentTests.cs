@@ -7,7 +7,7 @@ namespace PresentationHelp.Test2.Sentiments;
 
 public class SentimentTests
 {
-    private SentimentScreen sut;
+    private SentimentScreen sut = null!;
 
     [Before(Test)]
     public async Task Initialize()
