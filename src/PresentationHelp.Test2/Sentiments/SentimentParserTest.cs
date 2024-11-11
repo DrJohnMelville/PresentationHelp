@@ -27,7 +27,7 @@ public class SentimentParserTest
         (await ss.TryParseCommandAsync("~Title Hello World  ", Mock.Of<IScreenHolder>()))
             .Result.Should().Be(CommandResultKind.NewHtml);
         ss.SentimentTitle.Should().Be("Hello World");
-        ss.Title.Should().Be("Sentiment");
+        ss.CommandGroupTitle.Should().Be("Sentiment");
         scr.NewScreen.HtmlForUser(new HtmlBuilder("meeting", 1)).Should().Contain("Hello World");
     }
 

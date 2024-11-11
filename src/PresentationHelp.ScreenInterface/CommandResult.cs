@@ -2,7 +2,7 @@
 
 public interface ICommandInfo
 {
-    public string Title { get; }
+    public string CommandGroupTitle { get; }
     public IEnumerable<ICommandInfo> Commands { get; }
 }
 

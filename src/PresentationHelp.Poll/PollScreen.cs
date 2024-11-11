@@ -15,7 +15,6 @@ public partial class VoteItem
 
 public partial class PollScreen : IScreenDefinition
 {
-//    public IScreenHolder Holder { get; }
     private ConcurrentDictionary<string, int> Votes { get; } = new();
     [DelegateTo] private readonly ICommandParser commands;
     private readonly IThrottle recountThrottle;

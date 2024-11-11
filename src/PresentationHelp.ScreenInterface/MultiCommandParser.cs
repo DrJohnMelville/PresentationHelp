@@ -17,7 +17,7 @@ public partial class MultiCommandParser(ICommandParser inner) : ICommandParser
     [GeneratedRegex(@"(?:^\s*(?'cmd'~.+\S))|(?:^\s*(?'cmd'[^~]+[^~\s]))", RegexOptions.Multiline)]
     private static partial Regex Separator();
 
-    public string Title => inner.Title;
+    public string CommandGroupTitle => inner.CommandGroupTitle;
 
     public IEnumerable<ICommandInfo> Commands => inner.Commands;
 }

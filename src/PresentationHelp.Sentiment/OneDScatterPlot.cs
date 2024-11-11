@@ -8,6 +8,7 @@ namespace PresentationHelp.Sentiment;
 [GenerateDP(typeof(Brush), "BoxFillBrush", Default = "@Brushes.LightGray")]
 [GenerateDP(typeof(Brush), "BoxLineBrush", Default = "@Brushes.Black")]
 [GenerateDP(typeof(double), "BoxLineWidth", Default = 2.0)]
+[GenerateDP(typeof(double), "DotRadius", Default = 2.5)]
 public partial class OneDScatterPlot: FrameworkElement
 {
     [GenerateDP]
@@ -17,12 +18,7 @@ public partial class OneDScatterPlot: FrameworkElement
 
     protected override void OnRender(DrawingContext drawingContext)
     {
-        var r = new Random();
-        var ys = Values
-#if DEBUG
-            .SelectMany(i=>Enumerable.Range(0,10).Select(j=>i+(r.NextDouble()/5)))
-#endif
-            .Select(i=>(1 - i)*ActualHeight).ToArray();
+        var ys = Values.Select(i=>(1 - i)*ActualHeight).ToArray();
         if (ys.Length == 0) return;
         var scatterEngine = new ScatterEngine(ys, 5, ActualWidth / 2);
         DrawBox(drawingContext, scatterEngine);
@@ -50,7 +46,7 @@ public partial class OneDScatterPlot: FrameworkElement
     {
         foreach (var value in scatterEngine.Points())
         {
-            drawingContext.DrawEllipse(DotBrush, null, value, 2.5, 2.5);
+            drawingContext.DrawEllipse(DotBrush, null, value, DotRadius, DotRadius);
         }
     }
 }

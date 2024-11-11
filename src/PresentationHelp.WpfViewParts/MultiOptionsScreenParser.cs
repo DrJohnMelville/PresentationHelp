@@ -27,7 +27,7 @@ public abstract partial class MultiOptionScreenParser(string commandName) : ICom
 
     protected abstract IScreenDefinition CreateScreen(IScreenHolder holder, string[] strings);
 
-    public string Title => $"{commandName}\r\n   [Poll Options]";
+    public string CommandGroupTitle => $"{commandName}\r\n   [Poll Options]";
 
     public IEnumerable<ICommandInfo> Commands => [];
 }

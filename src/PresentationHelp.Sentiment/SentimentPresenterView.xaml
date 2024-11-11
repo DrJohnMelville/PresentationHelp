@@ -20,7 +20,12 @@
         <TextBlock Text="{Binding SentimentTitle}" HorizontalAlignment="Center"
                    Grid.ColumnSpan="4"/>
         <local:OneDScatterPlot Grid.Row="1" Grid.Column="1" MaxWidth="60" MinWidth="10"
-                               Values="{Binding Sentiments}" Width ="40"/>
+                               Values="{Binding Sentiments}" Width ="40"
+                               DotBrush="{Binding DotBrush}"
+                               DotRadius="{Binding DotRadius}"
+                               BoxFillBrush="{Binding BoxFillBrush}"
+                               BoxLineBrush="{Binding BoxLineBrush}"
+                               BoxLineWidth="{Binding BoxLineWidth}"/>
         <ItemsControl ItemsSource="{Binding Labels}" Grid.Column="2" Grid.Row="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

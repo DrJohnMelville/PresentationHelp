@@ -20,7 +20,7 @@ public partial class MessageScreen(string message) : IScreenDefinition
     public object PublicViewModel => SolidColorViewModel.Transparent;
     public object CommandViewModel => SolidColorViewModel.LightGray;
 
-    public string Title => "Message Screen";
+    public string CommandGroupTitle => "Message Screen";
 
     public IEnumerable<ICommandInfo> Commands => [];
 }

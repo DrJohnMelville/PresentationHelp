@@ -16,7 +16,7 @@ public class ErrorScreen(IScreenDefinition priorScreen, string error): IScreenDe
     public object PublicViewModel => priorScreen.PublicViewModel;
     public object CommandViewModel => new ErrorScreenViewModel(Error, priorScreen);
 
-    public string Title => priorScreen.Title;
+    public string CommandGroupTitle => priorScreen.CommandGroupTitle;
 
     public IEnumerable<ICommandInfo> Commands => priorScreen.Commands;
 }

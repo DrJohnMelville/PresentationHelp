@@ -10,7 +10,7 @@ namespace PresentationHelp.WpfViewParts;
 
 public partial class CommandParser:ICommandParser
 {
-    [FromConstructor] public string Title { get; }
+    [FromConstructor] public string CommandGroupTitle { get; }
 
     public IEnumerable<ICommandInfo> Commands => commandDeclarations.OfType<ICommandInfo>();
 
@@ -100,7 +100,7 @@ internal readonly partial struct CommandDeclaration: ICommandInfo
     [GeneratedRegex("([#a-zA-z]\\w+)[,\\s]* (?:(\\d+)\\s*%)?", RegexOptions.IgnoreCase|RegexOptions.IgnorePatternWhitespace)]
     private static partial Regex RemovePercentFromColor();
 
-    public string Title => Documentation;
+    public string CommandGroupTitle => Documentation;
 
     public IEnumerable<ICommandInfo> Commands => [];
 }

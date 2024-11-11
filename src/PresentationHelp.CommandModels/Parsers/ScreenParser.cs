@@ -19,7 +19,7 @@ public class ScreenParser(IList<ICommandParser> parsers): ICommandParser
             """), CommandResultKind.KeepHtml);
     }
 
-    public string Title => "Create Screens";
+    public string CommandGroupTitle => "Create Screens";
 
     public IEnumerable<ICommandInfo> Commands => parsers;
 }

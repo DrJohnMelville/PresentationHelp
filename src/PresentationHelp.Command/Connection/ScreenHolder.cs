@@ -121,7 +121,7 @@ public partial class ScreenHolder : DisplayHolder, ICommandParser, IScreenHolder
     }
     #endregion
 
-    public string Title => "Error -- should not show";
+    public string CommandGroupTitle => "Error -- should not show";
 
     public IEnumerable<ICommandInfo> Commands => [];
 }

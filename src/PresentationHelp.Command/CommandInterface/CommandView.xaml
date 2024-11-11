@@ -44,7 +44,7 @@
                     <ItemsControl.ItemTemplate>
                         <HierarchicalDataTemplate DataType="{x:Type screenInterface:ICommandParser}"
                                                   ItemsSource="{Binding Commands}">
-                            <TextBlock Text="{Binding Title}"/>
+                            <TextBlock Text="{Binding CommandGroupTitle}"/>
                         </HierarchicalDataTemplate>
                     </ItemsControl.ItemTemplate>
                 </TreeView>

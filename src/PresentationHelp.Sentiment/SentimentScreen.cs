@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Windows.Media;
 using Melville.INPC;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.WpfViewParts;
@@ -9,18 +10,32 @@ public partial class SentimentScreen : IScreenDefinition
 {
     public string[] Labels { get; }
     [AutoNotify] private string sentimentTitle = "";
+    [AutoNotify] private Brush dotBrush = Brushes.Red;
+    [AutoNotify] private Brush boxFillBrush = Brushes.LightGray;
+    [AutoNotify] private Brush boxLineBrush = Brushes.Black;
+    [AutoNotify] private double boxLineWidth = 2.0;
+    [AutoNotify] private double dotRadius = 2.5;
     [DelegateTo]private readonly ICommandParser parser;
 
     private readonly ConcurrentDictionary<string, double> sentiments = new();
     public IEnumerable<double> Sentiments => sentiments.Values;
     private readonly IThrottle displayThrottle;
 
+
     public SentimentScreen(string[] labels, Func<TimeSpan, Func<ValueTask>, IThrottle> throttleFactory)
     {
         Labels = labels;
         parser = new CommandParser("Sentiment")
             .WithCommand("~Title [Sentiment Title]", @"^~\s*Title\s*(.+\S)", (string i) => SentimentTitle = i,
-                CommandResultKind.NewHtml);
+                CommandResultKind.NewHtml)
+            .WithCommand("~Dot Color [color]", @"^~\s*Dot\s*Color\s+(.+)$", (Brush b)=>DotBrush = b)
+            .WithCommand("~Box Color [color]", @"^~\s*Box\s*Color\s+(.+)$", (Brush b)=>BoxFillBrush = b)
+            .WithCommand("~Box Line Color [color]", @"^~\s*Box\s*Line\s*Color\s+(.+)$", (Brush b)=>BoxLineBrush= b)
+            .WithCommand("~Box Line Width [number]", $"""^~\s*Box\s*Line\s*Width{ParserParts.RealNumber}$""", 
+                (double d)=>BoxLineWidth= d)
+            .WithCommand("~Dot Radius[number]", $"""^~\s*Dot\s*Radius{ParserParts.RealNumber}$""", 
+                (double d)=>DotRadius= d)
+            ;
         displayThrottle = throttleFactory(TimeSpan.FromSeconds(0.5), Repaint);
     }
 

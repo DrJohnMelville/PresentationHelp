@@ -5,7 +5,7 @@ namespace PresentationHelp.MessageScreens;
 
 public partial class MessageScreenParser : ICommandParser
 {
-    public string Title => "Message\r\n    [Message Content]";
+    public string CommandGroupTitle => "Message\r\n    [Message Content]";
 
     public IEnumerable<ICommandInfo> Commands => [];
 

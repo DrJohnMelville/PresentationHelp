@@ -12,7 +12,7 @@ public class ConnectionViewModelTest
     [Test]
     public void UrlProp() => sut.Url.Should().Be("UrlText");
     [Test]
-    public void TitleProp() => sut.Title.Should().Be("Connection Information");
+    public void TitleProp() => sut.CommandGroupTitle.Should().Be("Connection Information");
 
     [Test]
     [Arguments("~QR Margin 1 2 3 4", 2, 6, 6, 12)]
