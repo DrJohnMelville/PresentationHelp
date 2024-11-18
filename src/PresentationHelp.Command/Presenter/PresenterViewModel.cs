@@ -9,7 +9,7 @@ namespace PresentationHelp.Command.Presenter;
 
 public partial class PresenterViewModel
 {
-    [AutoNotify] private int id;
+    [AutoNotify] public partial int Id { get; set; }
     public MeetingModel Meeting { get; }
 
     public PresenterViewModel(IWebsiteConnection connection)

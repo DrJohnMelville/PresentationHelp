@@ -9,12 +9,12 @@ namespace PresentationHelp.Sentiment;
 public partial class SentimentScreen : IScreenDefinition
 {
     public string[] Labels { get; }
-    [AutoNotify] private string sentimentTitle = "";
-    [AutoNotify] private Brush dotBrush = Brushes.Red;
-    [AutoNotify] private Brush boxFillBrush = Brushes.LightGray;
-    [AutoNotify] private Brush boxLineBrush = Brushes.Black;
-    [AutoNotify] private double boxLineWidth = 2.0;
-    [AutoNotify] private double dotRadius = 2.5;
+    [AutoNotify] public partial string SentimentTitle {get; set;} //# = "";
+    [AutoNotify] public partial Brush DotBrush {get; set;} //# = Brushes.Red;
+    [AutoNotify] public partial Brush BoxFillBrush {get; set;} //# = Brushes.LightGray;
+    [AutoNotify] public partial Brush BoxLineBrush {get; set;} //# = Brushes.Black;
+    [AutoNotify] public partial double BoxLineWidth {get; set;} //# = 2.0;
+    [AutoNotify] public partial double DotRadius {get; set;} //# = 2.5;
     [DelegateTo]private readonly ICommandParser parser;
 
     private readonly ConcurrentDictionary<string, double> sentiments = new();

@@ -22,11 +22,11 @@ public partial class PollScreen : IScreenDefinition
     public VoteItem[] Items { get; }
     public int VotesCast => Votes.Count;
 
-    [AutoNotify] private string pollTitle = "";
-    [AutoNotify] private bool showResult;
-    [AutoNotify] private Brush lineBrush = Brushes.Black;
-    [AutoNotify] private Brush barColor = Brushes.LawnGreen;
-    [AutoNotify] private Brush barBackground = Brushes.LightGray;
+    [AutoNotify] public partial string PollTitle {get; set;} //# = "";
+    [AutoNotify] public partial bool ShowResult { get; set;}
+    [AutoNotify] public partial Brush LineBrush {get; set;} //# = Brushes.Black;
+    [AutoNotify] public partial Brush BarColor {get; set;} //# = Brushes.LawnGreen;
+    [AutoNotify] public partial Brush BarBackground {get; set;} //# = Brushes.LightGray;
 
     public PollScreen(string[] items, Func<TimeSpan, Func<ValueTask>, IThrottle> throttleFactory)
     {

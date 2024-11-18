@@ -17,8 +17,8 @@ public partial class QueryMeetingNameViewModel
 {
     private static readonly string[] staticServerNames = ["https://localhost:44394/"];
     public string[] Servers => staticServerNames;
-    [AutoNotify] private string server = staticServerNames[0];
-    [AutoNotify] private string meetingName = "weatherforecast";
+    [AutoNotify] public partial string Server { get; set; } //# = staticServerNames[0];
+    [AutoNotify] public partial string MeetingName { get; set; } //# = "weatherforecast";
 
     public async Task Login(
         [FromServices]IRegisterWebsiteConnection target,

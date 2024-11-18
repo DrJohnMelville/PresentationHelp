@@ -7,13 +7,12 @@ using PresentationHelp.Command.Presenter;
 
 namespace PresentationHelp.Command.CommandInterface;
 
-public partial class CommandViewModel(
-    IWebsiteConnection connection)
+public partial class CommandViewModel(IWebsiteConnection connection)
 {
     public MeetingModel Meeting { get; } = connection.GetClient();
-    [AutoNotify] private string nextCommand = "";
+    [AutoNotify] public partial string NextCommand { get; set; } //# = "";
 
-    [AutoNotify] public bool CanExecuteCommand => !string.IsNullOrWhiteSpace(NextCommand);
+    public bool CanExecuteCommand => !string.IsNullOrWhiteSpace(NextCommand);
 
     public Task ExecuteCommand(IWaitingService wait) => CommandButtonPressed(NextCommand, wait);
 

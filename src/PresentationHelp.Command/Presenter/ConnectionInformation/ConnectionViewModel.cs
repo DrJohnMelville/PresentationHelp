@@ -11,8 +11,8 @@ namespace PresentationHelp.Command.Presenter.ConnectionInformation;
 public partial class ConnectionViewModel: DisplayHolder, ICommandParser
 {
     [FromConstructor] public string Url { get; }
-    [AutoNotify] private bool showQR = true;
-    [AutoNotify] private bool showUrl = true;
+    [AutoNotify] public partial bool ShowQR { get; set; } //# = true;
+    [AutoNotify] public partial bool ShowUrl { get; set; } //# = true;
     
     [DelegateTo] private CommandParser parser;
 

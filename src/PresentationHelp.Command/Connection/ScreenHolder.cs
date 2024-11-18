@@ -19,10 +19,9 @@ public abstract partial class DisplayHolder
         ActualHeight = actualHeight;
     }
 
-    [AutoNotify] private double actualWidth = 1;
-    [AutoNotify] private double actualHeight = 1;
-    [AutoNotify] private Thickness relativeThickness = new Thickness(5);
-    [AutoNotify]
+    [AutoNotify] public partial double ActualWidth { get; set; } //# = 1;
+    [AutoNotify] public partial double ActualHeight { get; set; } //# = 1;
+    [AutoNotify] public partial Thickness RelativeThickness { get; set; } //# = new Thickness(5);
     public Thickness Location => new Thickness(
         RelativeThickness.Left * ActualWidth / 100,
         RelativeThickness.Top * ActualHeight / 100,
@@ -31,8 +30,8 @@ public abstract partial class DisplayHolder
 
     #region Font Size
 
-    [AutoNotify] private double fontSize = 24;
-    [AutoNotify] private string selectedFontSize = "24";
+    [AutoNotify] public partial double FontSize { get; set; } //# = 24;
+    [AutoNotify] public partial double SelectedFontSize { get; set; } //# = 24;
     [AutoNotify]
     public string FontSizeCommand =>
         FontSize.ToString(CultureInfo.InvariantCulture).Equals(SelectedFontSize) ?
@@ -43,8 +42,8 @@ public abstract partial class DisplayHolder
 
     #region FontColor
 
-    [AutoNotify] private Brush fontBrush = Brushes.Black;
-    [AutoNotify] private Brush backgroundBrush = Brushes.Transparent;
+    [AutoNotify] public partial Brush FontBrush { get; set; } //# = Brushes.Black;
+    [AutoNotify] public partial Brush BackgroundBrush { get; set; } //# = Brushes.Transparent;
 
     #endregion
 

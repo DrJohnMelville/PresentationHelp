@@ -11,7 +11,7 @@ namespace PresentationHelp.WordCloud;
 public partial class WordCloudScreen: IScreenDefinition
 {
 
-    [AutoNotify] private string title = "";
+    [AutoNotify] public partial string Title { get; set; } //# = "";
     [DelegateTo]private readonly ICommandParser parser;
     public ConcurrentDictionary<string, int> Words { get; } = new(StringComparer.CurrentCultureIgnoreCase);
     private readonly IThrottle throttle;
