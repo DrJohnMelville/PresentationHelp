@@ -51,11 +51,6 @@ public partial class WpfWordCloudEngine: IGraphicEngine<DrawingContext>
     [FromConstructor] public ISizer Sizer { get; }
     [FromConstructor] private readonly GlyphRunRenderer renderer;
 
-    public WpfWordCloudEngine(LogSizer sizer)
-    {
-        throw new NotImplementedException();
-    }
-
     public void Dispose()
     {
     }
@@ -68,7 +63,7 @@ public partial class WpfWordCloudEngine: IGraphicEngine<DrawingContext>
     public void Draw(PointD location, RectangleD measured, string text, int count, string? colorHex = null)
     {
         renderer.Render(text, Sizer.GetFontSize(count),
-            new Point(location.X, location.Y))
+            new Point(location.X + measured.X, location.Y + measured.Y))
             .Draw(Bitmap, Brushes.Black);
     }
 
