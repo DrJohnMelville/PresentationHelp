@@ -1,20 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
 	  <UseWpf>true</UseWpf>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PresentationHelp.ScreenInterface\PresentationHelp.ScreenInterface.csproj" />
+    <PackageReference Include="Melville.MVVM.Wpf" Version="0.7.5-preview" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Melville.MVVM.Wpf">
-      <HintPath>..\..\..\..\..\..\.nuget\packages\melville.mvvm.wpf\0.7.2\lib\net8.0-windows7.0\Melville.MVVM.Wpf.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\PresentationHelp.ScreenInterface\PresentationHelp.ScreenInterface.csproj" />
   </ItemGroup>
-
+		
 </Project>
