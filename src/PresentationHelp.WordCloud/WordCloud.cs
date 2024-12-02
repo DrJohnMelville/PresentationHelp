@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using KnowledgePicker.WordCloud;
@@ -8,6 +9,7 @@ using KnowledgePicker.WordCloud.Layouts;
 using KnowledgePicker.WordCloud.Primitives;
 using KnowledgePicker.WordCloud.Sizers;
 using Melville.INPC;
+using SkiaSharp;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 using Pen = System.Windows.Media.Pen;
@@ -38,10 +40,27 @@ public partial class WordCloud: FrameworkElement
         };
         var layout = new SpiralLayout(input);
         var colorizer = new RandomColorizer();
+
         var engine = new WpfWordCloudEngine(dc, new LogSizer(input), 
             new GlyphRunRenderer(new FontFamily("Consolas")));
         var genetrator = new WordCloudGenerator<DrawingContext>(input, engine, layout, colorizer);
         genetrator.Draw();
+
+        var e2 = new SkGraphicEngine(new LogSizer(input), input, SKTypeface.FromFamilyName("Consolas"),
+            true);
+        var g2 = new WordCloudGenerator<SKBitmap>(input , e2, layout, colorizer);
+        using var final = new SKBitmap((int)ActualWidth, (int)ActualHeight);
+        using var canvas = new SKCanvas(final);
+
+        // Draw on white background.
+        canvas.Clear(SKColors.White);
+        using var bitmap = g2.Draw();
+        canvas.DrawBitmap(bitmap, 0f, 0f);
+
+        // Save to PNG.
+        using var data = final.Encode(SKEncodedImageFormat.Png, 100);
+        using var writer = File.Create(@"C:\Users\jom252\OneDrive - Medical University of South Carolina\Documents\Scratch\PrintTarget\output.png");
+        data.SaveTo(writer);
     }
 }
 
