@@ -3,6 +3,7 @@ using Melville.MVVM.Wpf.RootWindows;
 using Melville.TestHelpers.Http;
 using PresentationHelp.Command.CommandInterface;
 using PresentationHelp.Command.Connection;
+using PresentationHelp.Command.PowerpointWatchers;
 using PresentationHelp.Command.QueryMeetingName;
 
 namespace PresentationHelp.Test2.Command;
@@ -17,7 +18,7 @@ public class QueryMeetingNameViewModelTest
     [Test]
     public async Task SuccessLogin()
     {
-        var cvm = new CommandViewModel(connectionClient.Object);
+        var cvm = new CommandViewModel(connectionClient.Object, Mock.Of<IPowerpointWatcher>());
         await sut.Login(connection.Object, navWindow.Object, () => cvm);
         connection.Verify(i => i.SetClient("https://localhost:44394/", "weatherforecast"));
         navWindow.Verify(i => i.NavigateTo(cvm));

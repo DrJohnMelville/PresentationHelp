@@ -29,6 +29,7 @@
         </Grid.RowDefinitions>
         <WrapPanel>
             <Button Content="Show Presenter View" Click="{eventBindings:EventBinding ShowPresenter}"/>
+            <Button Content="Attach to PowerPointg" Click="{eventBindings:EventBinding TryAttachToPowerPoint}"/>
             <wpfViewParts:TextCommandButton eventBindings:EventBinding.Parameter="~QR Margin 0 85 85 0&#13;&#10;~QR Font Size 12">QR Bottom Left</wpfViewParts:TextCommandButton>
             <wpfViewParts:TextCommandButton eventBindings:EventBinding.Parameter="~QR Margin 85 85 0 0&#13;&#10;~QR Font Size 12">QR Bottom Right</wpfViewParts:TextCommandButton>
             <wpfViewParts:TextCommandButton eventBindings:EventBinding.Parameter="~QR Margin 10&#13;&#10;~QR Font Size 24">QR Big</wpfViewParts:TextCommandButton>
