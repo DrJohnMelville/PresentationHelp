@@ -57,7 +57,7 @@ public partial class CommandViewModel
     }
 
     public MeetingModel Meeting { get; }
-    private readonly IPowerpointWatcher watcher;
+    private readonly IPowerpointWatcher watcher;    
     [AutoNotify] public partial string NextCommand { get; set; } //# = "";
 
     public bool CanExecuteCommand => !string.IsNullOrWhiteSpace(NextCommand);

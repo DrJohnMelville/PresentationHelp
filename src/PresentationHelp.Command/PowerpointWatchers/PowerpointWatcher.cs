@@ -17,15 +17,33 @@ public partial class PowerpointWatcher : IPowerpointWatcher
 
     public bool Attach()
     {
+        var walker = TreeWalker.RawViewWalker;
         var win = AutomationElement.RootElement.FindFirst(TreeScope.Children,
             new PropertyCondition(AutomationElement.ClassNameProperty, "PodiumParent"));
         if (win is null) return false;
-        var parent = win.FindFirst(TreeScope.Descendants,
-            new PropertyCondition(AutomationElement.NameProperty, "Slide Notes"));
+        // var parent = win.FindFirst(TreeScope.Descendants,
+        //     new PropertyCondition(AutomationElement.NameProperty, "Slide Notes"));
+        var parent = DepthFirstSearch(win, "Slide Notes");
         if (parent is null) return false;
         Automation.AddStructureChangedEventHandler(parent, TreeScope.Subtree, StructureChanged);
         TryGetCommand(parent);
         return true;
+    }
+
+    private AutomationElement? DepthFirstSearch(AutomationElement root, string name)
+    {
+        var nodeName = root.GetCurrentPropertyValue(AutomationElement.NameProperty);
+        if ((nodeName.ToString()??"").Equals(name)) return root;
+
+        var walker = TreeWalker.RawViewWalker;
+        for (var child = walker.GetFirstChild(root);
+             child is not null;
+             child = walker.GetNextSibling(child))
+        {
+            if (DepthFirstSearch(child, name) is {}  found) return found;
+        }
+
+        return null;
     }
 
     private void StructureChanged(object sender, StructureChangedEventArgs e)
