@@ -113,7 +113,7 @@ public partial class PollScreen : IScreenDefinition
     }
     
     .ButtonState{display:none}
-    .Button{padding:3px; margin:4px; background:#CCC; border:1px solid #333; cursor:pointer;}
+    .Button{padding:3px; margin:4px; background:#CCC; border:1px solid #333; cursor:pointer; font-size: 50px;}
     .ButtonState:checked + .Button{background:#fff;}
     </style>
     """;

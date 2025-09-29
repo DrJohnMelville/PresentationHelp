@@ -4,10 +4,11 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>d723b488-8798-4d20-8ed1-1c8802099993</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Melville.IOC.AspNet" Version="0.7.5-preview" />
+    <PackageReference Include="Melville.IOC.AspNet" Version="0.8.3" />
   </ItemGroup>
 
   <ItemGroup>

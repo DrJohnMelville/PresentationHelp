@@ -89,6 +89,9 @@ public partial class SentimentScreen : IScreenDefinition
           grid-row: 2 / span 1;
           justify-self: start;
         }
+        option {
+          font-size: 50px;
+        }
         </style>
         """;
 

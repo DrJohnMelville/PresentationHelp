@@ -8,11 +8,7 @@ internal class Program
     private static TaskCompletionSource source = new TaskCompletionSource();
     static async Task Main(string[] args)
     {
-    var win = AutomationElement.RootElement.FindFirst(TreeScope.Children,
-        new PropertyCondition(AutomationElement.ClassNameProperty, "PodiumParent"));
-    var parent = win.FindFirst(TreeScope.Descendants,
-        new PropertyCondition(AutomationElement.NameProperty, "Slide Notes"));
-    Automation.AddStructureChangedEventHandler(parent, TreeScope.Subtree, StrucChanged);
+    Automation.AddStructureChangedEventHandler(AutomationElement.RootElement, TreeScope.Subtree, StrucChanged);
     do
     {
         Console.WriteLine("Monitoring");
@@ -23,9 +19,10 @@ internal class Program
     {
         if (e.StructureChangeType != StructureChangeType.ChildAdded) return;
         if (sender is not AutomationElement element) return;
-        var child = element.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.NameProperty, "Slide Notes"));
+        var child = element.FindFirst(TreeScope.Children, Condition.TrueCondition);
         if (child is null) return;
         if (!(child.TryGetCurrentPattern(TextPattern.Pattern, out var patt) && patt is TextPattern tp)) return;
-        Console.WriteLine(tp.DocumentRange.GetText(10000));
+        string value = tp.DocumentRange.GetText(10000);
+        Console.WriteLine(value.Replace("\r","\r\n"));
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Melville.IOC.IocContainers;
 using Melville.IOC.IocContainers.ActivationStrategies.TypeActivation;
+using Melville.IOC.TypeResolutionPolicy;
+using Microsoft.AspNetCore.DataProtection;
 using PresentationHelp.Website.Models.Entities;
 using PresentationHelp.Website.Models.Services;
 using PresentationHelp.Website.Services;
@@ -17,7 +19,7 @@ public readonly struct IocConfiguration(IBindableIocService service)
 
         SetupWebsiteServices();
     }
-
+    
     private void SetupWebsiteServices()
     {
         service.Bind<MeetingStore>().ToSelf().AsSingleton();

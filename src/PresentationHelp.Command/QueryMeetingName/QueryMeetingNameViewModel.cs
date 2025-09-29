@@ -15,7 +15,7 @@ namespace PresentationHelp.Command.QueryMeetingName;
 
 public partial class QueryMeetingNameViewModel
 {
-    private static readonly string[] staticServerNames = ["https://localhost:44394/"];
+    private static readonly string[] staticServerNames = ["https://p.drjohnmelville.com/", "https://localhost:44394/"];
     public string[] Servers => staticServerNames;
     [AutoNotify] public partial string Server { get; set; } //# = staticServerNames[0];
     [AutoNotify] public partial string MeetingName { get; set; } //# = "weatherforecast";
