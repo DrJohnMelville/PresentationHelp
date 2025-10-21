@@ -34,6 +34,9 @@ public readonly struct AspNetServiceRegistration(IServiceCollection coll)
 {
     public void Configure()
     {
-        coll.AddSignalR();
+        coll.AddSignalR(o =>
+        {
+            o.StatefulReconnectBufferSize = 100_000;
+        });
     }
 }

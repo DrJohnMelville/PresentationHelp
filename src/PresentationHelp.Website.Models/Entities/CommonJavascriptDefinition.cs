@@ -3,10 +3,13 @@
 public static class CommonJavascriptDefinition
 {
     public static readonly byte[] JavaScript = """
-        var connection = new signalR.HubConnectionBuilder().withUrl("/___Hubs/Client___").build();
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/___Hubs/Client___")
+            .withAutomaticReconnect()
+            .withStatefulReconnect()
+            .build();
 
         connection.on("Refresh", function() {
-            console.log("Refreshing");
             location.reload();
         });
 

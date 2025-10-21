@@ -37,6 +37,7 @@
                    wpfHacks:VisibilityHack.CollapseUnless="{Binding Meeting.Holder.ConnectionInfo.ShowQR}">Hide QR</wpfViewParts:TextCommandButton>
             <wpfViewParts:TextCommandButton eventBindings:EventBinding.Parameter="~Show Both"
                    wpfHacks:VisibilityHack.CollapseIf="{Binding Meeting.Holder.ConnectionInfo.ShowQR}">Show QR</wpfViewParts:TextCommandButton>
+            <wpfViewParts:TextCommandButton eventBindings:EventBinding.Parameter="Message&#13;&#10;    You are logged in but there is no question active.">Hide Question</wpfViewParts:TextCommandButton>
         </WrapPanel>
         <TextBlock Grid.Row="1">Enter a Command</TextBlock>
         <DockPanel Grid.Row="2" Margin="0, 0, 0, 5">

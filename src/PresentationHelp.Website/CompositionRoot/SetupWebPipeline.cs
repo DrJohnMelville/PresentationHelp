@@ -14,7 +14,7 @@ public readonly struct SetupWebPipeline (WebApplication app)
         app.UseHttpsRedirection();
         app.UseMiddleware<UserIdService>();
 
-        app.MapHub<ClientHub>("/___Hubs/Client___");
+        app.MapHub<ClientHub>("/___Hubs/Client___", o=>o.AllowStatefulReconnects = true);
         app.MapHub<DisplayHub>("/___Hubs/Display___");
         app.MapGet("/___lib/shared.js", 
             () => TypedResults.Bytes(CommonJavascriptDefinition.JavaScript, "application/javascript"));
