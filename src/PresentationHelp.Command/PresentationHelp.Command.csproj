@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Melville.WpfAppFramework" Version="0.7.5-preview" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.0" />
+    <PackageReference Include="Melville.WpfAppFramework" Version="0.8.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.SourceGenerator" Version="7.0.0-preview.7.22376.6" />
-    <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.12" />
+    <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.13" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PresentationHelp.CommandModels\PresentationHelp.CommandModels.csproj" />
+    <ProjectReference Include="..\PresentationHelp.DocumentScanner\PresentationHelp.DocumentScanner.csproj" />
     <ProjectReference Include="..\PresentationHelp.MessageScreens\PresentationHelp.MessageScreens.csproj" />
     <ProjectReference Include="..\PresentationHelp.Poll\PresentationHelp.Poll.csproj" />
     <ProjectReference Include="..\PresentationHelp.Sentiment\PresentationHelp.Sentiment.csproj" />

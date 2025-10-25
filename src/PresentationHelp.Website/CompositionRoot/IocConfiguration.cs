@@ -37,6 +37,7 @@ public readonly struct AspNetServiceRegistration(IServiceCollection coll)
         coll.AddSignalR(o =>
         {
             o.StatefulReconnectBufferSize = 100_000;
+            o.MaximumReceiveMessageSize= 1024 * 1024+20;
         });
     }
 }

@@ -20,7 +20,7 @@ public class QueryMeetingNameViewModelTest
     {
         var cvm = new CommandViewModel(connectionClient.Object, Mock.Of<IPowerpointWatcher>());
         await sut.Login(connection.Object, navWindow.Object, () => cvm);
-        connection.Verify(i => i.SetClient("https://localhost:44394/", "weatherforecast"));
+        connection.Verify(i => i.SetClient("https://p.drjohnmelville.com/", "weatherforecast"));
         navWindow.Verify(i => i.NavigateTo(cvm));
     }
 }

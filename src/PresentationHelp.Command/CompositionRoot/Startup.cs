@@ -10,6 +10,7 @@ using Melville.WpfAppFramework.StartupBases;
 using PresentationHelp.Command.Connection;
 using PresentationHelp.Command.QueryMeetingName;
 using PresentationHelp.CommandModels.Parsers;
+using PresentationHelp.DocumentScanner;
 using PresentationHelp.MessageScreens;
 using PresentationHelp.Poll;
 using PresentationHelp.ScreenInterface;
@@ -61,6 +62,7 @@ public class Startup:StartupBase
         service.Bind<ICommandParser>().To<PollScreenParser>();
         service.Bind<ICommandParser>().To<SentimentScreenParser>();
         service.Bind<ICommandParser>().To<WordCloudScreenParser>();
+        service.Bind<ICommandParser>().To<ScanDocumentParser>();
         service.Bind<ICommandParser>().To<ScreenParser>().BlockSelfInjection().AsSingleton();
     }
 
