@@ -1,10 +1,35 @@
-﻿using PresentationHelp.ScreenInterface;
+﻿using Melville.Lists;
+using PresentationHelp.ScreenInterface;
 using PresentationHelp.WpfViewParts;
+using System.Buffers.Text;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Net.NetworkInformation;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace PresentationHelp.DocumentScanner;
 
+public class SingleScannedDocument {
+    public BitmapImage Image { get; }
+    private byte[] imageData;
+    private const int dataUrlHeaderLength = 22;
+    public SingleScannedDocument(string source)
+    {
+        int length = Base64.GetMaxDecodedFromUtf8Length(source.Length - dataUrlHeaderLength);
+        Convert.TryFromBase64Chars(source.AsSpan(dataUrlHeaderLength), 
+            this.imageData = new byte[length], out int bytesWritten);
+
+        Image = new BitmapImage();
+        Image.BeginInit();
+        Image.StreamSource = new MemoryStream(this.imageData);
+        Image.EndInit();
+        Image.Freeze();
+    }
+}
 public class ScanDocumentViewModel : IScreenDefinition
 {
+    public ThreadSafeBindableCollection<SingleScannedDocument> ScannedDocuments { get; } = new();
     public object PublicViewModel => this;
 
     public object CommandViewModel => this;
@@ -24,6 +49,8 @@ public class ScanDocumentViewModel : IScreenDefinition
 
     public ValueTask AcceptDatum(string user, string datum)
     {
+        //data:image/png;base64,iVBORw0KGg -- skip 22 characters
+        ScannedDocuments.Add(new SingleScannedDocument(datum));
         return ValueTask.CompletedTask;
     }
 
@@ -186,7 +213,7 @@ public class ScanDocumentViewModel : IScreenDefinition
                 return true;
             }
 
-            highlightPaper(image, capturePhoto) {
+            highlightPaper(image, capturePhoto, shouldCapture) {
 
                 const canvas = document.createElement("canvas");
                 const ctx = canvas.getContext("2d");
@@ -217,7 +244,7 @@ public class ScanDocumentViewModel : IScreenDefinition
                             ])) {
                             capturePhoto()
                         }
-                        ctx.strokeStyle = "blue";
+                        ctx.strokeStyle = shouldCapture? "red": "blue";
                         ctx.lineWidth = 1;
                         ctx.beginPath();
                         ctx.moveTo(...Object.values(topLeftCorner));
@@ -404,7 +431,7 @@ public class ScanDocumentViewModel : IScreenDefinition
                 // Continuous highlight loop
                 highlightInterval = setInterval(() => {
                     ctx.drawImage(video, 0, 0, highlightCanvas.width, highlightCanvas.height);
-                    const hlCanvas = scanner.highlightPaper(highlightCanvas, captureImage);
+                    const hlCanvas = scanner.highlightPaper(highlightCanvas, captureImage, shouldCapture);
                     // Clear and draw highlight result on highlightCanvas
                     ctx.clearRect(0, 0, highlightCanvas.width, highlightCanvas.height);
                     ctx.drawImage(hlCanvas, 0, 0);
