@@ -5,6 +5,7 @@ using PresentationHelp.Command.PowerpointWatchers;
 using PresentationHelp.CommandModels.Parsers;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.Shared;
+using PresentationHelp.WpfViewParts;
 
 namespace PresentationHelp.Test2.Command;
 
@@ -19,7 +20,11 @@ public class CommandViewModelTest
 
     public CommandViewModelTest()
     {
-        meeting = new MeetingModel("https://Url.com/", "MeetingName", hubServerMock.Object,
+        meeting = new MeetingModel(new MeetingUrl
+        {
+            BaseUrl = "https://Url.com/",
+            MeetingName = "MeetingName"
+        }, hubServerMock.Object,
             commandParser.Object);
         websiteConnectionMock.Setup(i => i.GetClient()).Returns(meeting);
         sut = new CommandViewModel(websiteConnectionMock.Object, ppWatcher.Object);

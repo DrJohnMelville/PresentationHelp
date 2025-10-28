@@ -10,6 +10,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\PresentationHelp.ScreenInterface\PresentationHelp.ScreenInterface.csproj" />
 		<PackageReference Include="Melville.Generators.INPC" Version="0.8.3" />
+		<PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.13" />
 	</ItemGroup>
 
 </Project>

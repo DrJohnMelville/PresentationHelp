@@ -31,6 +31,8 @@ public class Startup:StartupBase
     protected override void RegisterWithIocContainer(IBindableIocService service)
     {
         SetupSearchTreeDebug();
+        service.Bind<IOpenSaveFile>().To<OpenSaveFileAdapter>();
+        service.Bind<MeetingUrl>().ToSelf().AsSingleton();
         service.RegisterHomeViewModel<QueryMeetingNameViewModel>();
         service.Bind<IOpenSaveFile>().To<OpenSaveFileAdapter>();
         service.Bind<Window>( ).And<IRootNavigationWindow>().To<RootNavigationWindow>().AsSingleton();

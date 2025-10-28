@@ -24,7 +24,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <WrapPanel>
@@ -40,7 +39,8 @@
             <wpfViewParts:TextCommandButton eventBindings:EventBinding.Parameter="Message&#13;&#10;    You are logged in but there is no question active.">Hide Question</wpfViewParts:TextCommandButton>
         </WrapPanel>
         <TextBlock Grid.Row="1">Enter a Command</TextBlock>
-        <DockPanel Grid.Row="2" Margin="0, 0, 0, 5">
+
+        <DockPanel Grid.Row="2" Margin="0 0 0 5">
             <ScrollViewer DockPanel.Dock="Right" MaxWidth="250" HorizontalScrollBarVisibility="Auto">
                 <TreeView DockPanel.Dock="Right" ItemsSource="{Binding Meeting.Holder.Targets}">
                     <ItemsControl.ItemTemplate>
@@ -59,8 +59,10 @@
         </DockPanel>
         <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
                       Height="5"/>
-        <WrapPanel Grid.Row="3">
-            <wpfViewParts:TextCommandButton 
+
+        <DockPanel Grid.Row="3" >
+            <WrapPanel DockPanel.Dock="Top">
+                <wpfViewParts:TextCommandButton 
                 eventBindings:EventBinding.Parameter ="{Binding Meeting.Holder.ResponsesLocked,
             ConverterParameter=~AllowResponses|~LockResponses,
             Converter={x:Static wpfViewParts:BoolStringConverter.Instance}}"
@@ -69,26 +71,27 @@
             Converter={x:Static wpfViewParts:BoolStringConverter.Instance}}"
             />
 
-            <TextBlock Margin="7 0">Font Size</TextBlock>
-            <ComboBox SelectedItem="{Binding Meeting.Holder.SelectedFontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                <TextBlock Margin="7 0">Font Size</TextBlock>
+                <ComboBox SelectedItem="{Binding Meeting.Holder.SelectedFontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       eventBindings:EventBinding.Parameter="{Binding Meeting.Holder.FontSizeCommand}"
                       SelectionChanged="{eventBindings:EventBinding CommandButtonPressed}">
-                <ComboBox.Items>
-                    <system:String>8</system:String>
-                    <system:String>12</system:String>
-                    <system:String>18</system:String>
-                    <system:String>24</system:String>
-                    <system:String>36</system:String>
-                    <system:String>40</system:String>
-                    <system:String>52</system:String>
-                    <system:String>70</system:String>
-                    <system:String>90</system:String>
-                    <system:String>100</system:String>
-                    <system:String>120</system:String>
-                </ComboBox.Items>
-            </ComboBox>
-        </WrapPanel>
-        <viewFrames:ViewFrame Grid.Row="4" Content="{Binding Meeting.CurrentScreen.CommandViewModel}">
-        </viewFrames:ViewFrame>
+                    <ComboBox.Items>
+                        <system:String>8</system:String>
+                        <system:String>12</system:String>
+                        <system:String>18</system:String>
+                        <system:String>24</system:String>
+                        <system:String>36</system:String>
+                        <system:String>40</system:String>
+                        <system:String>52</system:String>
+                        <system:String>70</system:String>
+                        <system:String>90</system:String>
+                        <system:String>100</system:String>
+                        <system:String>120</system:String>
+                    </ComboBox.Items>
+                </ComboBox>
+            </WrapPanel>
+            <viewFrames:ViewFrame Content="{Binding Meeting.CurrentScreen.CommandViewModel}">
+            </viewFrames:ViewFrame>
+        </DockPanel>
     </Grid>
 </UserControl>

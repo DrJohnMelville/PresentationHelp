@@ -17,8 +17,7 @@ public class Throttle : IThrottle
     private readonly TimeSpan timeSpan;
     private readonly Func<ValueTask> action;
     private readonly ITimer timer;
-#warning upgrade to Lock i .NET 9.0
-    private readonly object mutex = new();
+    private readonly Lock mutex = new();
     private ThrottleState state = ThrottleState.Idle;
 
     public Throttle(TimeSpan timeSpan, Func<ValueTask> action, TimeProvider time)

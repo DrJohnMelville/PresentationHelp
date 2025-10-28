@@ -1,24 +1,29 @@
 ﻿using Melville.INPC;
 using Microsoft.AspNetCore.SignalR.Client;
-using PresentationHelp.Shared;
-using System.Web;
 using PresentationHelp.Command.Presenter;
 using PresentationHelp.CommandModels.Parsers;
 using PresentationHelp.ScreenInterface;
+using PresentationHelp.Shared;
 using PresentationHelp.Website.Models.Entities;
+using PresentationHelp.WpfViewParts;
+using System.Buffers.Text;
+using System.Web;
 
 namespace PresentationHelp.Command.Connection;
 
-public class MeetingModelFactory(ICommandParser screenParser)
+public class MeetingModelFactory(ICommandParser screenParser, MeetingUrl urlRecord)
 {
     public async Task<MeetingModel> Create(string baseUrl, string meetingName)
     {
+        urlRecord.BaseUrl = baseUrl;
+        urlRecord.MeetingName = meetingName;
+
         var hubConnection = new HubConnectionBuilder().WithUrl(new Uri(baseUrl + "___Hubs/Display___"))
             .WithAutomaticReconnect()
             .Build();
         await hubConnection.StartAsync();
         var meetingModel = 
-            new MeetingModel(baseUrl, meetingName, hubConnection.ServerProxy<IDisplayHubServer>(),
+            new MeetingModel(urlRecord, hubConnection.ServerProxy<IDisplayHubServer>(),
                 screenParser);
         meetingModel.SetDisposeHandles(hubConnection.ClientProxy<IDisplayHubClient>(meetingModel),
             hubConnection);
@@ -32,22 +37,22 @@ public partial class MeetingModel: IDisplayHubClient, IAsyncDisposable
     private readonly ICommandParser commandParser;
     public ScreenHolder Holder { get; }
     public IScreenDefinition CurrentScreen => Holder.Screen; 
-    public string ParticipantUrl { get; }
-    public string MeetingName { get; }
+    public string ParticipantUrl => meetingUrl.ParticipantUrl;
+    public string MeetingName => meetingUrl.MeetingName;
     private IDisplayHubServer DisplayHub { get; }
     private int screenNumber = 0;
+    private MeetingUrl meetingUrl;
 
     public MeetingModel(
-        string baseUrl, string meetingName, IDisplayHubServer displayHub,
+        MeetingUrl url, IDisplayHubServer displayHub,
         ICommandParser screenParser)
     {
-        ParticipantUrl = $"{baseUrl}{HttpUtility.UrlEncode(meetingName)}";
+        meetingUrl = url;
         Holder = new(screenParser, ParticipantUrl);
         this.DelegatePropertyChangeFrom(Holder, nameof(ScreenHolder.Screen), nameof(CurrentScreen));
-        MeetingName = meetingName;
         DisplayHub = displayHub;
         this.commandParser = new MultiCommandParser(Holder);
-        DisplayHub.CreateOrJoinMeeting(meetingName);
+        DisplayHub.CreateOrJoinMeeting(MeetingName);
     }
 
     private IDisposable? clientMethodRegistrations;

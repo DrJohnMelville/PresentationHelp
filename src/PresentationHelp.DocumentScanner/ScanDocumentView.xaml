@@ -4,6 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PresentationHelp.DocumentScanner"
+             xmlns:vh="clr-namespace:Melville.MVVM.Wpf.WpfHacks;assembly=Melville.MVVM.Wpf"
+             xmlns:eventBindings="clr-namespace:Melville.MVVM.Wpf.EventBindings;assembly=Melville.MVVM.Wpf"
+             xmlns:qr="clr-namespace:PresentationHelp.WpfViewParts;assembly=PresentationHelp.WpfViewParts" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -11,16 +14,33 @@
             <ColumnDefinition Width="205"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox ItemsSource="{Binding ScannedDocuments}" IsSynchronizedWithCurrentItem="true" Margin="0 0 5 0">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="Black" BorderThickness="1" Margin="5">
-                        <Image Source="{Binding Image}" Stretch="Uniform" Height="200"/>
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type local:SingleScannedDocument}">
+                <Grid>
+                    <Image Source="{Binding Image}" Stretch="Uniform" 
+                               Width="{Binding ActualWidth, ElementName=List}"
+                           MouseDown="{eventBindings:EventBinding DragImage}"/>
+                    <Button HorizontalAlignment="Left" Margin="5 5 0 0" VerticalAlignment="Top"
+                                Background="Red" Foreground="White" FontFamily="Marlett"
+                                Click="{eventBindings:EventBinding DeletePhoto }">r</Button>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" 
+                                VerticalAlignment="Bottom" Margin="0 0 0 5">
+                        <Button Click="{eventBindings:EventBinding WriteFile}">Save</Button>
+                        <Button Margin="5 0 0 0" 
+                                Click="{eventBindings:EventBinding CopyPhoto}">Copy</Button>
+                    </StackPanel>
+
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
+        <ListBox ItemsSource="{Binding ScannedDocuments}" IsSynchronizedWithCurrentItem="true" Margin="0 0 5 0"
+                 x:Name="List">
         </ListBox>
         <GridSplitter Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
-        <Image Grid.Column="1"  Source="{Binding ScannedDocuments/Image}" Stretch="Uniform"/>
+        <ContentPresenter Content="{Binding ScannedDocuments/}" Grid.Column="1"/>
+        <qr:QRDisplay Grid.Column="1" Content="{Binding Url.ParticipantUrl}"
+                      vh:VisibilityHack.CollapseUnless="{Binding ShowQrCode}"/>
+
     </Grid>
 </UserControl>

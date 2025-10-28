@@ -1,10 +1,18 @@
-﻿using Melville.Lists;
+﻿using Melville.INPC;
+using Melville.Lists;
+using Melville.MVVM.Wpf.DiParameterSources;
+using Melville.MVVM.Wpf.MouseClicks;
+using Melville.MVVM.Wpf.MouseDragging;
+using Melville.MVVM.Wpf.MouseDragging.Drag;
+using Melville.MVVM.Wpf.MouseDragging.DroppedFiles;
+using Melville.MVVM.Wpf.MvvmDialogs;
 using PresentationHelp.ScreenInterface;
 using PresentationHelp.WpfViewParts;
 using System.Buffers.Text;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.NetworkInformation;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -12,24 +20,28 @@ namespace PresentationHelp.DocumentScanner;
 
 public class SingleScannedDocument {
     public BitmapImage Image { get; }
-    private byte[] imageData;
+    public byte[] ImageData { get; set; }
     private const int dataUrlHeaderLength = 22;
     public SingleScannedDocument(string source)
     {
         int length = Base64.GetMaxDecodedFromUtf8Length(source.Length - dataUrlHeaderLength);
         Convert.TryFromBase64Chars(source.AsSpan(dataUrlHeaderLength), 
-            this.imageData = new byte[length], out int bytesWritten);
+            this.ImageData = new byte[length], out int bytesWritten);
 
         Image = new BitmapImage();
         Image.BeginInit();
-        Image.StreamSource = new MemoryStream(this.imageData);
+        Image.StreamSource = new MemoryStream(this.ImageData);
         Image.EndInit();
         Image.Freeze();
     }
 }
-public class ScanDocumentViewModel : IScreenDefinition
+
+[AutoNotify]
+public partial class ScanDocumentViewModel : IScreenDefinition
 {
+    [FromConstructor] public MeetingUrl Url { get; }
     public ThreadSafeBindableCollection<SingleScannedDocument> ScannedDocuments { get; } = new();
+    public bool ShowQrCode => ScannedDocuments.Count is 0;
     public object PublicViewModel => this;
 
     public object CommandViewModel => this;
@@ -51,7 +63,41 @@ public class ScanDocumentViewModel : IScreenDefinition
     {
         //data:image/png;base64,iVBORw0KGg -- skip 22 characters
         ScannedDocuments.Add(new SingleScannedDocument(datum));
+        UpdateShowQrCode();
         return ValueTask.CompletedTask;
+    }
+
+    private void UpdateShowQrCode() => ((IExternalNotifyPropertyChanged)this).OnPropertyChanged(nameof(ShowQrCode));
+
+    public void DeletePhoto(SingleScannedDocument doc)
+    {
+        ScannedDocuments.Remove(doc);
+        ((IExternalNotifyPropertyChanged)this).OnPropertyChanged(nameof(ShowQrCode));
+    }
+
+    public void CopyPhoto(SingleScannedDocument doc)
+    {
+        Clipboard.Clear();
+        Clipboard.SetImage(doc.Image);
+    }
+
+    public async Task WriteFile(SingleScannedDocument doc, [FromServices] IOpenSaveFile osf)
+    {
+        if (osf.GetSaveFile(null, "png", "PNG Files (*.png)|*.png", "Select File Name",
+            "Scanned Image.png") is { } outputFile)
+        {
+            await using var outputStream = await outputFile.CreateWrite();
+            await outputStream.WriteAsync(doc.ImageData);
+        }
+    }
+
+    public void DragImage(SingleScannedDocument doc, IMouseClickReport mcr)
+    {
+        if (mcr.ClickCount() > 1) return;
+        var data = new ComDataObject();
+        data.PushStreams(("Image.png", new MemoryStream(doc.ImageData)));
+        mcr.DragSource().DragTarget(0.5)
+            .Drag(new DataObject(data), DragDropEffects.Copy);
     }
 
     public string HtmlForUser(IHtmlBuilder builder) =>

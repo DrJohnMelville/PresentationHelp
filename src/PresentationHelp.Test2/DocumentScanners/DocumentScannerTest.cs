@@ -11,7 +11,7 @@ namespace PresentationHelp.Test2.DocumentScanners;
 
 public class DocumentScannerTest
 {
-    private readonly ScanDocumentParser parser = new();
+    private readonly ScanDocumentParser parser = new(()=>new(new()));
 
     [Test]
     public async Task IncorrectCommand()
@@ -31,7 +31,7 @@ public class DocumentScannerTest
 
 public class ScanDocumentScreenTest
 {
-    private readonly ScanDocumentViewModel screen = new();
+    private readonly ScanDocumentViewModel screen = new(new ());
     [Test]
     public void CommandViewModelTest()
     {

@@ -8,7 +8,7 @@ using ZXing;
 using ZXing.Common;
 using ZXing.Windows.Compatibility;
 
-namespace PresentationHelp.Command.Presenter.ConnectionInformation;
+namespace PresentationHelp.WpfViewParts;
 
 public partial class QRDisplay: FrameworkElement
 {

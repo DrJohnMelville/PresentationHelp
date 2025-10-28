@@ -1,4 +1,5 @@
 ﻿using PresentationHelp.ScreenInterface;
+using PresentationHelp.WpfViewParts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PresentationHelp.DocumentScanner;
 
-public partial class ScanDocumentParser : ICommandParser
+public partial class ScanDocumentParser(Func<ScanDocumentViewModel> modelFactory) : ICommandParser
 {
     public string CommandGroupTitle => "ScanDocument";
 
@@ -17,7 +18,7 @@ public partial class ScanDocumentParser : ICommandParser
     public ValueTask<CommandResult> TryParseCommandAsync(string command, IScreenHolder holder) =>
          ValueTask.FromResult(
              Parser().IsMatch(command) ?
-             new CommandResult(new ScanDocumentViewModel(), CommandResultKind.NewHtml) :
+             new CommandResult(modelFactory(), CommandResultKind.NewHtml) :
              new CommandResult(holder.Screen, CommandResultKind.NotRecognized));
 
     [GeneratedRegex(@"^\s*ScanDocument$", RegexOptions.IgnoreCase)]
