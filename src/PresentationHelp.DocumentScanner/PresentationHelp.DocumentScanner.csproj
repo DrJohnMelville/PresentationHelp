@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<PackageReference Include="Melville.MVVM.Wpf" Version="0.8.3" />
 		<PackageReference Include="Melville.Generators.INPC" Version="0.8.3" />
+		<PackageReference Include="QuestPDF" Version="2025.7.3" />
 	</ItemGroup>
 
 	<ItemGroup>

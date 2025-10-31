@@ -14,6 +14,10 @@
             <ColumnDefinition Width="205"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type local:SingleScannedDocument}">
                 <Grid>
@@ -37,9 +41,10 @@
         <ListBox ItemsSource="{Binding ScannedDocuments}" IsSynchronizedWithCurrentItem="true" Margin="0 0 5 0"
                  x:Name="List">
         </ListBox>
+        <Button Grid.Row="1" Click="{eventBindings:EventBinding WritePdf}">Export Pdf</Button>
         <GridSplitter Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
-        <ContentPresenter Content="{Binding ScannedDocuments/}" Grid.Column="1"/>
-        <qr:QRDisplay Grid.Column="1" Content="{Binding Url.ParticipantUrl}"
+        <ContentPresenter Content="{Binding ScannedDocuments/}" Grid.Column="1" Grid.RowSpan="2"/>
+        <qr:QRDisplay Grid.Column="1" Content="{Binding Url.ParticipantUrl}" Grid.RowSpan="2"
                       vh:VisibilityHack.CollapseUnless="{Binding ShowQrCode}"/>
 
     </Grid>

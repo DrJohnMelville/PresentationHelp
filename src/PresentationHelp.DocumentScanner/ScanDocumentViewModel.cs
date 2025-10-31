@@ -91,6 +91,15 @@ public partial class ScanDocumentViewModel : IScreenDefinition
         }
     }
 
+    public async Task WritePdf([FromServices] IOpenSaveFile osf)
+    {
+        if (osf.GetSaveFileName(null, "pdf", "PDF Files (*.pdf)|*.pdf", "Select File Name",
+            "Scanned Document.pdf") is { } outputFile)
+        {
+            await new PdfWriter(ScannedDocuments).WriteToFile(outputFile);
+        }
+    }
+
     public void DragImage(SingleScannedDocument doc, IMouseClickReport mcr)
     {
         if (mcr.ClickCount() > 1) return;
@@ -107,7 +116,6 @@ public partial class ScanDocumentViewModel : IScreenDefinition
         body {
             font-family: sans-serif;
             padding: 20px;
-            max-width: 900px;
             margin: auto;
         }
 
@@ -149,8 +157,7 @@ public partial class ScanDocumentViewModel : IScreenDefinition
         <div id="cameraContainer" style="display:none;">
         <video id="video" autoplay playsinline style="display:none"></video>
         <canvas id="highlightCanvas"></canvas>
-        <button id="captureBtn">📸 Capture Scanned Document</button>
-        <div id="cameraResult"></div>
+        <button id="captureBtn">Capture Scanned Document</button>
     </div>
 
     <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
